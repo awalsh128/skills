@@ -22,7 +22,7 @@ claude plugin marketplace add awalsh128/skills
 claude plugin install awalsh128@awalsh128-skills
 ```
 
-Or install with the [skills CLI](https://github.com/vercel-lab  s/skills), which works across agents:
+Or install with the [skills CLI](https://github.com/vercel-labs/skills), which works across agents:
 
 ```sh
 npx skills add awalsh128/skills
