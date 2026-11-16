@@ -1,0 +1,15 @@
+{
+  "name": "awalsh128-skills",
+  "description": "Installable agentic skills that I use in my dev workflows.",
+  "owner": {
+    "name": "Andrew Walsh",
+    "url": "https://github.com/awalsh128"
+  },
+  "plugins": [
+    {
+      "name": "awalsh128",
+      "source": "./",
+      "description": "Installable agentic skills that I use in my dev workflows."
+    }
+  ]
+}

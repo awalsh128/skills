@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: action-readme
+expected_outcome: |
+  Action README with Quick Start, inputs table matching action.yml, emoji bullets, sponsor callout to octocat, logo-missing offer.
+context:
+  scaffold_script: place-files.sh

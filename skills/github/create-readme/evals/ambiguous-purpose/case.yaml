@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: ambiguous-purpose
+expected_outcome: |
+  The skill asks what the project is for instead of guessing, because only a bare main.go exists.
+context:
+  scaffold_script: place-files.sh

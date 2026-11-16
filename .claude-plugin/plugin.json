@@ -1,0 +1,22 @@
+{
+  "name": "awalsh128",
+  "description": "Installable agentic skills that I use in my dev workflows.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Andrew Walsh",
+    "email": "awalsh128@gmail.com",
+    "url": "https://github.com/awalsh128",
+    "github": "awalsh128"
+  },
+  "homepage": "https://github.com/awalsh128/skills",
+  "repository": "https://github.com/awalsh128/skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "skills",
+    "readme",
+    "github"
+  ],
+  "skills": [
+    "./skills/github/"
+  ]
+}
