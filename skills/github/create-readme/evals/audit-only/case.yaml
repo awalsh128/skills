@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: audit-only
+expected_outcome: |
+  Audit mode: README byte-for-byte unchanged, per-convention pass/fail with line references.
+context:
+  scaffold_script: place-files.sh

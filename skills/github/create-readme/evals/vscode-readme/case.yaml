@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: vscode-readme
+expected_outcome: |
+  VS Code README with centered header, settings table from contributes.configuration, emoji bullets and demo placement.
+context:
+  scaffold_script: place-files.sh
