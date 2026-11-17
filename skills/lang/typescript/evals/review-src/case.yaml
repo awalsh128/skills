@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-src
+expected_outcome: |
+  A review that flags types.ts and constants.ts (co-locate instead), regex URL parsing (use URL), hand-built query strings (URLSearchParams) and JSON deep clone (structuredClone), with file:line references and no files edited.
+context:
+  scaffold_script: place-files.sh

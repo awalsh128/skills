@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: parse-github-url
+expected_outcome: |
+  parseRepoUrl added to src/links.ts using the URL API rather than a regex over the whole URL, its return type declared in links.ts, no new dependency, bare repo URLs handled.
+context:
+  scaffold_script: place-files.sh

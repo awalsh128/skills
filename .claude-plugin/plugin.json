@@ -14,9 +14,13 @@
   "keywords": [
     "skills",
     "readme",
-    "github"
+    "github",
+    "typescript",
+    "testing"
   ],
   "skills": [
-    "./skills/github/"
+    "./skills/github/",
+    "./skills/lang/",
+    "./skills/testing/"
   ]
 }

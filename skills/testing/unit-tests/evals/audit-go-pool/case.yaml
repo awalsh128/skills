@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: audit-go-pool
+expected_outcome: |
+  An audit of pool_test.go with file:line findings: sleep-based waiting, a package-level counter shared across tests, assertions on unexported fields, vague names, missing -race; each with a concrete fix; no files edited.
+context:
+  scaffold_script: place-files.sh

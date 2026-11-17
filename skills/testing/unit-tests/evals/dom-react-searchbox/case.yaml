@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: dom-react-searchbox
+expected_outcome: |
+  React Testing Library tests for SearchBox that query by role/label, drive input with user-event, handle the debounce with fake timers or findBy rather than real waiting, and add no data-testid to the component.
+context:
+  scaffold_script: place-files.sh

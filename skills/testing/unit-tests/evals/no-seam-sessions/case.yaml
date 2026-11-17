@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: no-seam-sessions
+expected_outcome: |
+  Tests for SessionStore that control time without sleeping by adding a backwards-compatible clock parameter (default time.time) rather than patching the time module or adding test-only flags; app.py keeps working unchanged; assertions go through the public API; the summary names the seam it added.
+context:
+  scaffold_script: place-files.sh
