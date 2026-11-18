@@ -11,6 +11,9 @@ using the skills in other projects; each skill's `SKILL.md` carries those.
 - ALWAYS keep a skill's `description` narrow: it states when the skill applies and what it is not for. Quote
   nothing with `: ` in it, or the YAML frontmatter stops parsing.
 - ALWAYS run `python3 scripts/validate.py` after changing a skill or manifest.
+- After adding, removing or renaming a skill, or changing what its description promises, run `create-readme`
+  in revise mode for the README Skills table only. Do not run it for edits to a skill's body, references or
+  evals; the validate check below catches a missing or stale row.
 - NEVER edit `*-workspace/` folders; they are eval run output and are git-ignored.
 - Files under `skills/*/*/evals/**/files/` (including their nested `AGENTS.md`) are test input for evals, not
   guidance for this repo.

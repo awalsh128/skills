@@ -1,7 +1,7 @@
 {
   "name": "awalsh128",
   "description": "Installable agentic skills that I use in my dev workflows.",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "author": {
     "name": "Andrew Walsh",
     "email": "awalsh128@gmail.com",
@@ -11,6 +11,6 @@
   "homepage": "https://github.com/awalsh128/skills",
   "repository": "https://github.com/awalsh128/skills",
   "license": "Apache-2.0",
-  "keywords": ["skills", "readme", "github", "typescript", "testing"],
-  "skills": ["./skills/github/", "./skills/lang/", "./skills/testing/"]
+  "keywords": ["skills", "readme", "github", "typescript", "testing", "vscode"],
+  "skills": ["./skills/dev/", "./skills/github/", "./skills/lang/", "./skills/testing/"]
 }

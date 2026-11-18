@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: python-no-node
+expected_outcome: |
+  Python repo gets editor files and Cursor-safe extensions, with no Node toolchain added unprompted and a question about husky.
+context:
+  scaffold_script: place-files.sh

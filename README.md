@@ -7,7 +7,7 @@ Installable agentic skills that I use in my dev workflows, built for
 [Claude Code](https://claude.com/claude-code).
 
 - 🧩 **One folder per skill:** a `SKILL.md` plus an optional `references/` folder that loads only when needed
-- ✅ **Tested:** each skill ships its own `evals/` cases
+- ✅ **Tested:** most skills ship their own `evals/` cases
 - 🔌 **Plugin and marketplace manifests:** [`plugin.json`](.claude-plugin/plugin.json) and
   [`marketplace.json`](.claude-plugin/marketplace.json)
 
@@ -38,12 +38,14 @@ Then ask for what the skill does, for example "write a README for this repo".
 
 ## Skills
 
-| Group     | Skill                                                         | What it does                                                                                                                                                        |
-| --------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)       | Writes, revises or audits a GitHub README to my own conventions: logo, badge row, emoji feature bullets, sponsor badge, compact layout chosen by repo type.         |
-| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md) | Creates, extends or reviews a TypeScript GitHub Action: testable runner, rollup bundle, Vitest, semantic-release, SHA-pinned workflows.                             |
-| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)               | Writes, modifies or reviews TypeScript: readable over terse, platform and small libraries over hand-rolled code, single-responsibility modules, co-located types.   |
-| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)            | Writes, revises or audits unit tests in any language: behavior through the public API, Arrange-Act-Assert, three-part names, parameterized cases, faked boundaries. |
+| Group     | Skill                                                         | What it does                                                                                                                                                                                         |
+| --------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dev`     | [`project-setup`](skills/dev/project-setup/SKILL.md)          | Sets up a new VS Code or Cursor project's baseline: recommended extensions, `.vscode` settings, EditorConfig, Prettier at 110 columns and a husky format check, deferring to my powerpack templates. |
+| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)       | Writes, revises or audits a GitHub README to my own conventions: logo, badge row, emoji feature bullets, sponsor badge, compact layout chosen by repo type.                                          |
+| `github`  | [`github-cicd`](skills/github/github-cicd/SKILL.md)           | Creates, changes or reviews GitHub Actions workflows: staging to main fast-forward promotion, CI-gated releases, semantic-release, OIDC instead of secrets, SHA-pinned actions, Dependabot.          |
+| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md) | Creates, extends or reviews a TypeScript GitHub Action: testable runner, rollup bundle, Vitest, semantic-release, SHA-pinned workflows.                                                              |
+| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)               | Writes, modifies or reviews TypeScript: readable over terse, platform and small libraries over hand-rolled code, single-responsibility modules, co-located types.                                    |
+| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)            | Writes, revises or audits unit tests in any language: behavior through the public API, Arrange-Act-Assert, three-part names, parameterized cases, faked boundaries.                                  |
 
 ## Layout
 

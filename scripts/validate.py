@@ -58,6 +58,15 @@ for d in skill_dirs:
         if not (d / ref).is_file():
             err(f"{rel}/SKILL.md: referenced {ref} does not exist")
 
+# README skills table must link every skill, and only skills that exist.
+readme = (root / "README.md").read_text()
+listed = set(re.findall(r"\]\((skills/[\w./-]+?)/SKILL\.md\)", readme))
+actual = {str(d.relative_to(root)) for d in skill_dirs}
+for missing in sorted(actual - listed):
+    err(f"README.md: skills table is missing {missing}")
+for stale in sorted(listed - actual):
+    err(f"README.md: skills table lists {stale}, which is not a skill")
+
 if errors:
     print("\n".join(errors))
     sys.exit(1)
