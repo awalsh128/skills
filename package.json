@@ -3,9 +3,13 @@
   "private": true,
   "description": "Dev tooling for the awalsh128 skills plugin.",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "prettier": "^3.4.2",
+    "prettier-plugin-padding-lines": "^0.1.0"
   }
 }

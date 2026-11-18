@@ -5,5 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
 ---
 
-can you write the README for this package
-Input files: see files/
+can you write the README for this package Input files: see files/

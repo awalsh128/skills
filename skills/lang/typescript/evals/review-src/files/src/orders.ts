@@ -9,7 +9,9 @@ export function orderIdFromUrl(url: string): string | undefined {
 export function listUrl(q: OrderQuery): string {
   let s = API_BASE + "/orders?limit=" + PAGE_SIZE;
   if (q.status) s += "&status=" + q.status;
+
   if (q.page) s += "&page=" + q.page;
+
   return s;
 }
 

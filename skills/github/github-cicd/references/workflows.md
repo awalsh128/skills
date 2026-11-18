@@ -1,6 +1,8 @@
 # Workflow templates
 
-Distilled from https://github.com/awalsh128/winston-host-adapters (branch `staging`). Placeholders in `<angle brackets>`. `<sha>` means resolve the full commit SHA of the latest release tag at write time and keep the `# vX.Y.Z` comment. Adjust job names, build commands and the package list to the repo.
+Distilled from https://github.com/awalsh128/winston-host-adapters (branch `staging`). Placeholders in
+`<angle brackets>`. `<sha>` means resolve the full commit SHA of the latest release tag at write time and keep
+the `# vX.Y.Z` comment. Adjust job names, build commands and the package list to the repo.
 
 ## Composite action: setup (`.github/actions/setup/action.yml`)
 
@@ -11,8 +13,8 @@ description: "Sets up Node.js and installs dependencies"
 inputs:
   ignore-scripts:
     description: >-
-      Skip install scripts, both dependencies' and the root prepare script (husky). For privileged
-      jobs, so dependency code can't run with their credentials at install.
+      Skip install scripts, both dependencies' and the root prepare script (husky). For privileged jobs, so
+      dependency code can't run with their credentials at install.
     required: false
     default: "false"
 
@@ -76,7 +78,9 @@ runs:
 
 ## ci.yml
 
-Triggers: `staging` gives nightly and promote a result for staging's exact commit; `main` reports each promotion's status. The workflow must be named `ci.yml`, because `require-ci-success` looks it up by file name.
+Triggers: `staging` gives nightly and promote a result for staging's exact commit; `main` reports each
+promotion's status. The workflow must be named `ci.yml`, because `require-ci-success` looks it up by file
+name.
 
 ```yaml
 name: CI
@@ -153,7 +157,8 @@ jobs:
         run: npm pack --dry-run # add --workspaces for a monorepo
 ```
 
-Add `lint`, `npm run docs:api` and coverage steps when the repo has those scripts. `secrets.GITHUB_TOKEN` is the built-in token, not a stored secret.
+Add `lint`, `npm run docs:api` and coverage steps when the repo has those scripts. `secrets.GITHUB_TOKEN` is
+the built-in token, not a stored secret.
 
 ## pr.yml
 
@@ -215,7 +220,9 @@ jobs:
         uses: actions/dependency-review-action@<sha> # vX
 ```
 
-Needs `@commitlint/cli` and `@commitlint/config-conventional` as dev dependencies, `"commitlint": { "extends": ["@commitlint/config-conventional"] }` in `package.json`, and a husky `commit-msg` hook running `npx --no -- commitlint --edit "$1"`.
+Needs `@commitlint/cli` and `@commitlint/config-conventional` as dev dependencies,
+`"commitlint": { "extends": ["@commitlint/config-conventional"] }` in `package.json`, and a husky `commit-msg`
+hook running `npx --no -- commitlint --edit "$1"`.
 
 ## nightly.yml
 
@@ -285,7 +292,9 @@ jobs:
         run: gh workflow run publish.yml --ref staging
 ```
 
-For a monorepo, loop over `"<package directory>:<tag pattern>"` entries and compare each package with its own last tag, excluding its `test` directory and README; the shared lockfile and base tsconfig count for every package.
+For a monorepo, loop over `"<package directory>:<tag pattern>"` entries and compare each package with its own
+last tag, excluding its `test` directory and README; the shared lockfile and base tsconfig count for every
+package.
 
 ## promote.yml
 
@@ -437,19 +446,33 @@ jobs:
           github-token: ${{ github.token }}
 ```
 
-Read the pinned version's `action.yml` (`gh api repos/awalsh128/npm-publish-strict/contents/action.yml`) for current inputs and outputs rather than trusting this list. Run `mode: check` (or a dry run) after any change to confirm the preconditions without releasing.
+Read the pinned version's `action.yml` (`gh api repos/awalsh128/npm-publish-strict/contents/action.yml`) for
+current inputs and outputs rather than trusting this list. Run `mode: check` (or a dry run) after any change
+to confirm the preconditions without releasing.
 
 ### Monorepo form
 
-One `Release <package>` step per package, in dependency order, so a package never publishes before what it depends on and a failure stops the rest. Per step: `working-directory`, `tag-format` (`<package>-v${version}`; omit to keep plain `v*` tags for a package continuing older tags), `commit-paths` (the package directory), and `pin-dependencies` (`"<dependency name>=<dependency tag format>"`) for internal dependencies. Between steps, `git checkout -- .` restores the manifests semantic-release rewrote, so the next package installs from the committed tree. Set `workspaces-update=false` in `.npmrc`, because `npm version` otherwise re-resolves the workspace and fails on placeholder internal versions. Packages keep the placeholder version `0.0.0` in git.
+One `Release <package>` step per package, in dependency order, so a package never publishes before what it
+depends on and a failure stops the rest. Per step: `working-directory`, `tag-format` (`<package>-v${version}`;
+omit to keep plain `v*` tags for a package continuing older tags), `commit-paths` (the package directory), and
+`pin-dependencies` (`"<dependency name>=<dependency tag format>"`) for internal dependencies. Between steps,
+`git checkout -- .` restores the manifests semantic-release rewrote, so the next package installs from the
+committed tree. Set `workspaces-update=false` in `.npmrc`, because `npm version` otherwise re-resolves the
+workspace and fails on placeholder internal versions. Packages keep the placeholder version `0.0.0` in git.
 
 ### Docs site (optional)
 
-Only official releases (`github.ref == 'refs/heads/main'`) rebuild the docs. In the release job: a step computing `any=true` when a `version` output is set, then `npm run docs:api`, `actions/configure-pages` (needs `pages: read`) and `actions/upload-pages-artifact`. A separate `deploy-pages` job (`needs: release`, `if:` on main and the output) runs `actions/deploy-pages` with `pages: write`, `id-token: write` and the `github-pages` environment, which only allows `main`; the release job can't use it because it also runs on `staging`.
+Only official releases (`github.ref == 'refs/heads/main'`) rebuild the docs. In the release job: a step
+computing `any=true` when a `version` output is set, then `npm run docs:api`, `actions/configure-pages` (needs
+`pages: read`) and `actions/upload-pages-artifact`. A separate `deploy-pages` job (`needs: release`, `if:` on
+main and the output) runs `actions/deploy-pages` with `pages: write`, `id-token: write` and the `github-pages`
+environment, which only allows `main`; the release job can't use it because it also runs on `staging`.
 
 ## Octo STS trust policies (`.github/chainguard/`)
 
-Get the IDs with `gh api repos/<owner>/<repo> --jq '"\(.owner.id) \(.id)"'`. The subject is `repo:<owner>@<owner-id>/<repo>@<repo-id>:.*`, so a repository that later takes the same name doesn't match. Policies are read from the default branch.
+Get the IDs with `gh api repos/<owner>/<repo> --jq '"\(.owner.id) \(.id)"'`. The subject is
+`repo:<owner>@<owner-id>/<repo>@<repo-id>:.*`, so a repository that later takes the same name doesn't match.
+Policies are read from the default branch.
 
 `release.sts.yaml` (tags, used by `publish.yml` on `main` and `staging`):
 
@@ -465,11 +488,14 @@ permissions:
   contents: write
 ```
 
-`promote.sts.yaml` (fast-forwards `main`, used by `promote.yml` on `staging` only): the same, with `ref: "refs/heads/staging"` and `job_workflow_ref` set to `promote\\.yml@refs/heads/staging`.
+`promote.sts.yaml` (fast-forwards `main`, used by `promote.yml` on `staging` only): the same, with
+`ref: "refs/heads/staging"` and `job_workflow_ref` set to `promote\\.yml@refs/heads/staging`.
 
 ## dependabot.yml
 
-Pull requests target `staging`. Titles use the `build` type, which doesn't trigger a release; retitle one as `fix:` when a runtime dependency update should ship. The cooldown skips releases younger than a week, giving a compromised release time to be caught.
+Pull requests target `staging`. Titles use the `build` type, which doesn't trigger a release; retitle one as
+`fix:` when a runtime dependency update should ship. The cooldown skips releases younger than a week, giving a
+compromised release time to be caught.
 
 ```yaml
 version: 2

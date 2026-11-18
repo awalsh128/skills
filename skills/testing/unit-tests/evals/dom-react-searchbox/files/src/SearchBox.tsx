@@ -17,9 +17,13 @@ export function SearchBox({ onSearch, minLength = 2 }: SearchBoxProps) {
       setResults(null);
       return;
     }
+
     const timer = setTimeout(() => {
       onSearch(trimmed)
-        .then((r) => { setResults(r); setError(false); })
+        .then((r) => {
+          setResults(r);
+          setError(false);
+        })
         .catch(() => setError(true));
     }, 300);
     return () => clearTimeout(timer);
@@ -36,7 +40,9 @@ export function SearchBox({ onSearch, minLength = 2 }: SearchBoxProps) {
       {results && results.length === 0 && <p>No results</p>}
       {results && results.length > 0 && (
         <ul aria-label="Results">
-          {results.map((r) => <li key={r}>{r}</li>)}
+          {results.map((r) => (
+            <li key={r}>{r}</li>
+          ))}
         </ul>
       )}
     </div>

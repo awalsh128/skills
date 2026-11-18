@@ -20,7 +20,7 @@ export class CouponValidator {
 
   constructor(
     coupons: Coupon[],
-    private readonly now: () => Date = () => new Date(),
+    private readonly now: () => Date = () => new Date()
   ) {
     this.coupons = new Map(coupons.map((c) => [c.code.toUpperCase(), c]));
   }
@@ -29,7 +29,9 @@ export class CouponValidator {
   apply(code: string, subtotalCents: number): number {
     const coupon = this.coupons.get(code.trim().toUpperCase());
     if (!coupon) throw new CouponError("unknown");
+
     if (this.isExpired(coupon)) throw new CouponError("expired");
+
     if (subtotalCents < coupon.minSubtotalCents) throw new CouponError("below-minimum");
 
     const discount = this.discountFor(coupon, subtotalCents);

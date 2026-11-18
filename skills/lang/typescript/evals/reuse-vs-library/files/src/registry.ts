@@ -10,6 +10,7 @@ export interface Release {
 export async function fetchLatestRelease(): Promise<Release> {
   const res = await fetch(`${REGISTRY}/releases/latest`);
   if (!res.ok) throw new Error(`registry: ${res.status}`);
+
   return (await res.json()) as Release;
 }
 
@@ -19,5 +20,6 @@ export async function fetchPluginVersions(names: string[]): Promise<Record<strin
   url.searchParams.set("names", names.join(","));
   const res = await fetch(url);
   if (!res.ok) throw new Error(`registry: ${res.status}`);
+
   return (await res.json()) as Record<string, string>;
 }

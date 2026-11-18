@@ -1,1 +1,33 @@
-{"name":"vscode-tidy","displayName":"Tidy","publisher":"jdoe","version":"0.3.0","engines":{"vscode":"^1.80.0"},"description":"Tidy blank lines on save","contributes":{"commands":[{"command":"tidy.run","title":"Tidy: Run"}],"configuration":{"title":"Tidy","properties":{"tidy.maxBlankLines":{"type":"number","default":1,"description":"Max consecutive blank lines"},"tidy.onSave":{"type":"boolean","default":true,"description":"Run on save"}}}}}
+{
+  "name": "vscode-tidy",
+  "displayName": "Tidy",
+  "publisher": "jdoe",
+  "version": "0.3.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "description": "Tidy blank lines on save",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tidy.run",
+        "title": "Tidy: Run"
+      }
+    ],
+    "configuration": {
+      "title": "Tidy",
+      "properties": {
+        "tidy.maxBlankLines": {
+          "type": "number",
+          "default": 1,
+          "description": "Max consecutive blank lines"
+        },
+        "tidy.onSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run on save"
+        }
+      }
+    }
+  }
+}

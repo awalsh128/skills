@@ -1,6 +1,7 @@
 # Config templates
 
-Adapted from the exemplar. Replace names, check dependency versions with `npm view`, and drop what the action does not need.
+Adapted from the exemplar. Replace names, check dependency versions with `npm view`, and drop what the action
+does not need.
 
 ## action.yml
 
@@ -28,10 +29,14 @@ runs:
 
 ## tsconfig
 
-`tsconfig.base.json`: `target`/`lib` `ES2023`, `module`/`moduleResolution` `nodenext`, `strict`, `noUncheckedIndexedAccess`, `declaration`, `sourceMap`, `esModuleInterop`, `forceConsistentCasingInFileNames`, `skipLibCheck`.
+`tsconfig.base.json`: `target`/`lib` `ES2023`, `module`/`moduleResolution` `nodenext`, `strict`,
+`noUncheckedIndexedAccess`, `declaration`, `sourceMap`, `esModuleInterop`, `forceConsistentCasingInFileNames`,
+`skipLibCheck`.
 
-- `tsconfig.json` (typecheck, `noEmit`, `allowImportingTsExtensions`, `types: ["node"]`): extends base, includes `src`, `test`, `scripts`.
-- `tsconfig.build.json` (emit): extends base, includes `src` only, `rootDir: "."`, `outDir: "./dist"`, `declarationMap`.
+- `tsconfig.json` (typecheck, `noEmit`, `allowImportingTsExtensions`, `types: ["node"]`): extends base,
+  includes `src`, `test`, `scripts`.
+- `tsconfig.build.json` (emit): extends base, includes `src` only, `rootDir: "."`, `outDir: "./dist"`,
+  `declarationMap`.
 - `tsconfig.scripts.json` (`.mts` tooling, `--noEmit`): extends base, includes `scripts`.
 
 ## rollup.config.mjs
@@ -63,12 +68,14 @@ export default {
     ) {
       return;
     }
+
     warn(warning);
   },
 };
 ```
 
-If the bundle needs non-JS files at runtime, add a plugin whose `writeBundle()` does `fs.cpSync(src, dest, { recursive: true })`.
+If the bundle needs non-JS files at runtime, add a plugin whose `writeBundle()` does
+`fs.cpSync(src, dest, { recursive: true })`.
 
 ## vitest.config.ts
 
@@ -129,4 +136,6 @@ export default [
 }
 ```
 
-Also `prepare: husky`, `typecheck:lib`, `typecheck:scripts`, `build:scripts`, and `check:*` scripts for repo checks. Set `"version": "0.0.0-semantically-released"` and a `funding` block pointing at the owner's Sponsors page. `.gitignore`: `dist/`, `coverage/`, `node_modules/`.
+Also `prepare: husky`, `typecheck:lib`, `typecheck:scripts`, `build:scripts`, and `check:*` scripts for repo
+checks. Set `"version": "0.0.0-semantically-released"` and a `funding` block pointing at the owner's Sponsors
+page. `.gitignore`: `dist/`, `coverage/`, `node_modules/`.
