@@ -50,7 +50,14 @@ Domains full of edge cases always go to a library or the platform, never a hand-
 
 Each module and class has a single responsibility, and its name says what that is. Code that changes together lives together.
 
-- Name a module or class after the concept it owns (`order.ts`, `RateLimiter`, `parseRepoUrl`). A name that needs a vague suffix to hold it together (`*Helper`, `*Util`, `*Utils`, `*Manager`, `*Handler`, `*Processor`, `*Service` used as a catch-all) is a sign it has several jobs: split it by job and name each part for what it does. A small helper function belongs in the module that calls it; when two modules need it, give it its own module named for its job (`batch.ts`, `slug.ts`).
+- Name a module or class after the concept it owns (`order.ts`, `RateLimiter`, `parseRepoUrl`). A name that needs a vague suffix to hold it together (`*Helper`, `*Util`, `*Utils`, `*Manager`, `*Handler`, `*Processor`, `*Service` used as a catch-all) is a sign it has several jobs: split it by job and name each part for what it does.
+- Find a home before making a file. For a function or type, take the first that fits:
+  1. The module of its only caller, when it is small and nothing else needs it.
+  2. The existing module that already owns its concept (a level helper in `levels.ts`, a text helper in `format.ts`).
+  3. A new module named for its job (`batch.ts`, `slug.ts`), only when two or more modules need it and no existing module owns the concept.
+- Don't make a module for one small function (under about 30 lines) when step 1 or 2 fits. Many one-function files are as hard to navigate as one grab-bag file; match the granularity of the neighbouring modules.
+- A vague filename alone doesn't force a split. If the file's contents are cohesive, renaming it to the concept is enough; split only when it holds unrelated jobs.
+- In Review mode, when a finding would create a new file, offer the choice (fold into an existing module, or create one) instead of fixing one target, and say which you recommend.
 - A type or constant lives in the file that uses it. When several modules share one, export it from the module that owns the concept (`order.ts` exports `Order` beside the functions that work on orders), not from a grab-bag file. Write `types.ts`, `constants.ts`, `utils.ts` or `helpers.ts` only when the repo's conventions require them. Rationale: https://www.totaltypescript.com/where-to-put-your-types-in-application-code
 - Infer types where the code already says them (`ReturnType`, `typeof`, `satisfies`) rather than writing a parallel interface that can drift.
 - Organise folders by feature, not by kind.
