@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: revise-python-inventory
+expected_outcome: |
+  tests/test_inventory.py rewritten so it passes, uses a fresh Inventory per test with an injected clock instead of sleep, asserts through the public API, parameterizes the similar cases, uses three-part names, and still covers every behavior the old file did.
+context:
+  scaffold_script: place-files.sh

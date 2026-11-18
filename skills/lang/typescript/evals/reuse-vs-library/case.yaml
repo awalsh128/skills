@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: reuse-vs-library
+expected_outcome: |
+  Version comparison through the semver library (edge-case domain), date formatted with Intl (platform), batching written as a few local lines (simple), no utils/helpers/manager modules, and the summary explains the library choices.
+context:
+  scaffold_script: place-files.sh

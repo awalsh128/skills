@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: repo-convention-wins
+expected_outcome: |
+  Invoice type declared in src/types.ts as AGENTS.md requires, totalling function in src/invoices.ts, and the summary notes the repo convention overrode co-location.
+context:
+  scaffold_script: place-files.sh

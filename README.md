@@ -1,4 +1,4 @@
-# <img src="assets/logo.svg" alt="Agent Skills logo" height="60" align="center"> Agent Skills
+# <img src="assets/logo.svg" alt="Agent Skills logo" height="60" align="center"> awalsh128 Agent Skills
 
 [![validate](https://github.com/awalsh128/skills/actions/workflows/validate.yml/badge.svg)](https://github.com/awalsh128/skills/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/awalsh128/skills)](LICENSE)
@@ -34,9 +34,12 @@ Then ask for what the skill does, for example "write a README for this repo".
 
 ## Skills
 
-| Skill | What it does |
-| --- | --- |
-| [`create-readme`](skills/github/create-readme/SKILL.md) | Writes, revises or audits a GitHub README to my own conventions: logo, badge row, emoji feature bullets, sponsor badge, compact layout chosen by repo type. |
+| Group     | Skill                                                         | What it does                                                                                                                                                         |
+| --------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)       | Writes, revises or audits a GitHub README to my own conventions: logo, badge row, emoji feature bullets, sponsor badge, compact layout chosen by repo type.          |
+| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md) | Creates, extends or reviews a TypeScript GitHub Action: testable runner, rollup bundle, Vitest, semantic-release, SHA-pinned workflows.                               |
+| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)               | Writes, modifies or reviews TypeScript: readable over terse, platform and small libraries over hand-rolled code, single-responsibility modules, co-located types.     |
+| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)            | Writes, revises or audits unit tests in any language: behavior through the public API, Arrange-Act-Assert, three-part names, parameterized cases, faked boundaries. |
 
 ## Layout
 

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: env-config
+expected_outcome: |
+  Per-environment settings in JSON selected at runtime, API key read from an environment variable, config types inferred or kept in the config module, no constants.ts or types.ts.
+context:
+  scaffold_script: place-files.sh
