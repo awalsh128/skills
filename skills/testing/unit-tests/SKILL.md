@@ -54,6 +54,7 @@ A test describes what the unit does for its callers, so it survives any refactor
 ### Parameterize, but keep setup readable
 
 - When cases differ only in data, write one table-driven or parameterized test (`it.each`, `@pytest.mark.parametrize`, a Go table with `t.Run`, `@ParameterizedTest`) and give each row a readable case name.
+- Test every limit at three points: just below, exactly at, and just above (a timeout, a minimum length, a cap, a range end). The exact value is where `>` and `>=` differ, so it is the case that catches an off-by-one; a parameterized table holds all three. When the code's behavior at the exact value looks unintended, pin what it does and flag it in the summary.
 - Favor readable tests over DRY tests. Each test shows the setup that matters to it; push only incidental setup into a small factory with defaults (`makeOrder({ status: "paid" })`). Deep `beforeEach` chains and shared fixtures that a reader must trace across the file cost more than a few repeated lines.
 
 ### Real dependencies, fake boundaries
