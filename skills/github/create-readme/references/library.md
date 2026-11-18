@@ -28,3 +28,11 @@ Take the runtime version from the manifest field, not from memory.
 ## Is it published?
 
 Check before writing an install command: `npm view <name>`, `pip index versions <name>`, `cargo search <name> --limit 1`, or `go list -m <module>@latest`. If it is not published or the check can't run, show a source install (clone, then the repo's own build command) and say in the summary that publication is unverified.
+
+## Optional badges
+
+Suggest these only if the repo qualifies; don't insert them:
+
+- **Coverage:** `https://img.shields.io/codecov/c/github/<owner>/<repo>` (Codecov) or similar if the repo publishes coverage reports.
+- **Docker images:** `https://img.shields.io/docker/v/<org>/<image>` (Docker Hub) or `ghcr.io/<owner>/<repo>` (GitHub Container Registry) if the repo publishes images.
+- **GitHub Release (generic):** `https://img.shields.io/github/v/release/<owner>/<repo>` if the project uses GitHub Releases and doesn't publish to a language-specific registry.
