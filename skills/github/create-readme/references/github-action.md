@@ -27,4 +27,10 @@ Uses the standard layout in `SKILL.md`. Type-specific rules:
   say so in the summary; don't invent build steps.
 - Composite and Docker actions: the `runs.using` value decides Requirements (runner OS, `docker`
   availability); don't claim a Node runtime for them.
+- **Suggest, never apply: an all-outputs param.** When the action has two or more outputs and no such input,
+  add one line to the summary suggesting an opt-in boolean input (for example `output-all`, default `false`)
+  that, when `true`, uploads every output as one JSON file (for example `outputs.json`) in a workflow
+  artifact (via `@actions/artifact`), instead of adding another output. The individual outputs stay set either
+  way. It is a suggestion about `action.yml` and the action's code: do not add the input to the README tables
+  or example, and do not change `action.yml`, unless the user asks.
 - Drop Usage Guide and Caveats when there is nothing real to put in them.
