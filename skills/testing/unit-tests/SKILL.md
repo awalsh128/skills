@@ -1,6 +1,6 @@
 ---
 name: unit-tests
-description: Write, revise or audit unit tests to the user's conventions - behavior tested through the public API, Arrange-Act-Assert, names that state method, condition and expected result, parameterized cases, real dependencies with only external boundaries faked, isolated tests safe to run in parallel. Use whenever adding or changing tests in any language (Jest, Vitest, pytest, Go testing, JUnit, Rust), adding a feature or bug fix that needs test coverage, fixing flaky tests, or when the user asks whether tests are any good, even if they never say "unit test".
+description: Write, revise or audit unit tests to the user's conventions - behavior tested through the public API, Arrange-Act-Assert, names that state method, condition and expected result, parameterized cases, real dependencies with only external boundaries faked, isolated tests safe to run in parallel. Use only when the task is writing, changing, fixing or judging unit tests in any language (Jest, Vitest, pytest, Go testing, JUnit, Rust), including adding the tests a feature or bug fix needs. Not for integration, end-to-end, load or manual testing, nor for non-test code.
 ---
 
 # unit-tests

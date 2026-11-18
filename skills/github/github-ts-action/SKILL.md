@@ -1,6 +1,6 @@
 ---
 name: github-ts-action
-description: Create, scaffold, extend or review a TypeScript GitHub Action (JavaScript action running on node24) to the user's own conventions - src/index.ts plus a testable runner, rollup bundle to dist/action/index.js, vitest, semantic-release, SHA-pinned workflows. Use whenever the user wants a new GitHub Action in TypeScript, asks to add an input, output or feature to an existing one, says "github-ts-action", or asks whether an action repo follows their standards. Not for composite or Docker actions, reusable workflows, or the action's README (use create-readme).
+description: Create, scaffold, extend or review a TypeScript GitHub Action (JavaScript action running on node24) to the user's own conventions - src/index.ts plus a testable runner, rollup bundle to dist/action/index.js, vitest, semantic-release, SHA-pinned workflows. Use only when the project is a GitHub Action (it has or needs an action.yml), meaning the user wants a new one in TypeScript, asks to add an input, output or feature to an existing one, says "github-ts-action", or asks whether an action repo follows their standards. Not for general TypeScript outside a GitHub Action (use typescript), nor for composite or Docker actions, reusable workflows, or the action's README (use create-readme).
 ---
 
 # github-ts-action

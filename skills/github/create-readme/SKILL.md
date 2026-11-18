@@ -1,6 +1,6 @@
 ---
 name: create-readme
-description: Write, revise or audit a GitHub repository README.md to the user's own opinionated conventions (logo, badge row, emoji feature bullets, sponsor badge, compact structure chosen by repo type). Use whenever the user asks to create, draft, improve, fix, modernize, shorten or check a README for any of their repos, says "create-readme", or asks whether a README follows their standards, even if they don't say "README" explicitly (e.g. "document this repo", "add a quick start"). Not for API docs, docstrings, changelogs or design docs.
+description: Write, revise or audit a GitHub repository README.md to the user's own opinionated conventions (logo, badge row, emoji feature bullets, sponsor badge, compact structure chosen by repo type). Use only when the task is a repository's README.md, meaning the user asks to create, draft, improve, fix, modernize, shorten or check one, says "create-readme", or asks whether a README follows their standards. Not for API docs, docstrings, changelogs or design docs.
 ---
 
 # create-readme
