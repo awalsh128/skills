@@ -1,0 +1,11 @@
+{
+  "name": "awalsh128-skills",
+  "private": true,
+  "description": "Dev tooling for the awalsh128 skills plugin.",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
