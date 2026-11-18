@@ -67,7 +67,7 @@ AGENTS.md                  agent rules (see references/ci-and-release.md)
 
 ## CI, release and repo tooling
 
-Read `references/ci-and-release.md` before writing workflows, the setup action, release config, `AGENTS.md` or package scripts. Read `references/configs.md` before writing `tsconfig*`, `rollup.config.mjs`, `vitest.config.ts`, `eslint.config.js` or `package.json`.
+For the staging/main promotion, nightly candidates and OIDC-based release flow, use the `github-cicd` skill alongside this one. Read `references/ci-and-release.md` before writing workflows, the setup action, release config, `AGENTS.md` or package scripts. Read `references/configs.md` before writing `tsconfig*`, `rollup.config.mjs`, `vitest.config.ts`, `eslint.config.js` or `package.json`.
 
 Hard rules:
 
