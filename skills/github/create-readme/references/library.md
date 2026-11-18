@@ -4,7 +4,7 @@ Applies to repos published to a registry (npm, PyPI, crates.io...). Exemplar: ht
 
 Uses the standard layout in `SKILL.md`. Type-specific rules:
 
-- **Badges:** CI for each branch that has a workflow (e.g. `main` and `staging`), license, release.
+- **Badges:** CI for each branch that has a workflow (e.g. `main` and `staging`), license, release. Label each CI badge by its branch; see the same-label rule in `SKILL.md`.
 - **Warnings:** `[!IMPORTANT]` for hard requirements like `sudo`.
 
 ## Middle sections

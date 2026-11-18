@@ -20,13 +20,13 @@ Ground every claim in the repo. A README that describes things the code doesn't 
 1. Read the existing `README.md`, manifests (`package.json`, `pyproject.toml`, `go.mod`, `action.yml`...), `LICENSE`, `.github/workflows/`, and any `images/`, `assets/` or `logo.*`.
 2. Run `git remote -v` for the real owner/repo. Every badge and link is built from it, never hardcoded.
 3. Work out the **project name**: the plain-English name a person would call it, not the repo slug (`cache-apt-pkgs-action` → "Cache APT Packages", `vscode-keep-sorted` → "Keep Sorted"). Take it from, in order: the existing README title, the manifest's display name (`displayName`, `name` in `action.yml`, package description), then the slug with separators spaced, generic suffixes (`-action`, `vscode-`, `-cli`) dropped and words capitalized. Keep proper nouns and acronyms as the project writes them. If more than one reading is plausible, pick one and say so in the summary. Use it in the title, the logo alt text and prose. Keep the repo slug only where it must be literal: URLs, badge links, `uses:`, install commands and code.
-4. Find real install, build and test commands from scripts, Makefile or CI. Run the cheap ones to confirm.
+4. Find real install, build and test commands from scripts, Makefile or CI. Run the cheap ones.
 5. Classify the repo and read its template (see **Templates**). If the type or purpose isn't evident (e.g. a lone `main.go`), ask the user what the project is for instead of guessing.
 
 ## Conventions (all repo types)
 
 1. **Logo.** If one exists, put it in the title (inline `<img ... height="60" align="center">`, or centered above in a `<p align="center">`). If missing, add a one-line note and offer to create one. On a yes, read `references/logo.md`, write the placeholder SVG to `assets/logo.svg`, wire it in, and say it is a placeholder. Never put a placeholder or broken image in the README without a yes.
-2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI), `LICENSE` exists, a release tag exists. Registry and coverage badges (npm, Marketplace, Codecov) are suggested as snippets in the summary, not inserted. Badges are not mandatory; with no CI, omit and say so.
+2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI), `LICENSE` exists, a release tag exists. Registry and coverage badges (npm, Marketplace, Codecov) are suggested as snippets in the summary, not inserted. Badges are not mandatory; with no CI, omit and say so. Two badges must never show the same label: when several badges would (e.g. CI on `main` and CI on `staging`, or two workflows both named "CI"), give each a distinct label naming what sets it apart (`main`, `staging`, `release`), via the shields.io `label` parameter or the workflow badge's `?branch=` query plus `label`, and put the differentiator in the alt text too.
 3. **One-paragraph description.** What it does and for whom, with links to key dependencies. No history or philosophy.
 4. **Emoji feature bullets.** Directly under the description: 3-5 one-line bullets, each with a distinct emoji. This is the one deliberate emoji exception and it replaces a separate Features section. Personal tooling skips it. Elsewhere, emoji only where they carry information a reader scans for (⚠️ Caveats, status markers); never decorate every heading.
 5. **Sponsor badge** after the bullets, on by default, for solo-owner projects. A pink for-the-badge badge linking to the owner's Sponsors page, with one line of plain text under it:
@@ -40,13 +40,11 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    Exemplar: https://github.com/agent-sh/agnix. In a centered header (VS Code extensions), put the badge in a `<p align="center">` block as that README does.
 
    `<owner>` is the git remote owner. Check the page exists with `gh api users/<owner>/sponsorship` (or `orgs/<owner>/sponsorship`); an HTTP 404, or a fetch of the URL that redirects to the profile page, means no Sponsors page.
-   - Not found (404 or redirect to profile): skip the badge and say in the summary how to enable GitHub Sponsors.
-   - Owner is an org or multi-human project: no badge; the summary gives a short note on org Sponsors or a fiscal host with a docs link.
+   - Not found: skip the badge; the summary says how to enable GitHub Sponsors.
+   - Owner is an org or multi-human project: no badge; the summary notes org Sponsors or a fiscal host, with a docs link.
    - Check can't run at all (no `gh`, no network, auth error): include the badge and flag it unverified. A definite not-found is never "can't run".
    - The user can opt out. Personal tooling skips it.
-
-   Use `> [!IMPORTANT]` / `> [!NOTE]` callouts for real warnings (e.g. `sudo` required).
-6. **Quick Start first.** The shortest working example precedes reference material.
+6. **Quick Start first.** The shortest working example precedes reference material. Real warnings (e.g. `sudo` required) use `> [!IMPORTANT]` / `> [!NOTE]` callouts, right after the sponsor badge.
 7. **Tables for options.** Inputs, outputs, settings in tables with name, description, required, default.
 8. **Compact.** Aim for about 150 lines. Move overflow (long config reference, FAQ, API detail) to `docs/` or an existing doc and link it. Add a Contents list only when the README stays long for a good reason, and flag that.
 9. **Link out, don't duplicate.** Link Issues, Discussions, FAQ, `CONTRIBUTING`, `SECURITY`, generated API docs, Releases (instead of a changelog) and `docs/`, only when they exist and after verifying each link. Suggest missing ones in the summary; never invent them.
@@ -61,8 +59,8 @@ Every type except personal tooling uses this frame. Templates below only define 
 2. Badge row
 3. Description paragraph
 4. Emoji feature bullets (replace any Features section)
-5. Sponsor badge, then any real warnings
-6. **Middle sections** from the type's template, Quick Start first
+5. Sponsor badge, then any callout warnings
+6. **Middle sections** from the type's template
 7. At most one closing line linking `CONTRIBUTING.md`, if it exists
 
 ## Templates
