@@ -9,7 +9,8 @@
     {
       "name": "awalsh128",
       "source": "./",
-      "description": "Installable agentic skills that I use in my dev workflows."
+      "description": "Installable agentic skills that I use in my dev workflows.",
+      "version": "0.2.16"
     }
   ]
 }

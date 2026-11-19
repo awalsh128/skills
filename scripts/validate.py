@@ -24,9 +24,16 @@ if plugin.get("name") is None:
 for entry in market.get("plugins", []):
     if entry.get("name") != plugin.get("name"):
         err(f"marketplace.json: entry name {entry.get('name')!r} != plugin.json name {plugin.get('name')!r}")
+    if entry.get("name") == plugin.get("name"):
+        # plugin.json wins at install time, so a stale entry is silently ignored (AGENTS.md).
+        for key in ("version", "description"):
+            if entry.get(key) != plugin.get(key):
+                err(f"marketplace.json: entry {key} {entry.get(key)!r} != plugin.json {key} {plugin.get(key)!r}")
     src = entry.get("source")
     if isinstance(src, str) and not (root / src).is_dir():
         err(f"marketplace.json: source {src!r} does not exist")
+if market.get("description") != plugin.get("description"):
+    err(f"marketplace.json: description {market.get('description')!r} != plugin.json description")
 for key in ("name", "owner", "plugins"):
     if key not in market:
         err(f"marketplace.json: missing {key}")

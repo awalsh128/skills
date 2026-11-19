@@ -1,7 +1,8 @@
 # AGENTS.md
 
-Claude Code plugin of personal agentic skills. Skills live in `skills/<group>/<name>/SKILL.md` and are listed
-in `.claude-plugin/plugin.json`.
+Claude Code plugin of personal agentic skills. Skills live in `skills/<group>/<name>/SKILL.md`; each group
+folder is listed under `skills` in `.claude-plugin/plugin.json`, and `.claude-plugin/marketplace.json`
+publishes the plugin.
 
 These rules apply only when modifying this repository's own files. They are not conventions to follow when
 using the skills in other projects; each skill's `SKILL.md` carries those.
@@ -23,13 +24,18 @@ using the skills in other projects; each skill's `SKILL.md` carries those.
 - NEVER edit `*-workspace/` folders; they are eval run output and are git-ignored.
 - Files under `skills/*/*/evals/**/files/` (including their nested `AGENTS.md`) are test input for evals, not
   guidance for this repo.
-- The pre-commit hook (`npm install` enables it) bumps the patch version in `.claude-plugin/plugin.json` when
-  a commit does not. Do not bypass it with `--no-verify`.
+- Keep `plugin.json` and its entry in `marketplace.json` consistent: the same `name`, `description` and
+  `version`, and the same `description` at the top of `marketplace.json`. `plugin.json` is the source;
+  `scripts/validate.py` fails when they differ, because `plugin.json` silently wins at install time.
+- The pre-commit hook (`npm install` enables it) bumps the patch version in `plugin.json` when a commit does
+  not, and copies it to the `marketplace.json` entry. Do not bypass it with `--no-verify`. To change the
+  version by hand, edit `plugin.json` only; the hook copies it.
 - ASK FIRST before pushing, tagging or publishing.
 
 ## Quick Commands
 
 ```bash
 python3 scripts/validate.py
+npm run format:check
 npm install   # enables the husky pre-commit hook
 ```
