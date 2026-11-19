@@ -1,3 +1,4 @@
 # skill-creator eval run output
 *-workspace/
 node_modules/
+__pycache__/
