@@ -31,10 +31,9 @@ common advice differs, but let a repo's existing config win over it.
    `.husky/`, ESLint config, and the manifest that names the stack (`package.json`, `pyproject.toml`,
    `go.mod`, `Cargo.toml`, `*.csproj`). Cursor and VS Code share `.vscode/`; `.cursor/` only tells you which
    one the user runs. If the stack isn't evident (empty repo), ask what it will be instead of guessing.
-2. **Find the defaults.** Prefer the live templates in `~/repos/gh-dev-powerpack/templates/` (`core/common`
-   for `.editorconfig` and `.prettierrc.json`, `languages/<stack>` for the rest, such as `node/.vscode/`).
-   Read them every time; don't work from memory, as they change. If that folder is missing, use
-   `references/editor-files.md`.
+2. **Find the defaults.** If the `dev-powerpack-exemplars` skill is available, use it for the common and
+   language templates of this stack; they are the defaults, and they change, so don't work from memory.
+   Otherwise use `references/editor-files.md`.
 3. **Write or merge.** Never overwrite. Merge `recommendations` and settings keys into existing files, and
    report any key where the repo disagrees (for example a `printWidth` of 80) rather than changing it. Add
    `max_line_length = 110` to `.editorconfig` and `[110]` to `editor.rulers` if the template lacks them.

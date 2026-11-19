@@ -19,6 +19,10 @@ them even where common advice differs. Exemplar: https://github.com/awalsh128/wi
 `gh api repos/awalsh128/winston-host-adapters/contents/<path>?ref=staging`. The templates in
 `references/workflows.md` are distilled from it; when the exemplar has moved on, the exemplar wins.
 
+When the repo uses or should use the powerpack's `common`, `release-flow` or `npm-publish` sets, also use the
+`dev-powerpack-exemplars` skill for those files. Where it differs from this skill, follow this skill and list
+the difference in the summary.
+
 ## Precedence
 
 1. The repo's documented conventions (`AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`) win inside that repo;
