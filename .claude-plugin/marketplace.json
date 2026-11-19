@@ -1,6 +1,6 @@
 {
   "name": "awalsh128-skills",
-  "description": "Installable agentic skills that I use in my dev workflows.",
+  "description": "Installable agentic skills that I use in my dev workflows, built for Claude Code.",
   "owner": {
     "name": "Andrew Walsh",
     "url": "https://github.com/awalsh128"
@@ -9,8 +9,8 @@
     {
       "name": "awalsh128",
       "source": "./",
-      "description": "Installable agentic skills that I use in my dev workflows.",
-      "version": "0.2.18"
+      "description": "Installable agentic skills that I use in my dev workflows, built for Claude Code.",
+      "version": "0.2.19"
     }
   ]
 }
