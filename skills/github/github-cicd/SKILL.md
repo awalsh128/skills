@@ -120,6 +120,12 @@ them even where common advice differs. Exemplar: https://github.com/awalsh128/wi
     `cancel-in-progress: ${{ github.event_name == 'pull_request' }}`), so staging pushes that release are
     never cancelled or dropped. With squash-only merges the title is the commit, so skip per-commit commitlint
     in CI and keep the title lint.
+15. **Verify a release from the source, not from `npm view`.** The registry's metadata is cached and can lag a
+    publish by minutes: right after `Published <pkg>@<version>` in the release log, `npm view <pkg>` and its
+    `dist-tags` can still show the old version. Take the proof from the release job log, the tag and the
+    GitHub release, then ask the registry for the exact version (`npm view <pkg>@<version> version`) and retry
+    for a few minutes before calling it a failure. Don't treat `latest` still showing the old version as a
+    failed release, and never re-run a release because of it.
 
 ## Finishing
 
