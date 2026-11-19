@@ -80,7 +80,9 @@ runs:
 
 Triggers: `staging` gives nightly and promote a result for staging's exact commit; `main` reports each
 promotion's status. The workflow must be named `ci.yml`, because `require-ci-success` looks it up by file
-name.
+name. The `main` trigger is optional: promote only fast-forwards `main` to a commit whose CI already passed on
+`staging`, and `require-ci-success` reads that run, so a `main` run repeats it. Drop it where nothing needs a
+status on `main`, and then drop any "skipped on main" handling from the gate job.
 
 ```yaml
 name: CI
@@ -92,6 +94,11 @@ on:
   schedule:
     - cron: "0 18 * * *"
   workflow_dispatch:
+
+# Supersede running PR checks; any other run gets its own group, so none is cancelled or dropped.
+concurrency:
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
@@ -305,6 +312,12 @@ name: Promote staging to main
 
 on:
   workflow_dispatch:
+    inputs:
+      confirm-major:
+        description: "Required for a major release: the version being released (e.g. 2.0.0)"
+        type: string
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -348,6 +361,35 @@ jobs:
         with:
           sha: ${{ steps.staging.outputs.sha }}
           token: ${{ github.token }}
+
+      # A major release strands users of the previous major (there is no maintenance branch), so it
+      # needs its version typed in. The first official release counts as a major. Assumes `v${version}` tags.
+      - name: Confirm a major release
+        env:
+          STAGING_SHA: ${{ steps.staging.outputs.sha }}
+          CONFIRM: ${{ inputs.confirm-major }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          official="$(git tag --merged origin/main --list 'v[0-9]*' | grep -v -- '-' | sort -V | tail -n1 || true)"
+          candidate="$(git tag --merged "$STAGING_SHA" --list 'v[0-9]*-rc.*' | sort -V | tail -n1 || true)"
+          if [[ -z "$candidate" ]]; then
+            echo "Nothing new to release: staging has no candidate. main still fast-forwards."
+            exit 0
+          fi
+          next="${candidate#v}"
+          next="${next%%-*}"
+          if [[ -n "$official" && "$(printf '%s\n%s\n' "${official#v}" "$next" | sort -V | tail -n1)" == "${official#v}" ]]; then
+            echo "Nothing new to release: $official is already out. main still fast-forwards."
+            exit 0
+          fi
+          echo "Promotion releases $next."
+          if [[ -z "$official" || "${next%%.*}" -gt "$(cut -d. -f1 <<<"${official#v}")" ]]; then
+            [[ "$CONFIRM" == "$next" ]] || {
+              echo "::error::$next is a major release. Run Promote again with confirm-major set to $next."
+              exit 1
+            }
+          fi
 
       - name: Fast-forward main to staging
         env:
@@ -395,6 +437,8 @@ permissions: {}
 
 jobs:
   release:
+    # Off switch for every route to a release (see rule 11). A dry run publishes nothing, so it is always allowed.
+    if: ${{ vars.RELEASES_ENABLED != 'false' || inputs.dry-run }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment: release
