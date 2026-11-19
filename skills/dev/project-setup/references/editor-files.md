@@ -1,7 +1,7 @@
 # Fallback editor files
 
-Use these only when `~/repos/gh-dev-powerpack/templates/` isn't available. They match the powerpack's current
-Node templates, with 110 columns set everywhere.
+Use these only when the `dev-powerpack-exemplars` skill isn't available. They match the powerpack's Node
+templates at the time of writing, with 110 columns set everywhere.
 
 `.editorconfig`
 

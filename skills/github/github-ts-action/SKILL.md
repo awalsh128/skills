@@ -17,6 +17,10 @@ where common advice differs. Exemplar: https://github.com/awalsh128/cache-apt-pk
 (read a local clone only if one exists; otherwise
 `gh api repos/awalsh128/cache-apt-pkgs-action/contents/<path>?ref=main-2`).
 
+For repository files outside the action's code (editor, formatting, commit lint, issue forms), also use the
+`dev-powerpack-exemplars` skill and its `common`, `conventional-commits` and `node` sets. Where it differs
+from this skill, follow this skill and list the difference in the summary.
+
 ## Modes
 
 - **Scaffold**: no action yet. Create the layout below.

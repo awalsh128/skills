@@ -58,6 +58,17 @@ for d in skill_dirs:
         if not (d / ref).is_file():
             err(f"{rel}/SKILL.md: referenced {ref} does not exist")
 
+# Skills stay disjoint from gh-dev-powerpack (AGENTS.md): only the dev-powerpack-exemplars skill reads it, so
+# no skill names its repo or paths. Eval inputs and workspace output are skipped.
+for d in skill_dirs:
+    for md in d.rglob("*.md"):
+        rel_md = md.relative_to(root)
+        if any(part == "evals" or part.endswith("-workspace") for part in rel_md.parts):
+            continue
+        for line_no, line in enumerate(md.read_text().splitlines(), 1):
+            if "gh-dev-powerpack" in line:
+                err(f"{rel_md}:{line_no}: names gh-dev-powerpack; refer to the dev-powerpack-exemplars skill instead")
+
 # README skills table must link every skill, and only skills that exist.
 readme = (root / "README.md").read_text()
 listed = set(re.findall(r"\]\((skills/[\w./-]+?)/SKILL\.md\)", readme))
