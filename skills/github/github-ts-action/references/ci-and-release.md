@@ -44,6 +44,14 @@ release so `uses: owner/repo@vX` finds `dist/action/index.js`. The exemplar's `m
 workflow yet, so confirm how the user wants the bundle shipped (commit to a release branch, or force-add
 `dist/` in the release commit) before writing it.
 
+Variant for an action whose `main` only fast-forwards and whose `dist/` is committed (see **Bundle variant**
+in `SKILL.md`): semantic-release config without the changelog and git plugins, so a release creates a tag and
+a GitHub Release and commits nothing, `package.json` keeps a placeholder version, and notes live only in the
+Release. Keep the release job behind the off switch, and have it archive the files consumers run
+(`action.yml`, `dist/`, data and config files, the lockfile) from the tagged commit, attest the tarball with
+`actions/attest-build-provenance`, and upload it to the Release. Then `gh attestation verify` checks the
+bytes.
+
 Release publishing is irreversible: confirm before running or enabling it.
 
 ## PR policy

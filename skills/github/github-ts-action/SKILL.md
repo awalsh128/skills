@@ -83,6 +83,20 @@ AGENTS.md                  agent rules (see references/ci-and-release.md)
   `writeBundle` plugin, and `chmod`ed at startup because artifacts drop file modes.
 - **Dependencies**: `@actions/core`, `@actions/cache`, `@actions/artifact` as needed; `winston` for logging.
   Pin sibling libraries to an exact version, never a range.
+- **Runtime installs**: when the action installs packages at run time (semantic-release, or a config file it
+  loads), the install uses `--omit=dev`, so every package that config imports belongs in `dependencies`. A
+  devDependency import works in the repo and breaks every consumer. CI proves it: archive the files the
+  release ships, `npm ci --omit=dev` them into a temp directory and load the config from there.
+- **Inputs and outputs are the contract.** Settle the final set before 1.0.0. Leave out an output that is
+  constant or derivable from another (a fixed directory, a branch name that a boolean already implies), and
+  never rename or drop one later without a major release.
+- **External calls**: every network call gets an `AbortSignal.timeout`, so a stalled server can't hang the
+  job. A timeout is reported like any other failure, not thrown. Tests stub `fetch` (`vi.stubGlobal`) and
+  cover success, a rejection with its status, and a timeout.
+- **Bundle variant, run from a source commit.** When consumers use `uses: owner/repo@<sha>` with no release
+  bundle, commit `dist/` instead of gitignoring it, let CI rebuild it and fail on
+  `git diff --exit-code -- dist`, and mark it generated in `.gitattributes`
+  (`dist/** -diff linguist-generated=true`).
 - **Formatting**: Prettier `printWidth` 110. Lint with ESLint flat config and `@typescript-eslint/parser`.
 - **Bash**: `shellcheck`-clean with `set -euo pipefail`.
 - **Branding**: `action.yml` has `name`, `description`, `author`, `branding` (Feather icon and color), and

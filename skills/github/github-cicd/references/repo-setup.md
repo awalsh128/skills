@@ -38,4 +38,22 @@ generated files use.
 - Actions: allow only actions pinned to a full SHA ("Require actions to be pinned to a commit SHA", where
   available), default workflow permissions read-only.
 - Enable Dependabot alerts and security updates, and the dependency graph (required by `dependency-review`).
+- Public repositories: enable secret scanning and push protection, turn on private vulnerability reporting
+  (`gh api -X PUT repos/<owner>/<repo>/private-vulnerability-reporting`) and commit a `SECURITY.md` that links
+  to it. Require actions pinned to a SHA via
+  `gh api -X PUT repos/<owner>/<repo>/actions/permissions -F enabled=true -f allowed_actions=all -F sha_pinning_required=true`,
+  only after every workflow is pinned.
+- Immutable releases (`gh api -X PUT repos/<owner>/<repo>/immutable-releases`) once the first tags are final:
+  they block deleting or re-creating a published tag, so turn them on after any re-release.
 - Labels `vulnerability` and `test` for the audit issues.
+
+## Rulesets and tags after setup
+
+- Merging a changed `.github/rulesets/*.json` applies nothing. Apply it with
+  `gh api -X PUT repos/<owner>/<repo>/rulesets/<id> --input <file>`, then compare the live ruleset with the
+  file. Server defaults on the live copy (`required_reviewers: []` and the like) are not drift.
+- The tag ruleset blocks deleting tags. To re-release a version, turn the ruleset off, delete the release and
+  tag, and turn it back on in a trap, so a failed step still restores it.
+- The first release has no tag to start from, so semantic-release reads all history. Set the release's
+  baseline commit (commits before it are ignored by versioning and notes) so old history can't leak into the
+  first release notes, and remove it once that release is tagged.
