@@ -23,11 +23,19 @@ preview comment, take the planned version from it instead of computing one.
 
 ## Steps
 
-1. **Gather.** `gh pr view <n> --json title,body,baseRefName,files` and `gh pr diff <n>`. Read the release
-   config (`release.config.*`, `.releaserc*`, or the `release` key in `package.json`) for custom
-   `releaseRules`, and the package directory in a monorepo. With no release config and no tags, the repo
-   doesn't release: the title still records what the change means to consumers, so check it the same way and
-   say no version is at stake. Note the body's answer to "Breaking change" if the template asks it.
+1. **Gather.** `gh pr view <n> --json title,body,baseRefName,files` and `gh pr diff <n>`. Note the body's
+   answer to "Breaking change" if the template asks it. Then find how the repo releases, since that decides
+   what the title controls:
+   - **semantic-release**: a release config (`release.config.*`, `.releaserc*`, or the `release` key in
+     `package.json`). Read it for custom `releaseRules` and the package directory in a monorepo. The title
+     sets the version.
+   - **Another bump**: a version that a pre-commit hook or CI script bumps without reading the title (for
+     example `plugin.json`, a manifest, or an action's major tag). The title sets nothing: say so, and for a
+     breaking change, tell the user to bump the major version by hand.
+   - **None**: no release config, no tags and no bumped version. Say no version is at stake.
+
+   Check the title the same way in all three; it still records what the change means to consumers.
+
 2. **Map the consumer surface**: everything someone outside this repo depends on, for its kind.
    - Library: `exports`, `main`, `types`, the public entry points, exported names and their signatures.
    - GitHub Action: `action.yml` inputs (required, defaults), outputs, `runs.using`.
@@ -58,6 +66,7 @@ Done when every changed file has a class and the title has a verdict.
 ## Report
 
 Lead with the verdict: **matches**, **mismatch** with the corrected title, or **matches, possibly breaking**
-with who it hits. Under it, a table with one row per change that sets or contradicts the verdict: `file:line`,
-the surface item it touches, its class. For a breaking or possibly breaking change, include a ready-to-paste
-footer. Change the title only when the user asks (`gh pr edit <n> --title`).
+with who it hits, then one line on how the repo releases. Under it, a table with one row per change that sets
+or contradicts the verdict: `file:line`, the surface item it touches, its class. For a breaking or possibly
+breaking change, include a ready-to-paste footer. Change the title only when the user asks
+(`gh pr edit <n> --title`).
