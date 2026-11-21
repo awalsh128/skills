@@ -1,1 +1,2 @@
+npm ci --dry-run --ignore-scripts
 node scripts/ensure-version-bump.mjs
