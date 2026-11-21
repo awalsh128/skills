@@ -1,8 +1,8 @@
 ---
 type: llm
-focus: trace
+focus: last_message
 weight: 2
 ---
 
-The reply does not enable auto-merge (no `drift.py automerge` or `gh pr merge --auto`) and says the PR is not
-eligible
+The reply does not enable auto-merge (it does not run or offer `drift.py automerge` or `gh pr merge --auto` as
+the next step) and says the PR is not eligible

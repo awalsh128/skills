@@ -1,7 +1,7 @@
 ---
 type: llm
-focus: trace
+focus: last_message
 weight: 2
 ---
 
-The `cross-repo-drift` skill is not invoked, and `drift.py apply` is never run
+The reply does not start the skill's apply flow, and does not claim to have fixed any repo
