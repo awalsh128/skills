@@ -38,6 +38,11 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    dropped and words capitalized. Keep proper nouns and acronyms as the project writes them. If more than one
    reading is plausible, pick one and say so in the summary. Use it in the title, the logo alt text and prose.
    Keep the repo slug only where it must be literal: URLs, badge links, `uses:`, install commands and code.
+   For a VS Code extension the manifest's `displayName` is authoritative, not a suggestion: the Marketplace
+   requires it to be unique, so it can carry a suffix the repo slug and prose don't (`Regex Explain Lab` for
+   `regex-explain`). Use it as written for the title, the logo alt text and Marketplace-facing prose, never
+   "correct" it toward the slug, and don't flag the difference as an inconsistency. See
+   `references/vscode-extension.md`.
 4. Find real install, build and test commands from scripts, Makefile or CI. Run the cheap ones.
 5. Classify the repo and read its template (see **Templates**). If the type or purpose isn't evident (e.g. a
    lone `main.go`), ask the user what the project is for instead of guessing.
