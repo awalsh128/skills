@@ -6,7 +6,9 @@ https://github.com/awalsh128/ts-apt
 Uses the standard layout in `SKILL.md`. Type-specific rules:
 
 - **Badges:** CI for each branch that has a workflow (e.g. `main` and `staging`), license, release. Label each
-  CI badge by its branch; see the same-label rule in `SKILL.md`.
+  CI badge by its branch; see the same-label rule in `SKILL.md`. Also add the registry version badge once the
+  package is published (see "Is it published?") and the coverage badge when a workflow uploads coverage (see
+  "Coverage and registry badges").
 - **Warnings:** `[!IMPORTANT]` for hard requirements like `sudo`.
 
 ## Middle sections
@@ -22,7 +24,7 @@ Uses the standard layout in `SKILL.md`. Type-specific rules:
 
 Take the runtime version from the manifest field, not from memory.
 
-| Registry   | Install              | Runtime field              | Badge snippet (suggest, don't insert)                |
+| Registry   | Install              | Runtime field              | Version badge snippet (insert once published)        |
 | ---------- | -------------------- | -------------------------- | ---------------------------------------------------- |
 | npm        | `npm install <name>` | `engines.node`             | `https://img.shields.io/npm/v/<name>`                |
 | PyPI       | `pip install <name>` | `requires-python`          | `https://img.shields.io/pypi/v/<name>`               |
@@ -36,12 +38,28 @@ Check before writing an install command: `npm view <name>`, `pip index versions 
 run, show a source install (clone, then the repo's own build command) and say in the summary that publication
 is unverified.
 
+## Coverage and registry badges
+
+Insert these when they apply, and suggest them in the summary when they don't yet:
+
+- **Registry version:** the snippet in the table above, once `Is it published?` confirms the package exists.
+  Link it to the registry page.
+- **Coverage (Codecov):** applies only when a workflow runs `codecov/codecov-action`. A `.codecov.yml` alone
+  (the powerpack `node` set ships one) is not enough, since nothing uploads. Verify with
+  `curl -s https://codecov.io/api/v2/github/<owner>/repos/<repo>`: if it returns the repo with `"active":true`,
+  use its `branch` value in
+  `https://codecov.io/gh/<owner>/<repo>/branch/<branch>/graph/badge.svg`, linked to
+  `https://codecov.io/gh/<owner>/<repo>`. If the repo isn't found, insert the badge anyway only when the
+  workflow uploads, and say in the summary that Codecov isn't authorized or has no upload yet (the badge shows
+  "unknown" until then). A repo with a staging/main split has one branch on Codecov; use the one the API
+  reports.
+
 ## Optional badges
 
 Suggest these only if the repo qualifies; don't insert them:
 
-- **Coverage:** `https://img.shields.io/codecov/c/github/<owner>/<repo>` (Codecov) or similar if the repo
-  publishes coverage reports.
+- **Coverage (other services):** `https://img.shields.io/codecov/c/github/<owner>/<repo>` or similar if the
+  repo publishes coverage reports somewhere other than Codecov.
 - **Docker images:** `https://img.shields.io/docker/v/<org>/<image>` (Docker Hub) or `ghcr.io/<owner>/<repo>`
   (GitHub Container Registry) if the repo publishes images.
 - **GitHub Release (generic):** `https://img.shields.io/github/v/release/<owner>/<repo>` if the project uses
