@@ -1,17 +1,27 @@
 # Sponsor badge
 
-Placed after the bullets, on by default, for solo-owner projects. A pink for-the-badge badge linking to the
-owner's Sponsors page, with one line of plain text under it:
+Placed after the bullets, on by default, for solo-owner projects. A centered pink for-the-badge badge linking
+to the owner's Sponsors page, then a short centered pitch that says the project is free, why a sponsor helps,
+and that a small one-time donation is fine:
 
-```markdown
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/<owner>)
+```html
+<!-- prettier-ignore -->
+<p align="center">
+  <a href="https://github.com/sponsors/<owner>"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor <owner>"></a>
+</p>
 
-If you find this project useful, please consider [sponsoring it](https://github.com/sponsors/<owner>) and show
-some ❤️ for open source maintainers.
+<p align="center">
+  Free and open source, and kept up by one person.<br />
+  If it saves you time, <a href="https://github.com/sponsors/<owner>">sponsor it monthly</a> or
+  <a href="https://github.com/sponsors/<owner>?frequency=one-time">leave a small one-time tip</a>. Every bit
+  helps.
+</p>
 ```
 
-Exemplar: https://github.com/agent-sh/agnix. In a centered header (VS Code extensions), put the badge in a
-`<p align="center">` block as that README does.
+Keep the pitch to two short lines: no heading, no emoji beyond the badge's heart, no guilt. The
+`?frequency=one-time` link opens GitHub's one-time tab; if the owner's page has no one-time tier, drop that
+link and keep the monthly one. Use the `<!-- prettier-ignore -->` comment only when the repo uses Prettier.
+Exemplar: https://github.com/awalsh128/skills.
 
 `<owner>` is the git remote owner. Check the page exists with the GraphQL field `hasSponsorsListing`:
 `gh api graphql -f query='{user(login:"<owner>"){hasSponsorsListing}}'` (use `organization(login:...)` for an
