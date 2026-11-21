@@ -65,7 +65,11 @@ package-lock.json
 
 ```sh
 npm run format:check
+npm ci --dry-run --ignore-scripts
 ```
+
+The second line fails when the lock file doesn't match `package.json`. It takes under a second. Other package
+managers have a frozen-lockfile check; look up its flag instead of guessing.
 
 `package.json` additions
 
