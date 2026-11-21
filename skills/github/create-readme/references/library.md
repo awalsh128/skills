@@ -46,8 +46,8 @@ Insert these when they apply, and suggest them in the summary when they don't ye
   Link it to the registry page.
 - **Coverage (Codecov):** applies only when a workflow runs `codecov/codecov-action`. A `.codecov.yml` alone
   (the powerpack `node` set ships one) is not enough, since nothing uploads. Verify with
-  `curl -s https://codecov.io/api/v2/github/<owner>/repos/<repo>`: if it returns the repo with `"active":true`,
-  use its `branch` value in
+  `curl -s https://codecov.io/api/v2/github/<owner>/repos/<repo>`: if it returns the repo with
+  `"active":true`, use its `branch` value in
   `https://codecov.io/gh/<owner>/<repo>/branch/<branch>/graph/badge.svg`, linked to
   `https://codecov.io/gh/<owner>/<repo>`. If the repo isn't found, insert the badge anyway only when the
   workflow uploads, and say in the summary that Codecov isn't authorized or has no upload yet (the badge shows

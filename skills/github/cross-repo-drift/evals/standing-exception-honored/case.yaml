@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: standing-exception-honored
+expected_outcome: |
+  A rule with a standing exception counts as passing and is not acted on.
+context:
+  scaffold_script: place-files.sh
+---
+tags: [cross-repo-drift]
+max_turns: 30
+timeout_seconds: 900
+allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
+---
