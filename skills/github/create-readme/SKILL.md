@@ -33,14 +33,16 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    (`cache-apt-pkgs-action` → "Cache APT Packages", `vscode-keep-sorted` → "Keep Sorted"). Take it from, in
    order: the existing README title, the manifest's display name (`displayName`, `name` in `action.yml`,
    package description), then the slug with separators spaced, generic suffixes (`-action`, `vscode-`, `-cli`)
-   dropped and words capitalized. Keep proper nouns and acronyms as the project writes them. If more than one
-   reading is plausible, pick one and say so in the summary. Use it in the title, the logo alt text and prose.
-   Keep the repo slug only where it must be literal: URLs, badge links, `uses:`, install commands and code.
-   For a VS Code extension the manifest's `displayName` is authoritative, not a suggestion: the Marketplace
-   requires it to be unique, so it can carry a suffix the repo slug and prose don't (`Regex Explain Lab` for
-   `regex-explain`). Use it as written for the title, the logo alt text and Marketplace-facing prose, never
-   "correct" it toward the slug, and don't flag the difference as an inconsistency. See
-   `references/vscode-extension.md`.
+   dropped and words capitalized. Keep proper nouns and acronyms as the project writes them. Never include the
+   owner's handle in the name (`awalsh128 Agent Skills` → "Agent Skills"). For a library people install and
+   import by name, that package name (`ts-apt`) is the project name; keep it as written and use it in the alt
+   text (`ts-apt logo`). If more than one reading is plausible, pick one and say so in the summary. Use it in
+   the title, the logo alt text and prose. Keep the repo slug only where it must be literal: URLs, badge
+   links, `uses:`, install commands and code. For a VS Code extension the manifest's `displayName` is
+   authoritative, not a suggestion: the Marketplace requires it to be unique, so it can carry a suffix the
+   repo slug and prose don't (`Regex Explain Lab` for `regex-explain`). Use it as written for the title, the
+   logo alt text and Marketplace-facing prose, never "correct" it toward the slug, and don't flag the
+   difference as an inconsistency. See `references/vscode-extension.md`.
 4. Find real install, build and test commands from scripts, Makefile or CI. Run the cheap ones.
 5. Classify the repo and read its template (see **Templates**). If the type or purpose isn't evident (e.g. a
    lone `main.go`), ask the user what the project is for instead of guessing.
@@ -62,12 +64,14 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    </p>
    ```
 
-   The badge row follows, centered the same way. Use this even with no logo (omit the first block). Fall back
-   to a plain `# Title` with an inline `<img ... height="60" align="center">` only when the repo's README
-   already uses that style and the user hasn't asked to change it, and for personal tooling. If no logo
-   exists, add a one-line note and offer to create one. On a yes, read `references/logo.md`, write the
-   placeholder SVG to `assets/logo.svg`, wire it in, and say it is a placeholder. Never put a placeholder or
-   broken image in the README without a yes.
+   The badge row follows, centered the same way. Use this even with no logo (omit the first block). The
+   centered header is required for every repo type except personal tooling, in all modes. An inline
+   `<img ... height="60" align="center">` beside a `# Title` is the old style: Revise converts it, and Audit
+   reports it as a fail, even when the README already uses it. Only personal tooling may use a plain
+   `# Title`. Wrap the tagline and badge row in `<p align="center">` too. The logo alt text is always
+   `<project name> logo`, never the bare name. If no logo exists, add a one-line note and offer to create one.
+   On a yes, read `references/logo.md`, write the placeholder SVG to `assets/logo.svg`, wire it in, and say it
+   is a placeholder. Never put a placeholder or broken image in the README without a yes.
 
 2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI),
    `LICENSE` exists, a release tag exists. Include the registry version badge (npm, Marketplace) when the
@@ -112,7 +116,8 @@ README. Write / Revise ask before editing the live repo; Audit edits nothing.
 ## Standard layout
 
 Every type except personal tooling uses this frame. Templates below only define the middle and what is
-type-specific.
+type-specific. A section the template doesn't list (Credits, Layout) is allowed only when the template names
+it or the content can't live elsewhere; otherwise flag it in the summary, never delete it silently.
 
 1. Centered logo, title (project name) and tagline
 2. Badge row (centered under the header)
@@ -127,12 +132,16 @@ type-specific.
 Classify, then read only the matching file for its middle sections and type-specific rules. Drop sections that
 don't apply; never pad.
 
-| Repo type                                              | Read                             |
-| ------------------------------------------------------ | -------------------------------- |
-| GitHub Action (has `action.yml`)                       | `references/github-action.md`    |
-| Library or package published to a registry             | `references/library.md`          |
-| VS Code extension (`engines.vscode` in `package.json`) | `references/vscode-extension.md` |
-| Dotfiles, scripts, site, prototype, anything else      | `references/personal-tooling.md` |
+| Repo type                                                                 | Read                              |
+| ------------------------------------------------------------------------- | --------------------------------- |
+| GitHub Action (has `action.yml`)                                          | `references/github-action.md`     |
+| Library or package published to a registry                                | `references/library.md`           |
+| VS Code extension (`engines.vscode` in `package.json`)                    | `references/vscode-extension.md`  |
+| Skills, plugin or prompt collection (`SKILL.md` files, `.claude-plugin/`) | `references/skills-collection.md` |
+| Dotfiles, scripts, site, prototype, anything else                         | `references/personal-tooling.md`  |
+
+Personal tooling means repos meant mainly for the owner. A public repo that others install or use never falls
+back to it by default: use the nearest template above, or ask what the project is for.
 
 ## Finishing
 

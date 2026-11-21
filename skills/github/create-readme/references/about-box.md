@@ -17,7 +17,8 @@ must say the same thing as the README. Do this in every mode, after the README c
      `caching`, `semantic-release`).
 
    Prefer GitHub's featured topic spelling (`github-actions`, not `gh-actions`). Every topic must be backed by
-   the README or the code; flag existing topics that aren't, and README key concepts with no topic.
+   the README or the code; flag existing topics that aren't, and README key concepts with no topic. The same
+   goes for the homepage URL: it must match any site the README links, with the same host spelling.
 
 4. Show the current and proposed description and topics side by side.
    - **Write / Revise:** ASK before changing anything; it edits the live repository. On a yes, apply with

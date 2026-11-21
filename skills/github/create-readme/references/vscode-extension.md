@@ -64,17 +64,56 @@ see "VSCE badges" below. Drop any that don't apply rather than leaving them in.
 
 ## Middle sections
 
-1. **Quick Start:** install (Marketplace search by display name, or
-   `code --install-extension <publisher>.<name>`) and the first thing to do with it. This comes first.
+1. **Quick Start:** installation, then the first thing to do with it. This comes first. See "Installation"
+   below for what the install step covers.
 2. **Settings:** a table from `contributes.configuration` (name, description, default).
 3. **Advanced Usage:** only what the commands and settings don't already explain.
 
 If publication on the Marketplace can't be confirmed, say so in the summary rather than asserting the install
 ID.
 
+## Installation
+
+An extension is not limited to VS Code. It runs in any editor built on the VS Code extension host, such as
+Cursor, VSCodium and Windsurf, so write the install step for the editors the user's readers actually use, not
+for VS Code alone. The Marketplace is for Microsoft's own products; those forks read the Open VSX Registry
+instead, so which editors can install by search depends on where the extension is published.
+
+- **VS Code:** Marketplace search by display name, or `code --install-extension <publisher>.<name>`. Only when
+  the Marketplace page is confirmed.
+- **Forks (Cursor, VSCodium, Windsurf and similar):** search by display name in the editor's Extensions view,
+  or use the editor's own CLI (`cursor --install-extension`, `codium --install-extension`). Include this only
+  when the extension is published to Open VSX (see "VSCE badges"). Check the editor's CLI name rather than
+  assuming it.
+- **Not on the registry an editor reads:** install the `.vsix` from the GitHub release with
+  `--install-extension <file>.vsix`, and say which editors that covers.
+- Keep it short: a line or two per editor, in one list, not a section per editor.
+
+### LLM features packaged with the extension
+
+When `contributes` in `package.json` ships LLM features, installing the extension is not enough to use them,
+so the install step also says what else the reader must do. Look for `chatParticipants`, `languageModelTools`,
+`mcpServerDefinitionProviders`, and any bundled instructions, prompts or agent skills files. For each that is
+present:
+
+- **Prerequisites:** the chat or model provider the feature needs (for example a chat extension or an API key
+  setting from `contributes.configuration`), and the minimum editor version from `engines.vscode`.
+- **Enabling:** whether it registers itself on install or must be turned on, and where (a setting name, a
+  command from `contributes.commands`).
+- **Per-editor differences:** a feature the extension registers through a VS Code API may not exist in a fork,
+  or may need manual setup there (for example an MCP server entry in that editor's own config file). Say so
+  for each editor listed above, only for what you can verify in the repo or the extension's docs. If you can't
+  verify a fork, say it is untested rather than implying it works.
+- **Don't invent:** every setting, command and file name comes from `package.json` or the repo, and an LLM
+  feature with no verifiable install path goes in the summary as a question for the user.
+
+Keep this inside the Quick Start install step when it is a line or two; give it its own short section (see
+Notes) when it has more than that.
+
 ## Notes
 
 - Check every command and setting name against `contributes` in `package.json`.
-- An MCP server or agent integration gets its own short section.
+- An MCP server or agent integration gets its own short section when it needs more than a line or two of setup
+  beyond installing the extension (see "Installation").
 - The Marketplace icon in `package.json` must be a PNG. If the README uses an SVG logo, mention that the icon
   is separate.
