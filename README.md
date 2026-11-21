@@ -1,17 +1,30 @@
-# <img src="assets/logo.svg" alt="Agent Skills logo" height="60" align="center"> awalsh128 Agent Skills
+<p align="center">
+  <img src="assets/logo.svg" alt="Agent Skills logo" width="128" height="128">
+</p>
 
-[![validate](https://github.com/awalsh128/skills/actions/workflows/validate.yml/badge.svg)](https://github.com/awalsh128/skills/actions/workflows/validate.yml)
-[![License](https://img.shields.io/github/license/awalsh128/skills)](LICENSE)
+<h1 align="center">Agent Skills</h1>
 
-Installable agentic skills that I use in my dev workflows, built for
-[Claude Code](https://claude.com/claude-code).
+<p align="center">
+  Installable agentic skills for dev workflows, built for <a href="https://claude.com/claude-code">Claude Code</a>.
+</p>
+
+<p align="center">
+  <a href="https://github.com/awalsh128/skills/actions/workflows/validate.yml"><img src="https://github.com/awalsh128/skills/actions/workflows/validate.yml/badge.svg" alt="validate"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/awalsh128/skills" alt="License"></a>
+</p>
+
+Opinionated skills for developers who use [Claude Code](https://claude.com/claude-code) or another agent that
+reads `SKILL.md` files. Each one covers a recurring dev task, such as READMEs, CI workflows, TypeScript style
+and unit tests, and applies one consistent set of conventions.
 
 - 🧩 **One folder per skill:** a `SKILL.md` plus an optional `references/` folder that loads only when needed
 - ✅ **Tested:** most skills ship their own `evals/` cases
 - 🔌 **Plugin and marketplace manifests:** [`plugin.json`](.claude-plugin/plugin.json) and
   [`marketplace.json`](.claude-plugin/marketplace.json)
 
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/awalsh128)
+<p align="center">
+  <a href="https://github.com/sponsors/awalsh128"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
+</p>
 
 If you find this project useful, please consider [sponsoring it](https://github.com/sponsors/awalsh128) and
 show some ❤️ for open source maintainers.
@@ -38,18 +51,18 @@ Then ask for what the skill does, for example "write a README for this repo".
 
 ## Skills
 
-| Group     | Skill                                                                   | What it does                                                                                                                                                                                                                                                                             |
-| --------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dev`     | [`npm-audit`](skills/dev/npm-audit/SKILL.md)                            | Evaluates npm audit findings on the current tree, separates stale reports from real ones, and applies the smallest fix: lockfile refresh, bumped parent or override, with a one-call triage script.                                                                                      |
-| `dev`     | [`project-setup`](skills/dev/project-setup/SKILL.md)                    | Sets up a new VS Code or Cursor project's baseline: recommended extensions, `.vscode` settings, EditorConfig, Prettier at 110 columns and a husky format check, deferring to my powerpack templates.                                                                                     |
-| `dev`     | [`vsce-project`](skills/dev/vsce-project/SKILL.md)                      | Sets up and reviews what is unique to publishing a VS Code extension: manifest identity and Marketplace requirements, the Visual Studio Marketplace and Open VSX registries, one `.vsix` published from the release workflow, and pre-release versioning. Runs only when called by name. |
-| `github`  | [`check-pr-release-type`](skills/github/check-pr-release-type/SKILL.md) | Checks that a pull request title's Conventional Commits type matches what its diff does to consumers, so an undeclared breaking change can't ship as a minor or patch.                                                                                                                   |
-| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)                 | Writes, revises or audits a GitHub README to my own conventions: logo, badge row, emoji feature bullets, sponsor badge, compact layout chosen by repo type. Keeps the repo description and topics consistent with it.                                                                    |
-| `github`  | [`cross-repo-drift`](skills/github/cross-repo-drift/SKILL.md)           | Audits your public repos for drift from a standards source with a read-only report, then on approval opens PRs for the fixes. Scripts do the checking, a model only where judgment is needed, and it never starts without an explicit call.                                              |
-| `github`  | [`github-cicd`](skills/github/github-cicd/SKILL.md)                     | Creates, changes or reviews GitHub Actions workflows: staging to main fast-forward promotion, CI-gated releases, semantic-release, OIDC instead of secrets, SHA-pinned actions, Dependabot.                                                                                              |
-| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md)           | Creates, extends or reviews a TypeScript GitHub Action: testable runner, rollup bundle, Vitest, semantic-release, SHA-pinned workflows.                                                                                                                                                  |
-| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)                         | Writes, modifies or reviews TypeScript: readable over terse, platform and small libraries over hand-rolled code, single-responsibility modules, co-located types.                                                                                                                        |
-| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)                      | Writes, revises or audits unit tests in any language: behavior through the public API, Arrange-Act-Assert, three-part names, parameterized cases, faked boundaries.                                                                                                                      |
+| Group     | Skill                                                                   | Use it to                                                                                                     |
+| --------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `dev`     | [`npm-audit`](skills/dev/npm-audit/SKILL.md)                            | Triage and fix `npm audit` findings with the smallest safe change.                                            |
+| `dev`     | [`project-setup`](skills/dev/project-setup/SKILL.md)                    | Set up a new project's VS Code or Cursor, EditorConfig, Prettier and husky baseline.                          |
+| `dev`     | [`vsce-project`](skills/dev/vsce-project/SKILL.md)                      | Publish a VS Code extension: manifest, Marketplace, Open VSX and pre-releases. Runs only when called by name. |
+| `github`  | [`check-pr-release-type`](skills/github/check-pr-release-type/SKILL.md) | Check a pull request title's Conventional Commits type against what its diff does to consumers.               |
+| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)                 | Write, revise or audit a README, plus the repo description and topics.                                        |
+| `github`  | [`cross-repo-drift`](skills/github/cross-repo-drift/SKILL.md)           | Audit your public repos for drift from a standards source, then open fix PRs on approval.                     |
+| `github`  | [`github-cicd`](skills/github/github-cicd/SKILL.md)                     | Create or review GitHub Actions workflows: promotion, releases, OIDC, pinned actions.                         |
+| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md)           | Create, extend or review a TypeScript GitHub Action.                                                          |
+| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)                         | Write or review TypeScript: readable, small modules, co-located types.                                        |
+| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)                      | Write, revise or audit unit tests in any language.                                                            |
 
 ## Layout
 

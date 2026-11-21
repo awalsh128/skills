@@ -19,6 +19,8 @@ Uses the standard layout in `SKILL.md`. Type-specific rules:
 3. **Usage / API:** the main calls, then a link to generated API docs if they exist.
 4. **Testing:** the real test command. Omit this section if the repo has no tests; don't print a command that
    runs nothing.
+5. **Credits:** optional and last. Allowed when it credits real third-party code the library wraps or depends
+   on in a way users should know about. Each entry links the project and says what it provides.
 
 ## Registry quick reference
 
@@ -52,7 +54,9 @@ Insert these when they apply, and suggest them in the summary when they don't ye
   `https://codecov.io/gh/<owner>/<repo>`. If the repo isn't found, insert the badge anyway only when the
   workflow uploads, and say in the summary that Codecov isn't authorized or has no upload yet (the badge shows
   "unknown" until then). A repo with a staging/main split has one branch on Codecov; use the one the API
-  reports.
+  reports. If the API call itself fails (error or timeout, not a not-found), keep the existing badge or use
+  the default branch from `gh repo view --json defaultBranchRef`, and say in the summary that the Codecov
+  branch is unverified. Never skip the check silently.
 
 ## Optional badges
 
