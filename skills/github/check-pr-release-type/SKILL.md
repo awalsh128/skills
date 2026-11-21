@@ -1,10 +1,9 @@
 ---
 name: check-pr-release-type
 description:
-  Check that a pull request's Conventional Commits title declares the right release type for its diff - feat,
-  fix, a non-releasing type, or a breaking change - by mapping each change onto what consumers depend on. Use
-  when reviewing or about to merge a pull request whose title follows Conventional Commits, when the user asks
-  whether a change is breaking or what version it ships as, or says "check-pr-release-type". Not for general
+  Use when reviewing or about to merge a pull request whose title follows Conventional Commits, when the user
+  asks whether a change is breaking or what version it ships as, or says "check-pr-release-type". Checks the
+  title's type (feat, fix, non-releasing, breaking) against what the diff does to consumers. Not for general
   code review, commit message format (commitlint does that), or release pipeline setup (use github-cicd).
 ---
 

@@ -1,12 +1,11 @@
 ---
 name: npm-audit
 description:
-  Evaluate and fix npm audit findings in a Node project or npm workspaces monorepo - triage by severity and by
-  runtime versus dev dependency, decide which findings are real, apply the smallest non-breaking fix (lockfile
-  refresh, bumped parent, or an override) and verify it. Use when the user asks to check, evaluate or fix npm
-  audit, vulnerabilities, advisories or Dependabot security alerts, or when a CI audit step or an auto-filed
-  "npm audit found vulnerabilities" issue fails. Not for general dependency upgrades (use Dependabot), other
-  package managers, or CI workflow edits (use github-cicd).
+  Use when the user asks to check or fix npm audit findings, vulnerabilities or Dependabot security alerts in
+  a Node project or npm workspaces monorepo, or when a CI audit step or an auto-filed "npm audit found
+  vulnerabilities" issue fails. Triages by severity and runtime versus dev, applies the smallest non-breaking
+  fix and verifies it. Not for general dependency upgrades (use Dependabot), other package managers, or CI
+  workflow edits (use github-cicd).
 ---
 
 # npm-audit

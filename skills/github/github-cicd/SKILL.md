@@ -1,20 +1,18 @@
 ---
 name: github-cicd
 description:
-  Create, change or review GitHub Actions workflow files to the user's own opinionated CI/CD pipeline -
-  staging/main promotion by fast-forward, CI-gated releases, nightly release candidates, semantic-release
-  through npm-publish-strict, OIDC instead of secrets, SHA-pinned actions, Dependabot. Use only when the task
-  adds or modifies files under .github/workflows, .github/actions, .github/chainguard or
-  .github/dependabot.yml, or reviews them, or the user says "github-cicd". Not for code that merely runs in CI
-  (tests, build scripts), the code of a GitHub Action (use github-ts-action), a README (use create-readme), or
-  other CI systems.
+  Use when the task creates, changes or reviews files under .github/workflows, .github/actions,
+  .github/chainguard or .github/dependabot.yml, or the user says "github-cicd". Applies the user's CI/CD
+  pipeline (staging/main fast-forward promotion, CI-gated semantic-release, OIDC instead of secrets,
+  SHA-pinned actions). Not for code that merely runs in CI, the code of a GitHub Action (use
+  github-ts-action), a README (use create-readme), or other CI systems.
 ---
 
 # github-cicd
 
-This skill applies the user's CI/CD conventions to a repository's GitHub Actions. They are opinions: follow
-them even where common advice differs. Exemplar: https://github.com/awalsh128/winston-host-adapters (branch
-`staging` is the latest). Read the local clone at `~/repos/winston-host-adapters` if it exists, and check
+This skill applies the user's CI/CD conventions to a repository's GitHub Actions. Exemplar:
+https://github.com/awalsh128/winston-host-adapters (branch `staging` is the latest). Read the local clone at
+`~/repos/winston-host-adapters` if it exists, and check
 `git -C ~/repos/winston-host-adapters log origin/staging..HEAD` for unpushed changes, otherwise
 `gh api repos/awalsh128/winston-host-adapters/contents/<path>?ref=staging`. The templates in
 `references/workflows.md` are distilled from it; when the exemplar has moved on, the exemplar wins.
@@ -102,40 +100,20 @@ the difference in the summary.
    report moderate-and-up in a deduplicated issue without failing; high and critical anywhere fail, because
    release tooling runs with credentials.
 10. **Comment the why** in the workflow (a short block at the top says what the workflow does and what it
-    trusts). Skip comments that restate the step name.
-11. **Releases have an off switch.** The release job's `if` is
-    `vars.RELEASES_ENABLED != 'false' || inputs.dry-run`. Every route to a release (a staging push, promote, a
-    manual run) goes through that one job, and a dry run is always allowed. A repo that must hold releases
-    while it settles inverts it (`== 'true'`) and sets the variable when ready. A release job that merely
-    fails is not a hold: with no tags, every staging push plans `1.0.0-rc.1`, and a pipeline fixed later
-    releases at once.
-12. **A major release needs a typed confirmation.** `promote.yml` takes an optional `confirm-major` input. A
-    step compares the latest candidate tag on `staging` with the latest official tag on `main` and fails
-    unless the input equals the planned version, when it starts a new major or is the first official release.
-    There is no maintenance branch, so a major strands users of the previous one. Where the repo has a
-    TypeScript toolchain, put the comparison in a tested script instead of the bash step in the template.
-13. **One gate job per matrix, and rulesets match names exactly.** A matrix job reports one check per
-    combination, but a ruleset requires a name, so add a gate job named like the required check that `needs:`
-    the matrix and passes only when every case did. Pin each required check to the GitHub Actions app
-    (`integration_id` 15368). Merging a changed `.github/rulesets/*.json` applies nothing: apply it, then
-    compare the live ruleset with the file.
-14. **Don't run what proves nothing.** `concurrency` cancels superseded runs only for pull requests
-    (`group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}`,
-    `cancel-in-progress: ${{ github.event_name == 'pull_request' }}`), so staging pushes that release are
-    never cancelled or dropped. With squash-only merges the title is the commit, so skip per-commit commitlint
-    in CI and keep the title lint.
-15. **Verify a release from the source, not from `npm view`.** The registry's metadata is cached and can lag a
-    publish by minutes: right after `Published <pkg>@<version>` in the release log, `npm view <pkg>` and its
-    `dist-tags` can still show the old version. Take the proof from the release job log, the tag and the
-    GitHub release, then ask the registry for the exact version (`npm view <pkg>@<version> version`) and retry
-    for a few minutes before calling it a failure. Don't treat `latest` still showing the old version as a
-    failed release, and never re-run a release because of it.
+    trusts). Skip comments that restate the step name. 11-15. **Release and ruleset rules.** Read
+    `references/release-rules.md` before touching a release job, `promote.yml`, a matrix, a ruleset or
+    `concurrency`. In brief: releases have an off switch (`RELEASES_ENABLED`); a major release needs a typed
+    `confirm-major`; a matrix needs one gate job whose name matches the required check; `concurrency` cancels
+    only pull request runs; a release is verified from the release log and tag, not from `npm view`.
 
 ## Finishing
 
+Done when every workflow file passes the rules (or Review lists each failure), every pinned SHA is resolved,
+and the setup checklist is in the summary.
+
 - Validate: `actionlint` if installed, otherwise a YAML parse of each file;
   `gh api repos/<owner>/<repo>/git/ref/tags/<tag>` for each pinned SHA. Say plainly what you could not run.
-- Don't commit, push or enable anything unless asked. Never run a release, tag or promotion without
+- Leave commits, pushes and enabling to the user's ask. Run a release, tag or promotion only after
   confirmation; suggest `gh workflow run publish.yml --ref staging -f dry-run=true` to test a change.
 - Setup the files cannot do (rulesets, the Octo STS app, the `release` environment, the npm trusted publisher,
   Pages source) goes in the summary as a checklist from `references/repo-setup.md`, not into the workflows.
