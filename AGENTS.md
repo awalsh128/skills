@@ -30,6 +30,8 @@ using the skills in other projects; each skill's `SKILL.md` carries those.
 - The pre-commit hook (`npm install` enables it) bumps the patch version in `plugin.json` when a commit does
   not, and copies it to the `marketplace.json` entry. Do not bypass it with `--no-verify`. To change the
   version by hand, edit `plugin.json` only; the hook copies it.
+- The same hook fails when `package-lock.json` is out of sync with `package.json`. Add dependencies with
+  `npm install`, never by editing `package.json`, and commit the lock file with it.
 - ASK FIRST before pushing, tagging or publishing.
 
 ## Quick Commands
