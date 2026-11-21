@@ -3,6 +3,9 @@
 Applies to dotfiles, scripts, sites and prototypes meant mainly for the owner. Exemplar:
 https://github.com/awalsh128/aw-home
 
+Only for repos meant mainly for the owner. A public repo other people install or use (a skills collection, a
+library, a tool) is not personal tooling: use its own template or the standard layout in `SKILL.md`.
+
 ## Shape
 
 - Title and a one-line description. No badge row, no emoji bullets, no sponsor badge unless the repo is meant
