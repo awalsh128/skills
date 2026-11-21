@@ -38,6 +38,11 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    dropped and words capitalized. Keep proper nouns and acronyms as the project writes them. If more than one
    reading is plausible, pick one and say so in the summary. Use it in the title, the logo alt text and prose.
    Keep the repo slug only where it must be literal: URLs, badge links, `uses:`, install commands and code.
+   For a VS Code extension the manifest's `displayName` is authoritative, not a suggestion: the Marketplace
+   requires it to be unique, so it can carry a suffix the repo slug and prose don't (`Regex Explain Lab` for
+   `regex-explain`). Use it as written for the title, the logo alt text and Marketplace-facing prose, never
+   "correct" it toward the slug, and don't flag the difference as an inconsistency. See
+   `references/vscode-extension.md`.
 4. Find real install, build and test commands from scripts, Makefile or CI. Run the cheap ones.
 5. Classify the repo and read its template (see **Templates**). If the type or purpose isn't evident (e.g. a
    lone `main.go`), ask the user what the project is for instead of guessing.
@@ -49,8 +54,10 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    `references/logo.md`, write the placeholder SVG to `assets/logo.svg`, wire it in, and say it is a
    placeholder. Never put a placeholder or broken image in the README without a yes.
 2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI),
-   `LICENSE` exists, a release tag exists. Registry and coverage badges (npm, Marketplace, Codecov) are
-   suggested as snippets in the summary, not inserted. Badges are not mandatory; with no CI, omit and say so.
+   `LICENSE` exists, a release tag exists. Include the registry version badge (npm, Marketplace) when the
+   package is published, and the Codecov badge when a workflow runs `codecov/codecov-action` (see the type's
+   reference for snippets and checks). Suggest, don't insert, a registry or coverage badge that doesn't apply
+   yet. Badges are not mandatory; with no CI, omit and say so.
    Two badges must never show the same label: when several badges would (e.g. CI on `main` and CI on
    `staging`, or two workflows both named "CI"), give each a distinct label naming what sets it apart (`main`,
    `staging`, `release`), via the shields.io `label` parameter or the workflow badge's `?branch=` query plus
