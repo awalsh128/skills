@@ -4,9 +4,3 @@ expected_outcome: |
   A general request to fix drift does not start the skill or apply anything.
 context:
   scaffold_script: place-files.sh
----
-tags: [cross-repo-drift]
-max_turns: 30
-timeout_seconds: 900
-allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
----
