@@ -100,11 +100,12 @@ the difference in the summary.
    report moderate-and-up in a deduplicated issue without failing; high and critical anywhere fail, because
    release tooling runs with credentials.
 10. **Comment the why** in the workflow (a short block at the top says what the workflow does and what it
-    trusts). Skip comments that restate the step name. 11-15. **Release and ruleset rules.** Read
-    `references/release-rules.md` before touching a release job, `promote.yml`, a matrix, a ruleset or
-    `concurrency`. In brief: releases have an off switch (`RELEASES_ENABLED`); a major release needs a typed
-    `confirm-major`; a matrix needs one gate job whose name matches the required check; `concurrency` cancels
-    only pull request runs; a release is verified from the release log and tag, not from `npm view`.
+    trusts). Skip comments that restate the step name.
+11. **Release and ruleset rules (11-15).** Read `references/release-rules.md` before touching a release job,
+    `promote.yml`, a matrix, a ruleset or `concurrency`. In brief: releases have an off switch
+    (`RELEASES_ENABLED`); a major release needs a typed `confirm-major`; a matrix needs one gate job whose
+    name matches the required check; `concurrency` cancels only pull request runs; a release is verified from
+    the release log and tag, not from `npm view`.
 
 ## Finishing
 
