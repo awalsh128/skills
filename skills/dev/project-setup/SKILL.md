@@ -23,6 +23,8 @@ common advice differs, but let a repo's existing config win over it.
 - **EditorConfig** for the rest: UTF-8, LF, spaces, final newline, trimmed whitespace.
 - **Format on save** with Prettier as the default formatter, so the hook rarely has anything to say.
 - **husky pre-commit** runs the format check, so unformatted code can't land.
+- **The lock file stays in sync.** The same hook checks that the lock file matches `package.json`, so a
+  dependency edited in by hand can't be committed without its lock entry and then fail `npm ci` in CI.
 
 ## Steps
 
@@ -42,7 +44,9 @@ common advice differs, but let a repo's existing config win over it.
    since a long list is noise the user dismisses.
 5. **Node projects: Prettier and husky.** Add `prettier`, `prettier-plugin-padding-lines` and `husky` as dev
    dependencies, the `format` and `format:check` scripts, `"prepare": "husky"`, and a `.husky/pre-commit` that
-   runs `npm run format:check`. Take every version from `npm view <package> version`, never from memory: a
+   runs `npm run format:check` and `npm ci --dry-run --ignore-scripts`, which fails when the lock file is out
+   of sync with `package.json`. Add dependencies with `npm install`, never by editing `package.json`, and
+   commit the lock file with it. Take every version from `npm view <package> version`, never from memory: a
    remembered `^1.0.0` of a plugin that only has `0.1.0` breaks `npm install`. For other stacks, don't add a
    Node toolchain unprompted; set the language's formatter in `.vscode/settings.json` (ruff, gofmt, rustfmt)
    and ask whether they want husky anyway.
