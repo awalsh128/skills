@@ -26,7 +26,7 @@ If a variable is missing, say which one and stop. Don't guess a command.
 
 ## Calling it
 
-A bare call prints usage and does nothing else.
+The skill runs only when the user calls it by name, and a bare call prints usage and does nothing else.
 
 - `audit [--repos a,b] [--out report.json]` is read-only: it clones shallowly into a temp directory, runs
   `check`, and reports per repo its profile, open findings and excepted findings. Safe to schedule.
