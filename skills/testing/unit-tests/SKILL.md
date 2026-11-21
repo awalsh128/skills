@@ -1,12 +1,10 @@
 ---
 name: unit-tests
 description:
-  Write, revise or audit unit tests to the user's conventions - behavior tested through the public API,
-  Arrange-Act-Assert, names that state method, condition and expected result, parameterized cases, real
-  dependencies with only external boundaries faked, isolated tests safe to run in parallel. Use only when the
-  task is writing, changing, fixing or judging unit tests in any language (Jest, Vitest, pytest, Go testing,
-  JUnit, Rust), including adding the tests a feature or bug fix needs. Not for integration, end-to-end, load
-  or manual testing, nor for non-test code.
+  Use when the task is writing, changing, fixing or judging unit tests in any language (Jest, Vitest, pytest,
+  Go testing, JUnit, Rust), including the tests a feature or bug fix needs. Applies the user's conventions
+  (public-API behavior, Arrange-Act-Assert, faked boundaries only). Not for integration, end-to-end, load or
+  manual testing, nor for non-test code.
 ---
 
 # unit-tests
@@ -114,6 +112,8 @@ A test describes what the unit does for its callers, so it survives any refactor
   does the job, and keep it in the test file that uses it.
 
 ## Finishing
+
+Done when every test you wrote or touched is checked against the rules above and the full suite has run.
 
 - Run the tests you wrote or changed, then the full suite. Say plainly what failed or what you could not run.
 - Summarize: behaviors covered, any boundary you faked and why, repo conventions that overrode these rules,

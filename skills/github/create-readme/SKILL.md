@@ -1,11 +1,9 @@
 ---
 name: create-readme
 description:
-  Write, revise or audit a GitHub repository README.md to the user's own opinionated conventions (logo, badge
-  row, emoji feature bullets, sponsor badge, compact structure chosen by repo type), and keep the repository's
-  GitHub description and topics consistent with it. Use only when the task is a repository's README.md or its
-  GitHub description and topics, meaning the user asks to create, draft, improve, fix, modernize, shorten or
-  check one, says "create-readme", or asks whether a README follows their standards. Not for API docs,
+  Use when the task is a repository's README.md or its GitHub description and topics - write, revise or audit
+  one to the user's own conventions (logo, badges, emoji feature bullets, sponsor badge, structure by repo
+  type) - or the user says "create-readme" or asks whether a README follows their standards. Not for API docs,
   docstrings, changelogs or design docs.
 ---
 
@@ -90,31 +88,8 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    emoji. This is the one deliberate emoji exception and it replaces a separate Features section. Personal
    tooling skips it. Elsewhere, emoji only where they carry information a reader scans for (⚠️ Caveats, status
    markers); never decorate every heading.
-5. **Sponsor badge** after the bullets, on by default, for solo-owner projects. A pink for-the-badge badge
-   linking to the owner's Sponsors page, with one line of plain text under it:
-
-   ```markdown
-   [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/<owner>)
-
-   If you find this project useful, please consider [sponsoring it](https://github.com/sponsors/<owner>) and
-   show some ❤️ for open source maintainers.
-   ```
-
-   Exemplar: https://github.com/agent-sh/agnix. In a centered header (VS Code extensions), put the badge in a
-   `<p align="center">` block as that README does.
-
-   `<owner>` is the git remote owner. Check the page exists with the GraphQL field `hasSponsorsListing`:
-   `gh api graphql -f query='{user(login:"<owner>"){hasSponsorsListing}}'` (use `organization(login:...)` for
-   an org). `false` means no Sponsors page. Do not use a REST `.../sponsorship` path: it does not exist and
-   always returns 404, which looks like "not found" for owners who do have a page. If GraphQL is unavailable,
-   fetch `https://github.com/sponsors/<owner>`: a 200 means the page exists, and a 404 or a redirect to the
-   profile page means it does not.
-   - Not found: skip the badge; the summary says how to enable GitHub Sponsors.
-   - Owner is an org or multi-human project: no badge; the summary notes org Sponsors or a fiscal host, with a
-     docs link.
-   - Check can't run at all (no `gh`, no network, auth error): include the badge and flag it unverified. A
-     definite not-found is never "can't run".
-   - The user can opt out. Personal tooling skips it.
+5. **Sponsor badge** after the bullets, on by default, for solo-owner projects (skipped for personal tooling
+   and on opt-out). Read `references/sponsor-badge.md` for the snippet and the Sponsors-page check.
 
 6. **Quick Start first.** The shortest working example precedes reference material. Real warnings (e.g. `sudo`
    required) use `> [!IMPORTANT]` / `> [!NOTE]` callouts, right after the sponsor badge.
@@ -134,33 +109,9 @@ Ground every claim in the repo. A README that describes things the code doesn't 
 
 ## Description and topics
 
-The repository's About box (GitHub description and topics) is what search and the profile page show, so it
-must say the same thing as the README. Do this in every mode, after the README content is settled.
-
-1. Read the current values: `gh repo view <owner>/<repo> --json description,repositoryTopics`.
-2. **Description.** One sentence, at most about 120 characters, stating what the project does in the same
-   terms as the README description paragraph: same project name, same purpose, no claim the README doesn't
-   make. No emoji, no badges, no trailing "for X and Y and Z" lists. Inconsistent means it describes a
-   different or outdated purpose, names a feature the README doesn't, or is empty.
-3. **Topics.** Suggest 5-10. GitHub requires lowercase letters, digits and hyphens, at most 50 characters each
-   and 20 in total. Include:
-   - the repo type: `github-actions` (Action), `vscode-extension` (VS Code extension), the registry for a
-     published package (`npm-package`, `pypi-package`), `cli` for a command-line tool;
-   - the main language (`typescript`, `python`, `go`, `cpp`);
-   - the domain terms a person would search for, taken from the README description and feature bullets (`apt`,
-     `caching`, `semantic-release`).
-
-   Prefer GitHub's featured topic spelling (`github-actions`, not `gh-actions`). Every topic must be backed by
-   the README or the code; flag existing topics that aren't, and README key concepts with no topic. The same
-   goes for the homepage URL: it must match any site the README links, with the same host spelling.
-
-4. Show the current and proposed description and topics side by side.
-   - **Write / Revise:** ASK before changing anything; it edits the live repository. On a yes, apply with
-     `gh repo edit <owner>/<repo> --description "<text>" --add-topic <a>,<b> --remove-topic <c>`, then rerun
-     the step 1 command to confirm.
-   - **Audit:** report pass/fail for the description and topics with the proposed values. Edit nothing.
-   - `gh` missing or not authenticated: give the `gh repo edit` command in the summary and say the check
-     didn't run.
+The repository's About box (GitHub description and topics) must say the same thing as the README. In every
+mode, once the README content is settled, read `references/about-box.md` and compare the live values with the
+README. Write / Revise ask before editing the live repo; Audit edits nothing.
 
 ## Standard layout
 
@@ -194,8 +145,11 @@ back to it by default: use the nearest template above, or ask what the project i
 
 ## Finishing
 
-- Write to `README.md` at the repo root (not in audit mode). Don't commit unless asked. For large revisions,
-  show a summary before overwriting.
+Done when every convention above is applied (or reported pass/fail in Audit), every command and link is
+verified or flagged unverified, and the About box is compared with the README.
+
+- Write to `README.md` at the repo root (Audit mode writes nothing). Leave committing to the user's ask. For
+  large revisions, show a summary before overwriting.
 - End with a short summary: what changed, what couldn't be verified, the description and topics result
   (applied, declined or proposed), and suggestions (registry/coverage badge snippets, logo offer, Sponsors
   setup, missing CONTRIBUTING/FAQ/docs).

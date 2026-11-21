@@ -1,11 +1,8 @@
 ---
 name: cross-repo-drift
 description:
-  Use only when the user invokes cross-repo-drift or explicitly asks to audit or fix drift across their own
-  GitHub repos against a standards source repo. Audits the owner's public repos with a read-only report, then
-  on approval opens PRs that bring named repos back in line. Never starts on its own. Not for one repo (use
-  that repo's own sync command), adding one tool to a repo, project setup (use project-setup) or writing CI
-  workflows (use github-cicd).
+  Audit your public GitHub repos against a standards source repo with a read-only report, then on approval
+  open PRs that bring named repos back in line.
 disable-model-invocation: true
 ---
 
@@ -29,7 +26,7 @@ If a variable is missing, say which one and stop. Don't guess a command.
 
 ## Calling it
 
-The skill never starts on its own, and a bare call prints usage and does nothing else.
+The skill runs only when the user calls it by name, and a bare call prints usage and does nothing else.
 
 - `audit [--repos a,b] [--out report.json]` is read-only: it clones shallowly into a temp directory, runs
   `check`, and reports per repo its profile, open findings and excepted findings. Safe to schedule.
@@ -38,6 +35,9 @@ The skill never starts on its own, and a bare call prints usage and does nothing
   run with `DRIFT_UNATTENDED` set. Use `--dry-run` first.
 
 Run `python3 <skill dir>/scripts/drift.py` for the exact usage.
+
+Done when every approved `{repo, rule}` pair has a PR (reviewed, and auto-merge enabled where eligible) or a
+reported reason it was left unchanged.
 
 ## Flow
 
@@ -66,11 +66,12 @@ mechanical fixes. Give a subagent the smallest input that lets it decide, and ta
 structured verdict. Pick the model by tier with `drift.py tier fast|balanced|deep`; never name a model
 yourself. See `references/models-and-tokens.md` for who gets which tier and how to log tokens.
 
-## What this skill does not do
+## Boundaries
 
-- It does not decide merge eligibility, change a repo's settings, or touch private repos or forks.
-- It does not edit a repo's standing exceptions to make a finding go away; exceptions are the user's call.
-- It does not fix a collision, a deliberate difference or an `unclassified` repo.
+- Merge eligibility belongs to each repo's CI, and settings belong to the repo owner.
+- Scope is public, non-fork repos; private repos and forks are out.
+- A repo's standing exceptions stay as the user wrote them; only the user edits them.
+- A collision, a deliberate difference or an `unclassified` repo goes to the user as a prompt, unfixed.
 
 ## References
 

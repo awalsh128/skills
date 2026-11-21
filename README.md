@@ -51,18 +51,19 @@ Then ask for what the skill does, for example "write a README for this repo".
 
 ## Skills
 
-| Group     | Skill                                                                   | Use it to                                                                                                     |
-| --------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `dev`     | [`npm-audit`](skills/dev/npm-audit/SKILL.md)                            | Triage and fix `npm audit` findings with the smallest safe change.                                            |
-| `dev`     | [`project-setup`](skills/dev/project-setup/SKILL.md)                    | Set up a new project's VS Code or Cursor, EditorConfig, Prettier and husky baseline.                          |
-| `dev`     | [`vsce-project`](skills/dev/vsce-project/SKILL.md)                      | Publish a VS Code extension: manifest, Marketplace, Open VSX and pre-releases. Runs only when called by name. |
-| `github`  | [`check-pr-release-type`](skills/github/check-pr-release-type/SKILL.md) | Check a pull request title's Conventional Commits type against what its diff does to consumers.               |
-| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)                 | Write, revise or audit a README, plus the repo description and topics.                                        |
-| `github`  | [`cross-repo-drift`](skills/github/cross-repo-drift/SKILL.md)           | Audit your public repos for drift from a standards source, then open fix PRs on approval.                     |
-| `github`  | [`github-cicd`](skills/github/github-cicd/SKILL.md)                     | Create or review GitHub Actions workflows: promotion, releases, OIDC, pinned actions.                         |
-| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md)           | Create, extend or review a TypeScript GitHub Action.                                                          |
-| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)                         | Write or review TypeScript: readable, small modules, co-located types.                                        |
-| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)                      | Write, revise or audit unit tests in any language.                                                            |
+| Group     | Skill                                                                   | Use it to                                                                                                                                                 |
+| --------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dev`     | [`npm-audit`](skills/dev/npm-audit/SKILL.md)                            | Triage and fix `npm audit` findings with the smallest safe change.                                                                                        |
+| `dev`     | [`project-setup`](skills/dev/project-setup/SKILL.md)                    | Set up a new project's VS Code or Cursor, EditorConfig, Prettier and husky baseline.                                                                      |
+| `dev`     | [`vsce-project`](skills/dev/vsce-project/SKILL.md)                      | Publish a VS Code extension: manifest, Marketplace, Open VSX and pre-releases. Runs only when called by name.                                             |
+| `github`  | [`check-pr-release-type`](skills/github/check-pr-release-type/SKILL.md) | Check a pull request title's Conventional Commits type against what its diff does to consumers.                                                           |
+| `github`  | [`create-readme`](skills/github/create-readme/SKILL.md)                 | Write, revise or audit a README, plus the repo description and topics.                                                                                    |
+| `github`  | [`cross-repo-drift`](skills/github/cross-repo-drift/SKILL.md)           | Audit your public repos for drift from a standards source, then open fix PRs on approval.                                                                 |
+| `github`  | [`github-cicd`](skills/github/github-cicd/SKILL.md)                     | Create or review GitHub Actions workflows: promotion, releases, OIDC, pinned actions.                                                                     |
+| `github`  | [`github-ts-action`](skills/github/github-ts-action/SKILL.md)           | Create, extend or review a TypeScript GitHub Action.                                                                                                      |
+| `lang`    | [`code-design`](skills/lang/code-design/SKILL.md)                       | Write or review code in any language: readable over terse, platform and small libraries, single-responsibility modules, co-located types, config as data. |
+| `lang`    | [`typescript`](skills/lang/typescript/SKILL.md)                         | Add my TypeScript specifics on top of `code-design`: platform APIs first, inferred types, JSON imports, typed config.                                     |
+| `testing` | [`unit-tests`](skills/testing/unit-tests/SKILL.md)                      | Write, revise or audit unit tests in any language.                                                                                                        |
 
 ## Layout
 

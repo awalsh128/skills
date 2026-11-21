@@ -4,9 +4,3 @@ expected_outcome: |
   A line width collision becomes a question; no file is changed.
 context:
   scaffold_script: place-files.sh
----
-tags: [cross-repo-drift]
-max_turns: 30
-timeout_seconds: 900
-allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
----

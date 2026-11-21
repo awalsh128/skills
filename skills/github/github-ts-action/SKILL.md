@@ -1,21 +1,17 @@
 ---
 name: github-ts-action
 description:
-  Create, scaffold, extend or review a TypeScript GitHub Action (JavaScript action running on node24) to the
-  user's own conventions - src/index.ts plus a testable runner, rollup bundle to dist/action/index.js, vitest,
-  semantic-release, SHA-pinned workflows. Use only when the project is a GitHub Action (it has or needs an
-  action.yml), meaning the user wants a new one in TypeScript, asks to add an input, output or feature to an
-  existing one, says "github-ts-action", or asks whether an action repo follows their standards. Not for
-  general TypeScript outside a GitHub Action (use typescript), nor for composite or Docker actions, reusable
-  workflows, or the action's README (use create-readme).
+  Use when the project is a TypeScript GitHub Action (it has or needs an action.yml) and the user wants a new
+  one, a new input, output or feature, a standards review, or says "github-ts-action". Not for general
+  TypeScript outside an Action (use typescript), composite or Docker actions, reusable workflows, or the
+  action's README (use create-readme).
 ---
 
 # github-ts-action
 
-This skill applies the user's conventions for TypeScript GitHub Actions. They are opinions: follow them even
-where common advice differs. Exemplar: https://github.com/awalsh128/cache-apt-pkgs-action on branch `main-2`
-(read a local clone only if one exists; otherwise
-`gh api repos/awalsh128/cache-apt-pkgs-action/contents/<path>?ref=main-2`).
+This skill applies the user's conventions for TypeScript GitHub Actions. Exemplar:
+https://github.com/awalsh128/cache-apt-pkgs-action on branch `main-2` (read a local clone only if one exists;
+otherwise `gh api repos/awalsh128/cache-apt-pkgs-action/contents/<path>?ref=main-2`).
 
 For repository files outside the action's code (editor, formatting, commit lint, issue forms), also use the
 `dev-powerpack-exemplars` skill and its `common`, `conventional-commits` and `node` sets. Where it differs
@@ -108,10 +104,9 @@ AGENTS.md                  agent rules (see references/ci-and-release.md)
 
 ## Tests
 
-- Vitest, `globals: true`, `environment: node`, `include: ["test/**/*.test.ts"]`, v8 coverage over
-  `src/**/*.ts` excluding `src/index.ts`. Run as `vitest run --coverage`.
-- Name tests `<method> <conditions> <expected>`. Test behavior, not implementation. No control flow in test
-  bodies. Constants when the value doesn't matter. Parameterize repeated cases.
+- Vitest with v8 coverage over `src/**/*.ts` excluding `src/index.ts` (config in `references/configs.md`). Run
+  as `vitest run --coverage`.
+- Write the tests with the `unit-tests` skill alongside this one.
 - Mock at the dependency seam (`vi.mock` on the library, or hand-built mock objects cast `as never`), not by
   patching internals.
 - CI also enforces `type-coverage --at-least 95`.
@@ -123,20 +118,19 @@ alongside this one. Read `references/ci-and-release.md` before writing workflows
 config, `AGENTS.md` or package scripts. Read `references/configs.md` before writing `tsconfig*`,
 `rollup.config.mjs`, `vitest.config.ts`, `eslint.config.js` or `package.json`.
 
-Hard rules:
+Workflow hygiene (SHA pins, least-privilege `permissions:`) follows `github-cicd`. Action-specific:
 
-- Every `uses:` pinned to a full commit SHA with a `# vX.Y.Z` comment. Resolve SHAs with
-  `gh api repos/<owner>/<repo>/git/ref/tags/<tag>`, never from memory.
-- Least-privilege `permissions:` per job (`contents: read` by default).
 - Build once, upload the bundle as an artifact, and have integration jobs run it with `uses: ./`.
 - `main` is stable, `staging` is the prerelease branch (`rc`), released by semantic-release from Conventional
   Commits.
 
 ## Finishing
 
-- Verify before claiming done: `npx tsc -p tsconfig.json --noEmit`, `npm run lint`, `npx vitest run`, and
-  `npm run build` confirming `dist/action/index.js` exists. Say plainly what you could not run.
-- Don't commit unless asked. Do not publish, tag or push a release without confirmation.
+Done when typecheck, lint, tests and the build all pass, or the summary names each one that could not run.
+
+- Verify: `npx tsc -p tsconfig.json --noEmit`, `npm run lint`, `npx vitest run`, and `npm run build`
+  confirming `dist/action/index.js` exists. Say plainly what you could not run.
+- Leave committing to the user's ask. Publish, tag or push a release only after confirmation.
 - Summarize: files created or changed, assumptions (Node version, dependency versions, branch names),
   unverified items, and suggestions (README via `create-readme`, Codecov setup, Sponsors, missing
   CONTRIBUTING).

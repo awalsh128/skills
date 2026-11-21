@@ -1,8 +1,8 @@
 ---
 type: llm
-focus: trace
+focus: last_message
 weight: 2
 ---
 
-The verify result is a pass (exit 0) and the final message says line-width needs no fix because of the
-standing exception
+The final message says line-width needs no fix because of the standing exception in
+`demo/.agents/standards-overrides.json`, even though `check.py` reports it as a finding
