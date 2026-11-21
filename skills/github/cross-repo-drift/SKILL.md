@@ -2,7 +2,8 @@
 name: cross-repo-drift
 description:
   Audit your public GitHub repos against a standards source repo with a read-only report, then on approval
-  open PRs that bring named repos back in line.
+  open PRs that bring named repos back in line. Use when the user asks to check or sync their public repos
+  against a standards repo. Not for private repos, forks or a one-off edit to a single repo.
 disable-model-invocation: true
 ---
 

@@ -19,11 +19,13 @@ acting on a stale report: auto-filed issues and old CI logs describe the tree of
    (add `--omit=dev` for what ships to users). It prints each vulnerable package once with severity, direct or
    transitive, and the fix type. Don't run `npm audit` several times with different flags.
 2. **Check for staleness first.** If the result is `0 vulnerabilities`, the findings are stale: compare any
-   open issue or failing log against the current lockfile, say so, and close the issue with a comment naming
-   the fix (mocha 12 instead of 11, an override). Don't change code to chase a stale report.
-3. **Rank by exposure.** Production dependencies ship to users: fix all of them. Dev-only findings matter when
-   the tool runs with credentials (publish, release or deploy jobs) or on untrusted input; otherwise moderate
-   and below can wait for a grouped Dependabot PR. Say which bucket each finding is in.
+   open issue or failing log against the current lockfile, say so, and propose closing the issue with a
+   comment naming the fix (mocha 12 instead of 11, an override); close it only on a yes. Don't change code to
+   chase a stale report.
+3. **Rank by exposure.** Production dependencies ship to users: fix all of them. Dev-only findings: fix high
+   and critical now, because release tooling runs with credentials; moderate and below matter only when the
+   tool runs on untrusted input, otherwise they can wait for a grouped Dependabot PR. Say which bucket each
+   finding is in.
 4. **Fix in this order, stopping at the first that works:**
    1. `npm audit fix` (never `--force` on its own: it can major-bump or downgrade the parent to hide the
       advisory).

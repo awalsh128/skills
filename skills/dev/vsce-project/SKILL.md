@@ -4,8 +4,9 @@ description:
   Use only when the user says "vsce-project" or explicitly asks for it, to create, change or review the parts
   of a VS Code extension project that are unique to publishing it - package.json manifest identity and listing
   requirements, the Visual Studio Marketplace and Open VSX Registry, the publish job and its credentials, and
-  versioning with pre-releases. Not for the extension's own TypeScript (use typescript), general CI (use
-  github-cicd), the wording of the README (use create-readme) or editor setup (use project-setup).
+  versioning with pre-releases. Not for the extension's own TypeScript (use typescript alongside), general CI
+  (use github-cicd alongside), the wording of the README (use create-readme) or editor setup (use
+  project-setup).
 ---
 
 # vsce-project
