@@ -1,0 +1,22 @@
+{
+  "owner": "demo",
+  "approved": [{ "repo": "demo", "rule": "line-width" }],
+  "repos": [
+    {
+      "repo": "demo",
+      "status": "ok",
+      "profile": "node-package",
+      "base_branch": "main",
+      "findings": [
+        {
+          "rule": "line-width",
+          "category": "format-collision",
+          "path": ".editorconfig",
+          "message": "110 in .editorconfig, 100 in .prettierrc.json",
+          "fixable": false
+        }
+      ],
+      "excepted": []
+    }
+  ]
+}

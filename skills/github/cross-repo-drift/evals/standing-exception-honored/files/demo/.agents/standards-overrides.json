@@ -1,0 +1,4 @@
+{
+  "profile": "vscode-extension",
+  "exceptions": [{ "rule": "line-width", "reason": "extension keeps 100 columns on purpose" }]
+}

@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: audit-only-changes-nothing
+expected_outcome: |
+  The audit runs read-only and reports; nothing is applied, pushed or edited.
+context:
+  scaffold_script: place-files.sh
+---
+tags: [cross-repo-drift]
+max_turns: 30
+timeout_seconds: 900
+allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
+---
