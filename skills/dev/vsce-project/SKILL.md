@@ -97,3 +97,9 @@ A half-publish (one registry accepted, the other rejected) has used the version.
 publish the missing registry by hand from the release asset, or fix the cause and land a releasable commit
 (`fix` or `feat`) so semantic-release produces the next version; without one it releases nothing.
 `ovsx publish --skip-duplicate` is for an identical re-run, not a way around this.
+
+## Update notice
+
+To tell users when a newer version is published, add the small module in `references/update-notice.md`: one
+toast with Update, Dismiss and Never buttons, where Never is stored in a setting. Read it when the user asks
+for update messages.
