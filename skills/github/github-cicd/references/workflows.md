@@ -335,6 +335,18 @@ jobs:
       actions: write # Read CI runs and start the release workflow
       id-token: write # For OIDC: the Octo STS token that updates main
     steps:
+      # The trust policy only accepts runs on staging, and a default `gh workflow run` dispatches on main,
+      # where Octo STS fails with "token does not match trust policy". Fail first, saying why.
+      - name: Require the workflow to run on staging
+        if: github.ref != 'refs/heads/staging'
+        env:
+          REF: ${{ github.ref }}
+        shell: bash
+        run: |
+          echo "::error::Promote was started on $REF. Octo STS only issues the main token to runs on staging."
+          echo "Run: gh workflow run promote.yml --ref staging"
+          exit 1
+
       # main's ruleset only lets the Octo STS app update it, so main is pushed with its token,
       # issued under .github/chainguard/promote.sts.yaml to this workflow on staging only.
       - name: Create main token

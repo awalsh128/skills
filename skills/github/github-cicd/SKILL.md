@@ -115,7 +115,9 @@ and the setup checklist is in the summary.
 - Validate: `actionlint` if installed, otherwise a YAML parse of each file;
   `gh api repos/<owner>/<repo>/git/ref/tags/<tag>` for each pinned SHA. Say plainly what you could not run.
 - Leave commits, pushes and enabling to the user's ask. Run a release, tag or promotion only after
-  confirmation; suggest `gh workflow run publish.yml --ref staging -f dry-run=true` to test a change.
+  confirmation; suggest `gh workflow run publish.yml --ref staging -f dry-run=true` to test a change. Promote
+  is dispatched with `gh workflow run promote.yml --ref staging`: on the default branch the Octo STS trust
+  policy rejects it.
 - Setup the files cannot do (rulesets, the Octo STS app, the `release` environment, the npm trusted publisher,
   Pages source) goes in the summary as a checklist from `references/repo-setup.md`, not into the workflows.
 - Summarize: files created or changed, assumptions (Node version, package order, baseline commit), anything

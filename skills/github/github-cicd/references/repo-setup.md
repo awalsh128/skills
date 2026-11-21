@@ -19,6 +19,8 @@ generated files use.
 1. Install the app: https://github.com/apps/octo-sts/installations/new on the repository.
 2. Commit `.github/chainguard/release.sts.yaml` and `promote.sts.yaml` to `main`; policy changes take effect
    only once promoted.
+3. Promote by hand with `gh workflow run promote.yml --ref staging`. Without `--ref staging` the run is on
+   `main` and the trust policy rejects it. Put this command in the repo's `CONTRIBUTING.md`.
 
 ## Environments
 
