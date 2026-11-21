@@ -14,8 +14,8 @@ under Steps.
 
 1. Write `assets/logo.svg` (create `assets/` if needed). For a VS Code extension the Marketplace icon in
    `package.json` must be a PNG, so keep the SVG for the README and tell the user the icon still needs a PNG.
-2. Wire it into the README per the repo type's header: inline `<img ... height="60" align="center">` in the
-   title, or the centered block for VS Code extensions. Use `alt="<project name> logo"`.
+2. Wire it into the README's centered header block (see the Logo and title convention in `SKILL.md`). Use
+   `alt="<project name> logo"`.
 3. Tell the user it is a placeholder and where to replace it.
 
 ## SVG rules

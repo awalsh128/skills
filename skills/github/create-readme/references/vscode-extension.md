@@ -29,28 +29,28 @@ Markdown. Exemplar: https://github.com/awalsh128/vscode-regex-explain
 <tagline or description paragraph, linking the thing it wraps>
 ```
 
-The three registry lines (Version, Marketplace downloads, Open VSX downloads) are conditional on publication; see
-"VSCE badges" below. Drop any that don't apply rather than leaving them in.
+The three registry lines (Version, Marketplace downloads, Open VSX downloads) are conditional on publication;
+see "VSCE badges" below. Drop any that don't apply rather than leaving them in.
 
-- **Centering:** use `<p align="center">` with `<a><img></a>` pairs, not Markdown badge syntax, because Markdown
-  images can't be centered. Give every image alt text; it doubles as the badge label.
+- **Centering:** use `<p align="center">` with `<a><img></a>` pairs, not Markdown badge syntax, because
+  Markdown images can't be centered. Give every image alt text; it doubles as the badge label.
 - **Paths:** a monorepo points the logo at the extension package's `images/` folder
   (`packages/<ext>/images/logo.png`), and the badge row still describes the extension.
-- **VSCE badges (insert once the extension is published):** take `<publisher>` and `<name>` from the extension's
-  `package.json`, and check the Marketplace page (`https://marketplace.visualstudio.com/items?itemName=<publisher>.<name>`)
-  returns 200 first.
+- **VSCE badges (insert once the extension is published):** take `<publisher>` and `<name>` from the
+  extension's `package.json`, and check the Marketplace page
+  (`https://marketplace.visualstudio.com/items?itemName=<publisher>.<name>`) returns 200 first.
   - **Marketplace Version** and **Marketplace downloads**: the two `vsmarketplacebadges.dev` badges above.
   - **Open VSX downloads**: add it only when the extension is published to Open VSX (the repo has a publish
     workflow using `ovsx`, or `https://open-vsx.org/extension/<publisher>/<name>` returns 200).
   - Labels must differ: "Version", "Marketplace downloads", "Open VSX downloads". Add Open VSX version too
     only with a distinct label such as "Open VSX".
   - Not yet published: suggest the snippets in the summary instead of inserting them.
-- **Other badges:** CI and license when verifiable (CI per branch, labeled, when more than one). Add the Codecov
-  badge when a workflow uploads coverage to Codecov.
-- **Display name:** take the title and logo alt text from the extension's `displayName` in `package.json`, exactly
-  as written. The Marketplace requires a unique display name, so it may differ from the repo slug, the npm
-  package name or the prose name (for example `Regex Explain Lab` for `regex-explain`). Never change it to match
-  the slug, and don't report the difference as an inconsistency. In a monorepo, the extension package's
+- **Other badges:** CI and license when verifiable (CI per branch, labeled, when more than one). Add the
+  Codecov badge when a workflow uploads coverage to Codecov.
+- **Display name:** take the title and logo alt text from the extension's `displayName` in `package.json`,
+  exactly as written. The Marketplace requires a unique display name, so it may differ from the repo slug, the
+  npm package name or the prose name (for example `Regex Explain Lab` for `regex-explain`). Never change it to
+  match the slug, and don't report the difference as an inconsistency. In a monorepo, the extension package's
   `displayName` names the extension, while the root title may name the repository. Where the README refers to
   the extension as an installable thing (Quick Start, Marketplace search), use the `displayName`; in prose
   about the underlying library or the repo, the plain name is fine. A repo README title that disagrees with
