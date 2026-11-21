@@ -49,19 +49,37 @@ Ground every claim in the repo. A README that describes things the code doesn't 
 
 ## Conventions (all repo types)
 
-1. **Logo.** If one exists, put it in the title (inline `<img ... height="60" align="center">`, or centered
-   above in a `<p align="center">`). If missing, add a one-line note and offer to create one. On a yes, read
-   `references/logo.md`, write the placeholder SVG to `assets/logo.svg`, wire it in, and say it is a
-   placeholder. Never put a placeholder or broken image in the README without a yes.
+1. **Logo and title.** Prefer a centered header: logo, `<h1>` title and a one-line tagline, each centered.
+   Exemplar: https://github.com/awalsh128/vscode-keep-sorted
+
+   ```html
+   <p align="center">
+     <img src="images/logo.png" alt="<project name> logo" width="128" height="128">
+   </p>
+
+   <h1 align="center"><project name></h1>
+
+   <p align="center">
+     <one-line tagline, linking the thing it wraps>
+   </p>
+   ```
+
+   The badge row follows, centered the same way. Use this even with no logo (omit the first block). Fall back
+   to a plain `# Title` with an inline `<img ... height="60" align="center">` only when the repo's README
+   already uses that style and the user hasn't asked to change it, and for personal tooling. If no logo
+   exists, add a one-line note and offer to create one. On a yes, read `references/logo.md`, write the
+   placeholder SVG to `assets/logo.svg`, wire it in, and say it is a placeholder. Never put a placeholder or
+   broken image in the README without a yes.
+
 2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI),
    `LICENSE` exists, a release tag exists. Include the registry version badge (npm, Marketplace) when the
    package is published, and the Codecov badge when a workflow runs `codecov/codecov-action` (see the type's
    reference for snippets and checks). Suggest, don't insert, a registry or coverage badge that doesn't apply
-   yet. Badges are not mandatory; with no CI, omit and say so.
-   Two badges must never show the same label: when several badges would (e.g. CI on `main` and CI on
-   `staging`, or two workflows both named "CI"), give each a distinct label naming what sets it apart (`main`,
-   `staging`, `release`), via the shields.io `label` parameter or the workflow badge's `?branch=` query plus
-   `label`, and put the differentiator in the alt text too.
+   yet. Badges are not mandatory; with no CI, omit and say so. Two badges must never show the same label: when
+   several badges would (e.g. CI on `main` and CI on `staging`, or two workflows both named "CI"), give each a
+   distinct label naming what sets it apart (`main`, `staging`, `release`), via the shields.io `label`
+   parameter or the workflow badge's `?branch=` query plus `label`, and put the differentiator in the alt text
+   too.
 3. **One-paragraph description.** What it does and for whom, with links to key dependencies. No history or
    philosophy.
 4. **Emoji feature bullets.** Directly under the description: 3-5 one-line bullets, each with a distinct
@@ -141,9 +159,9 @@ must say the same thing as the README. Do this in every mode, after the README c
 Every type except personal tooling uses this frame. Templates below only define the middle and what is
 type-specific.
 
-1. Title (project name) with logo
-2. Badge row
-3. Description paragraph
+1. Centered logo, title (project name) and tagline
+2. Badge row (centered under the header)
+3. Description paragraph (the tagline is not a substitute for it)
 4. Emoji feature bullets (replace any Features section)
 5. Sponsor badge, then any callout warnings
 6. **Middle sections** from the type's template
