@@ -1,0 +1,56 @@
+{
+  "name": "shout-lint",
+  "displayName": "Shout Lint",
+  "publisher": "jdoe",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "repository": "https://github.com/jdoe/shout-lint",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "shoutLint.report",
+        "title": "Shout Lint: Show Report"
+      },
+      {
+        "command": "shoutLint.fixAll",
+        "title": "Shout Lint: Fix All"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "shoutLint.report",
+          "group": "navigation@100"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Shout Lint",
+      "properties": {
+        "shoutLint.maxCapsRun": {
+          "type": "number",
+          "default": 4,
+          "scope": "language-overridable"
+        },
+        "shoutLint.hover.enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "shoutLint.findings",
+          "name": "Shout Findings"
+        }
+      ]
+    }
+  }
+}

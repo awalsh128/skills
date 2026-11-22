@@ -64,6 +64,12 @@ for d in skill_dirs:
     for ref in re.findall(r"`(references/[\w./-]+\.md)`", text):
         if not (d / ref).is_file():
             err(f"{rel}/SKILL.md: referenced {ref} does not exist")
+    # Scripts and templates a skill tells the agent to run or copy, bare or as `<skill dir>/scripts/x`.
+    for script in set(re.findall(r"`((?:scripts|templates)/[\w./-]+)`", text)) | set(
+        re.findall(r"<skill dir>/((?:scripts|templates)/[\w./-]+)", text)
+    ):
+        if not (d / script).exists():
+            err(f"{rel}/SKILL.md: referenced {script} does not exist")
 
 # Skills stay disjoint from gh-dev-powerpack (AGENTS.md): only the dev-powerpack-exemplars skill reads it, so
 # no skill names its repo or paths. Eval inputs and workspace output are skipped.
