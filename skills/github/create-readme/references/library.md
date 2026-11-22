@@ -10,6 +10,9 @@ Uses the standard layout in `SKILL.md`. Type-specific rules:
   package is published (see "Is it published?") and the coverage badge when a workflow uploads coverage (see
   "Coverage and registry badges").
 - **Warnings:** `[!IMPORTANT]` for hard requirements like `sudo`.
+- **Demos:** a CLI (a terminal recording of a real command) or a library with visual output (the input and the
+  image it produces) gets a hero demo; a plain code library gets none. See `references/demos.md`, including
+  the packaged-README rules for registry pages.
 
 ## Middle sections
 

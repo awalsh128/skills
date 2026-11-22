@@ -1,8 +1,8 @@
 # Sponsor badge
 
-Placed after the bullets, on by default, for solo-owner projects. A centered pink for-the-badge badge linking
-to the owner's Sponsors page, then a short centered pitch that says the project is free, why a sponsor helps,
-and that a small one-time donation is fine:
+Placed after the bullets (and the hero demo, when the README has one), on by default, for solo-owner projects.
+A centered pink for-the-badge badge linking to the owner's Sponsors page, then a short centered pitch that
+says the project is free, why a sponsor helps, and that a small one-time donation is fine:
 
 ```html
 <!-- prettier-ignore -->
