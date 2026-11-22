@@ -100,6 +100,12 @@ Ground every claim in the repo. A README that describes things the code doesn't 
 9. **Link out, don't duplicate.** Link Issues, Discussions, FAQ, `CONTRIBUTING`, `SECURITY`, generated API
    docs, Releases (instead of a changelog) and `docs/`, only when they exist and after verifying each link.
    Suggest missing ones in the summary; never invent them.
+   - **Packaged README** (library, VS Code extension): the npm, Marketplace and Open VSX pages show the README
+     as it was at the last release, and a `docs:` commit does not release. Keep it to stable content (what it
+     is, install, Quick Start) and link volatile content (full config reference, FAQ, version-specific notes)
+     to its page on GitHub, so the link stays fresh when the copy cannot. Flag volatile content that stays,
+     such as a minimum version, and say in the summary that a change to it reaches the registry only with the
+     next release.
 10. **No tab duplication.** GitHub shows Contributing, License, Code of conduct and Security as tabs. Drop
     those sections when the file exists. The license badge covers License. At most one short closing line
     links to `CONTRIBUTING.md`. If the file is missing, suggest it in the summary; never fake it in the
