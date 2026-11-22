@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: reset-after-setting
+expected_outcome: |
+  A new scene is added for a setting that changes behavior, reusing the existing helpers, restoring the setting afterwards, leaving the existing scene untouched and re-recording only the new one.
+context:
+  scaffold_script: place-files.sh

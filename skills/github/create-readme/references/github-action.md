@@ -8,6 +8,8 @@ Uses the standard layout in `SKILL.md`. Type-specific rules:
   where they run), license, latest release. Label CI badges by workflow or branch when more than one; see the
   same-label rule in `SKILL.md`.
 - **Warnings:** `[!IMPORTANT]` for real constraints such as required permissions.
+- **Demos:** only when the Action has a visible effect (a PR comment, a job summary, an annotation): one
+  screenshot of it, per `references/demos.md`. The `steps:` example stays text.
 
 ## Middle sections
 

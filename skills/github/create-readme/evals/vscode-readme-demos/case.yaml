@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: vscode-readme-demos
+expected_outcome: |
+  VS Code README that shows one hero demo under the bullets, a few demos in their sections and links the rest to a gallery, while still reading fully without the images.
+context:
+  scaffold_script: place-files.sh

@@ -17,7 +17,8 @@ Studio Marketplace and through `ovsx` to the Open VSX Registry (the registry Cur
 read). Registry rules change, so when a command or limit matters to the task, confirm it against the tool's
 `--help` or the publishing docs instead of relying on this file.
 
-Use typescript for the extension code and github-cicd alongside this one for workflow files.
+Use typescript for the extension code and github-cicd alongside this one for workflow files. Use vsce-demo for
+the demo GIFs the listing shows; they must stay out of the `.vsix`.
 
 ## Identity
 

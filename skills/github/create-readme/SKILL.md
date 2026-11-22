@@ -27,7 +27,7 @@ https://github.com/awalsh128/vscode-keep-sorted (read a local clone only if one 
 Ground every claim in the repo. A README that describes things the code doesn't do is worse than none.
 
 1. Read the existing `README.md`, manifests (`package.json`, `pyproject.toml`, `go.mod`, `action.yml`...),
-   `LICENSE`, `.github/workflows/`, and any `images/`, `assets/` or `logo.*`.
+   `LICENSE`, `.github/workflows/`, and any `images/`, `assets/`, demo GIFs or videos, or `logo.*`.
 2. Run `git remote -v` for the real owner/repo. Every badge and link is built from it, never hardcoded.
 3. Work out the **project name**: the plain-English name a person would call it, not the repo slug
    (`cache-apt-pkgs-action` → "Cache APT Packages", `vscode-keep-sorted` → "Keep Sorted"). Take it from, in
@@ -88,8 +88,9 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    emoji. This is the one deliberate emoji exception and it replaces a separate Features section. Personal
    tooling skips it. Elsewhere, emoji only where they carry information a reader scans for (⚠️ Caveats, status
    markers); never decorate every heading.
-5. **Sponsor badge** after the bullets, on by default, for solo-owner projects (skipped for personal tooling
-   and on opt-out). Read `references/sponsor-badge.md` for the snippet and the Sponsors-page check.
+5. **Sponsor badge** after the bullets (and the hero demo, if any), on by default, for solo-owner projects
+   (skipped for personal tooling and on opt-out). Read `references/sponsor-badge.md` for the snippet and the
+   Sponsors-page check.
 
 6. **Quick Start first.** The shortest working example precedes reference material. Real warnings (e.g. `sudo`
    required) use `> [!IMPORTANT]` / `> [!NOTE]` callouts, right after the sponsor badge.
@@ -110,7 +111,12 @@ Ground every claim in the repo. A README that describes things the code doesn't 
     those sections when the file exists. The license badge covers License. At most one short closing line
     links to `CONTRIBUTING.md`. If the file is missing, suggest it in the summary; never fake it in the
     README.
-11. **Verified, not invented.** Every command, input name and link is checked against the repo. Say plainly
+11. **Demos earn their place.** For a product a reader has to see (UI, extension, CLI or TUI, visual output)
+    at most one hero demo under the bullets, a few in the sections that explain their feature, and the rest in
+    `docs/demos.md`. Each has a caption sentence and descriptive alt text, and the README must read fully with
+    demos removed. Read `references/demos.md` when the repo has demo GIFs, screenshots or videos, or the user
+    asks for them.
+12. **Verified, not invented.** Every command, input name and link is checked against the repo. Say plainly
     what you couldn't verify.
 
 ## Description and topics
@@ -129,9 +135,10 @@ it or the content can't live elsewhere; otherwise flag it in the summary, never 
 2. Badge row (centered under the header)
 3. Description paragraph (the tagline is not a substitute for it)
 4. Emoji feature bullets (replace any Features section)
-5. Sponsor badge, then any callout warnings
-6. **Middle sections** from the type's template
-7. At most one closing line linking `CONTRIBUTING.md`, if it exists
+5. Hero demo, for a product that has one worth showing (see `references/demos.md`)
+6. Sponsor badge, then any callout warnings
+7. **Middle sections** from the type's template
+8. At most one closing line linking `CONTRIBUTING.md`, if it exists
 
 ## Templates
 
@@ -158,4 +165,4 @@ verified or flagged unverified, and the About box is compared with the README.
   large revisions, show a summary before overwriting.
 - End with a short summary: what changed, what couldn't be verified, the description and topics result
   (applied, declined or proposed), and suggestions (registry/coverage badge snippets, logo offer, Sponsors
-  setup, missing CONTRIBUTING/FAQ/docs).
+  setup, missing CONTRIBUTING/FAQ/docs, a demo for a visual product that has none).

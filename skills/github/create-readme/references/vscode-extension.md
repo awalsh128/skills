@@ -59,7 +59,8 @@ see "VSCE badges" below. Drop any that don't apply rather than leaving them in.
 - **About description:** the GitHub description doesn't need the display name, but if it uses one, it uses the
   `displayName`.
 - **Description:** add a sentence on what the extension leaves alone, if it matters.
-- **Bullets:** keep the demo link or GIF together with the emoji bullets.
+- **Bullets and demos:** the hero GIF goes directly under the emoji bullets; other demos follow
+  `references/demos.md`. Use vsce-demo to produce the GIFs for this type.
 - **Sponsor badge:** centered, and preceded by `<!-- prettier-ignore -->` when the repo uses Prettier.
 
 ## Middle sections

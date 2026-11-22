@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: all-features
+expected_outcome: |
+  A scripted demo that covers every contributed and registered feature (diagnostics, quick fix, hover, two commands, context menu, tree view, status bar, webview panel, settings), with a coverage list, assertions, per-run state reset and the demo kept out of the .vsix.
+context:
+  scaffold_script: place-files.sh
