@@ -14,6 +14,9 @@ wrong GIF, which is why the skill checks frames. Read this when a recording look
   last thing on screen.
 - **Hover or panel clipped:** zoom 2 in a 960x540 window cut a hover and a webview off. Start at zoom 1, font
   15, and shorten the example before shrinking the font.
+- **Webview content clipped by a wide example:** a long regex made a diagram wider than the half-width panel
+  and pushed the legend and summary below the fold. Pick the shortest example that shows the behavior; the
+  scene still passed, only the frame showed it.
 - **Dev-host chrome:** "Extension Development Host" in the title, a Sign In button, an "extensions disabled"
   toast (from `--disable-extensions`; use an empty `--extensions-dir` instead), and the pointer parked in the
   hover. The profile and `launch.ts` remove the first three; `parkPointer` handles the last.

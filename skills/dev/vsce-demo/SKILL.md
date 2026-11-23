@@ -127,5 +127,7 @@ most, and cut frame rate or width before cutting content.
 - The Marketplace README renders images; confirm before relying on a video file there. Make a GIF for the
   listing, and keep any video as an extra for GitHub.
 - Hand the files to create-readme for placement next to the emoji bullets. Do not write README prose here.
+- Read `references/readme-placement.md` only when deciding which GIFs go in the README and which in a gallery
+  page; it has the split, the threshold and the registry caveats.
 - Binary files make the repo grow on every regeneration. Re-record only the scenes whose feature changed, and
   ASK FIRST before committing or pushing them.
