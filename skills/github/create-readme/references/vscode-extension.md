@@ -23,7 +23,6 @@ Markdown. Exemplar: https://github.com/awalsh128/vscode-regex-explain
   <a href="https://marketplace.visualstudio.com/items?itemName=<publisher>.<name>"><img src="https://vsmarketplacebadges.dev/downloads/<publisher>.<name>.svg?label=Marketplace%20downloads" alt="Marketplace downloads"></a>
   <a href="https://open-vsx.org/extension/<publisher>/<name>"><img src="https://img.shields.io/open-vsx/dt/<publisher>/<name>?label=Open%20VSX%20downloads" alt="Open VSX downloads"></a>
   <a href="https://github.com/<owner>/<repo>/actions/workflows/ci.yml"><img src="https://github.com/<owner>/<repo>/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/<owner>/<repo>/blob/main/LICENSE"><img src="https://img.shields.io/github/license/<owner>/<repo>" alt="License"></a>
 </p>
 
 <tagline or description paragraph, linking the thing it wraps>
@@ -45,8 +44,8 @@ see "VSCE badges" below. Drop any that don't apply rather than leaving them in.
   - Labels must differ: "Version", "Marketplace downloads", "Open VSX downloads". Add Open VSX version too
     only with a distinct label such as "Open VSX".
   - Not yet published: suggest the snippets in the summary instead of inserting them.
-- **Other badges:** CI and license when verifiable (CI per branch, labeled, when more than one). Add the
-  Codecov badge when a workflow uploads coverage to Codecov.
+- **Other badges:** CI when verifiable (CI per branch, labeled, when more than one). Add the Codecov badge
+  when a workflow uploads coverage to Codecov.
 - **Display name:** take the title and logo alt text from the extension's `displayName` in `package.json`,
   exactly as written. The Marketplace requires a unique display name, so it may differ from the repo slug, the
   npm package name or the prose name (for example `Regex Explain Lab` for `regex-explain`). Never change it to

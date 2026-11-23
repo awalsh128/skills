@@ -5,7 +5,7 @@ Applies when the repo has an `action.yml`. Exemplar: https://github.com/awalsh12
 Uses the standard layout in `SKILL.md`. Type-specific rules:
 
 - **Badges:** CI for each workflow that matters (test workflows may live in a sibling `-ci` repo, so check
-  where they run), license, latest release. Label CI badges by workflow or branch when more than one; see the
+  where they run), latest release. Label CI badges by workflow or branch when more than one; see the
   same-label rule in `SKILL.md`.
 - **Warnings:** `[!IMPORTANT]` for real constraints such as required permissions.
 - **Demos:** only when the Action has a visible effect (a PR comment, a job summary, an annotation): one

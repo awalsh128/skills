@@ -6,7 +6,7 @@ Applies to repos that publish agent skills or a plugin (`skills/**/SKILL.md`, `.
 Uses the standard layout in `SKILL.md`, including the centered header, badge row, emoji bullets and sponsor
 badge. This is not personal tooling: other people install it.
 
-- **Badges:** CI or validate workflow, license, and a release badge only once a release tag exists.
+- **Badges:** CI or validate workflow, and a release badge only once a release tag exists.
 - **Description:** what the skills do for the reader, not "that I use". No first person.
 
 ## Middle sections

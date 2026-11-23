@@ -5,10 +5,10 @@ https://github.com/awalsh128/ts-apt
 
 Uses the standard layout in `SKILL.md`. Type-specific rules:
 
-- **Badges:** CI for each branch that has a workflow (e.g. `main` and `staging`), license, release. Label each
-  CI badge by its branch; see the same-label rule in `SKILL.md`. Also add the registry version badge once the
-  package is published (see "Is it published?") and the coverage badge when a workflow uploads coverage (see
-  "Coverage and registry badges").
+- **Badges:** CI for each branch that has a workflow (e.g. `main` and `staging`), release. Label each CI badge
+  by its branch; see the same-label rule in `SKILL.md`. Also add the registry version badge once the package
+  is published (see "Is it published?") and the coverage badge when a workflow uploads coverage (see "Coverage
+  and registry badges").
 - **Warnings:** `[!IMPORTANT]` for hard requirements like `sudo`.
 - **Demos:** a CLI (a terminal recording of a real command) or a library with visual output (the input and the
   image it produces) gets a hero demo; a plain code library gets none. See `references/demos.md`, including

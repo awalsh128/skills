@@ -73,15 +73,15 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    On a yes, read `references/logo.md`, write the placeholder SVG to `assets/logo.svg`, wire it in, and say it
    is a placeholder. Never put a placeholder or broken image in the README without a yes.
 
-2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI),
-   `LICENSE` exists, a release tag exists. Include the registry version badge (npm, Marketplace) when the
-   package is published, and the Codecov badge when a workflow runs `codecov/codecov-action` (see the type's
-   reference for snippets and checks). Suggest, don't insert, a registry or coverage badge that doesn't apply
-   yet. Badges are not mandatory; with no CI, omit and say so. Two badges must never show the same label: when
-   several badges would (e.g. CI on `main` and CI on `staging`, or two workflows both named "CI"), give each a
-   distinct label naming what sets it apart (`main`, `staging`, `release`), via the shields.io `label`
-   parameter or the workflow badge's `?branch=` query plus `label`, and put the differentiator in the alt text
-   too.
+2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI), a
+   release tag exists. Never add a license badge: GitHub's License tab already shows it. Include the registry
+   version badge (npm, Marketplace) when the package is published, and the Codecov badge when a workflow runs
+   `codecov/codecov-action` (see the type's reference for snippets and checks). Suggest, don't insert, a
+   registry or coverage badge that doesn't apply yet. Badges are not mandatory; with no CI, omit and say so.
+   Two badges must never show the same label: when several badges would (e.g. CI on `main` and CI on
+   `staging`, or two workflows both named "CI"), give each a distinct label naming what sets it apart (`main`,
+   `staging`, `release`), via the shields.io `label` parameter or the workflow badge's `?branch=` query plus
+   `label`, and put the differentiator in the alt text too.
 3. **One-paragraph description.** What it does and for whom, with links to key dependencies. No history or
    philosophy.
 4. **Emoji feature bullets.** Directly under the description: 3-5 one-line bullets, each with a distinct
@@ -108,9 +108,9 @@ Ground every claim in the repo. A README that describes things the code doesn't 
      such as a minimum version, and say in the summary that a change to it reaches the registry only with the
      next release.
 10. **No tab duplication.** GitHub shows Contributing, License, Code of conduct and Security as tabs. Drop
-    those sections when the file exists. The license badge covers License. At most one short closing line
-    links to `CONTRIBUTING.md`. If the file is missing, suggest it in the summary; never fake it in the
-    README.
+    those sections when the file exists. Do not add a license badge either; the tab already covers it. At most
+    one short closing line links to `CONTRIBUTING.md`. If the file is missing, suggest it in the summary;
+    never fake it in the README.
 11. **Demos earn their place.** For a product a reader has to see (UI, extension, CLI or TUI, visual output)
     at most one hero demo under the bullets, a few in the sections that explain their feature, and the rest in
     `docs/demos.md`. Each has a caption sentence and descriptive alt text, and the README must read fully with
