@@ -57,6 +57,7 @@ Then ask for what the skill does, for example "write a README for this repo".
 
 | Group     | Skill                                                                   | Use it to                                                                                                                                                 |
 | --------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dev`     | [`hugo`](skills/dev/hugo/SKILL.md)                                      | Apply Hugo best practices to a site's content, assets, theme overrides and build.                                                                         |
 | `dev`     | [`npm-audit`](skills/dev/npm-audit/SKILL.md)                            | Triage and fix `npm audit` findings with the smallest safe change.                                                                                        |
 | `dev`     | [`project-setup`](skills/dev/project-setup/SKILL.md)                    | Set up a new project's VS Code or Cursor, EditorConfig, Prettier and husky baseline.                                                                      |
 | `dev`     | [`vsce-demo`](skills/dev/vsce-demo/SKILL.md)                            | Script and record GIF demos that cover every feature of a VS Code extension, with state reset between runs.                                               |

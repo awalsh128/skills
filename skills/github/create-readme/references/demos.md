@@ -31,9 +31,10 @@ or a broken image in the README.
   before the detail. At most one per section, and at most three or four in the whole README. A feature that is
   only an option or a table gets no demo.
 - **Everything else** moves to a gallery, `docs/demos.md`, with one heading and one demo per feature, linked
-  once from the README ("More demos"). Do not stack a README full of recordings: each one competes with the
-  text for attention and the page stops being scannable. Many demos is a gallery, not a README. Start the
-  gallery at the next feature, not with the hero again.
+  once from the README in a `> [!TIP]` callout ("More demos are in the [demo gallery](url)."), right after the
+  hero. Do not stack a README full of recordings: each one competes with the text for attention and the page
+  stops being scannable. Many demos is a gallery, not a README. Start the gallery at the next feature, not
+  with the hero again.
 
 ## How each one is written
 
