@@ -50,6 +50,10 @@ in `SKILL.md`): a release creates a tag and a GitHub Release and commits nothing
 placeholder version, and notes live only in the Release. Use the `publish.yml (GitHub Action)` form in
 `github-cicd`, which also archives and attests the files consumers run.
 
+Release notes credit each PR's author (`by [@login](...)` on every bullet that links a PR). Use the
+`generateNotes` plugin described in the `publish.yml (GitHub Action)` form in `github-cicd` instead of the
+bare `release-notes-generator`.
+
 Release publishing is irreversible: confirm before running or enabling it.
 
 ## PR policy
