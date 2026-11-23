@@ -1,0 +1,20 @@
+name: Release Thing
+description: Releases
+author: example
+branding:
+  icon: package
+  color: blue
+inputs:
+  token:
+    description: Token
+    required: true
+outputs:
+  work-dir:
+    description: Always ./work
+  branch-is-main:
+    description: True when branch is main
+  released:
+    description: Whether a release happened
+runs:
+  using: node24
+  main: dist/action/index.js

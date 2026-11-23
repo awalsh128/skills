@@ -1,0 +1,3 @@
+# tidy
+
+A Python CLI.

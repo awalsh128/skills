@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: stdlib-and-local-home
+expected_outcome: |
+  Dates and CSV are handled with the standard library, no regex date parsing, and the new function lives in the existing report module instead of a new utils or helpers file.
+context:
+  scaffold_script: place-files.sh

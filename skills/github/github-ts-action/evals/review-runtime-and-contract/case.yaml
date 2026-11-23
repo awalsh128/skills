@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-runtime-and-contract
+expected_outcome: |
+  A review flags a release config importing a devDependency, outputs that are constant, a network call without a timeout, a version range on a sibling library, and an index.ts that holds logic.
+context:
+  scaffold_script: place-files.sh

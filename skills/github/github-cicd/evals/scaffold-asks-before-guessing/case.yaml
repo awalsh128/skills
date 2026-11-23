@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: scaffold-asks-before-guessing
+expected_outcome: |
+  For a project that is not an npm package, the reply asks how it should publish and confirms branch and baseline assumptions instead of generating a full release pipeline from guesses.
+context:
+  scaffold_script: place-files.sh

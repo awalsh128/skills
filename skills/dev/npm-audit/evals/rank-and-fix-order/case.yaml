@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: rank-and-fix-order
+expected_outcome: |
+  Runtime findings are fixed, a dev-only moderate is left for Dependabot, and the fix order is audit fix then parent bump then a floored override, never force.
+context:
+  scaffold_script: place-files.sh

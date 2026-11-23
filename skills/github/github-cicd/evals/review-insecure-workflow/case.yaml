@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-insecure-workflow
+expected_outcome: |
+  The workflow is reviewed against the hard rules: unpinned actions, stored npm token, injected PR title, broad permissions, no timeout, and release started from another workflow are each reported with a fix; nothing is edited.
+context:
+  scaffold_script: place-files.sh

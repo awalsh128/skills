@@ -1,0 +1,10 @@
+diff --git a/action.yml b/action.yml
+--- a/action.yml
++++ b/action.yml
+@@ -3,5 +3,4 @@ description: Cache packages
+ inputs:
+   packages:
+     description: Packages to cache
+-    required: false
+-    default: ""
++    required: true

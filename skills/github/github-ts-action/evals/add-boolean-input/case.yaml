@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: add-boolean-input
+expected_outcome: |
+  A new fail_on_miss boolean input is added through action.yml, ActionInputs, getInputs in index.ts and the runner, with a test, keeping index.ts thin and runAction free of core and process.env.
+context:
+  scaffold_script: place-files.sh

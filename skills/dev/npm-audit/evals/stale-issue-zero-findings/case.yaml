@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: stale-issue-zero-findings
+expected_outcome: |
+  The auto-filed issue is identified as stale because the current tree has no vulnerabilities, no code or dependencies change, and closing the issue is proposed but waits for a yes.
+context:
+  scaffold_script: place-files.sh

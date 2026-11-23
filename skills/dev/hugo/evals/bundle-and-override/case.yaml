@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: bundle-and-override
+expected_outcome: |
+  A page bundle with the image beside it, the footer changed by a site-level override or theme parameter and not by editing themes/, current layout names, and no deprecated config keys added.
+context:
+  scaffold_script: place-files.sh
