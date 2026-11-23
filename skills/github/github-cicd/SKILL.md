@@ -100,8 +100,11 @@ the difference in the summary.
 9. **Audits fail by risk.** Runtime dependencies fail the build at any severity; development dependencies
    report moderate-and-up in a deduplicated issue without failing; high and critical anywhere fail, because
    release tooling runs with credentials.
-10. **Comment the why** in the workflow (a short block at the top says what the workflow does and what it
-    trusts). Skip comments that restate the step name.
+10. **Comment the why, briefly.** One line per comment, two at most for a security constraint. Say only what
+    the code can't: a non-obvious constraint or a security reason, not the mechanism or current behaviour.
+    Never name things that move (other files' contents, rule numbers, versions, error text); a stale comment
+    is unchecked and reads as authoritative. Prefer a clearer job, step or `env` name over a comment. The
+    header is one or two lines: what the workflow does and what it trusts.
 11. **Release and ruleset rules (11-15).** Read `references/release-rules.md` before touching a release job,
     `promote.yml`, a matrix, a ruleset or `concurrency`. In brief: releases have an off switch
     (`RELEASES_ENABLED`); a major release needs a typed `confirm-major`; a matrix needs one gate job whose

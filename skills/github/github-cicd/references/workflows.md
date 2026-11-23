@@ -68,8 +68,7 @@ runs:
         SHA: ${{ inputs.sha }}
       run: |
         set -euo pipefail
-        # Only completed runs count: promoting main starts a CI run for the same commit, which is
-        # still in progress when the release checks CI.
+        # Count only completed runs; promoting main starts a same-commit CI run still in progress.
         conclusion="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --commit "$SHA" \
           --status completed --limit 1 --json conclusion --jq '.[0].conclusion // ""')"
         if [[ "$conclusion" != "success" ]]; then
@@ -98,7 +97,7 @@ on:
     - cron: "0 18 * * *"
   workflow_dispatch:
 
-# Supersede running PR checks; any other run gets its own group, so none is cancelled or dropped.
+# Supersede running PR checks; any other run gets its own group.
 concurrency:
   group: ci-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -188,8 +187,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      # main is only updated by promote.yml, which fast-forwards it to staging; a merge into main
-      # would add a commit that staging doesn't have.
+      # main is updated only by promote.yml fast-forwarding it to staging.
       - name: Require staging as the base branch
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -210,9 +208,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      # Pull requests are squash-merged with the title as the commit subject, and semantic-release
-      # versions the package from it, so only the title has to be a Conventional Commit. The
-      # edited trigger reruns this check when the title changes.
+      # Only the title must be a Conventional Commit: it becomes the squash commit subject.
       - name: Lint pull request title
         env:
           TITLE: ${{ github.event.pull_request.title }}
@@ -239,9 +235,8 @@ hook running `npx --no -- commitlint --edit "$1"`.
 Schedules only run on the default branch, so this runs on `main` and starts `publish.yml` on `staging`.
 
 ```yaml
-# Starts a nightly release candidate when staging has shippable changes since its last release.
-# Candidates are published under the `rc` dist-tag, so they run publish.yml on its own: npm trusted
-# publishing trusts that workflow file started directly, not through another workflow.
+# Starts a nightly release candidate when staging has shippable changes.
+# Runs publish.yml on its own: npm trusted publishing trusts only that file started directly.
 name: Nightly release candidate
 
 on:
@@ -271,8 +266,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      # Shippable files are what the package publishes: sources and manifests, not docs, tests or
-      # workflows. publish.yml still releases nothing when no commit calls for a version.
+      # Shippable files are what the package publishes.
       - name: Look for shippable changes since the last release
         id: changes
         shell: bash
@@ -309,8 +303,7 @@ package.
 ## promote.yml
 
 ```yaml
-# Promotes staging to main by fast-forwarding main to staging's latest commit, then starts the
-# official release. main never gets commits of its own, so it is always an ancestor of staging.
+# Fast-forwards main to staging, then starts the official release.
 name: Promote staging to main
 
 on:
@@ -338,8 +331,7 @@ jobs:
       actions: write # Read CI runs and start the release workflow
       id-token: write # For OIDC: the Octo STS token that updates main
     steps:
-      # The trust policy only accepts runs on staging, and a default `gh workflow run` dispatches on main,
-      # where Octo STS fails with "token does not match trust policy". Fail first, saying why.
+      # Octo STS trusts only runs on staging; a default dispatch runs on main.
       - name: Require the workflow to run on staging
         if: github.ref != 'refs/heads/staging'
         env:
@@ -350,8 +342,7 @@ jobs:
           echo "Run: gh workflow run promote.yml --ref staging"
           exit 1
 
-      # main's ruleset only lets the Octo STS app update it, so main is pushed with its token,
-      # issued under .github/chainguard/promote.sts.yaml to this workflow on staging only.
+      # main's ruleset admits only the Octo STS app, so main is pushed with its token.
       - name: Create main token
         id: octo-sts
         uses: octo-sts/action@<sha> # vX
@@ -377,8 +368,7 @@ jobs:
           sha: ${{ steps.staging.outputs.sha }}
           token: ${{ github.token }}
 
-      # A major release strands users of the previous major (there is no maintenance branch), so it
-      # needs its version typed in. The first official release counts as a major. Assumes `v${version}` tags.
+      # A major release strands users of the previous major, so its version must be typed in.
       - name: Confirm a major release
         env:
           STAGING_SHA: ${{ steps.staging.outputs.sha }}
@@ -417,10 +407,10 @@ jobs:
             echo "Get those commits onto staging through a pull request, then promote again."
             exit 1
           fi
-          # Not a force push, so the remote rejects anything but a fast-forward.
+          # Not a force push, so only a fast-forward is accepted.
           git push origin "$STAGING_SHA:refs/heads/main"
 
-      # Starting the release on main makes semantic-release cut an official release, not a candidate.
+      # Started on main, semantic-release cuts an official release.
       - name: Start official release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -431,12 +421,8 @@ jobs:
 ## publish.yml (single npm package)
 
 ```yaml
-# Releases the package, always gated by CI:
-# - staging: nightly.yml starts this when staging has shippable changes, releasing a candidate
-#   (e.g. v1.2.0-rc.1) to npm under the `rc` dist-tag.
-# - main: promote.yml starts this after fast-forwarding main, releasing an official version.
-# No secrets: the job's OIDC token is exchanged for each credential. Tags are pushed with an Octo
-# STS token; npm trusted publishing is bound to this workflow file and the 'release' environment.
+# Releases the package, always gated by CI; started on its own by nightly.yml or promote.yml.
+# No secrets: OIDC tokens only; npm trusted publishing is bound to this file and the 'release' environment.
 name: Publish
 
 on:
@@ -452,7 +438,7 @@ permissions: {}
 
 jobs:
   release:
-    # Off switch for every route to a release (see rule 11). A dry run publishes nothing, so it is always allowed.
+    # Off switch for every route to a release; a dry run is always allowed.
     if: ${{ vars.RELEASES_ENABLED != 'false' || inputs.dry-run }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -480,7 +466,7 @@ jobs:
           sha: ${{ github.sha }}
           token: ${{ github.token }}
 
-      # This job can mint npm publish and GitHub tokens, so dependencies' install scripts don't run.
+      # This job can mint publish tokens, so install scripts don't run.
       - name: Setup
         uses: ./.github/actions/setup
         with:
