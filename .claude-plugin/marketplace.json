@@ -10,7 +10,7 @@
       "name": "awalsh128",
       "source": "./",
       "description": "Installable agentic skills that I use in my dev workflows, built for Claude Code.",
-      "version": "0.4.17"
+      "version": "0.4.18"
     }
   ]
 }
