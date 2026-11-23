@@ -524,6 +524,16 @@ computing `any=true` when a `version` output is set, then `npm run docs:api`, `a
 main and the output) runs `actions/deploy-pages` with `pages: write`, `id-token: write` and the `github-pages`
 environment, which only allows `main`; the release job can't use it because it also runs on `staging`.
 
+A `docs:` commit releases nothing, so a docs-only change (a landing page script, a typedoc option) never
+deploys through `publish.yml`. Give a repo with a docs site a manual `docs.yml` too: `workflow_dispatch` only,
+with `permissions: {}` at the top. A `build` job gated on `github.ref == 'refs/heads/main'` (`actions: read`,
+`contents: read`, `pages: read`) runs `require-ci-success`, `setup` with `ignore-scripts: true`, the build
+(packages import each other through `dist/`), `npm run docs:api`, `configure-pages` and
+`upload-pages-artifact`. A `deploy` job (`needs: build`, `concurrency: pages` with
+`cancel-in-progress: false`, `pages: write`, `id-token: write`, the `github-pages` environment) runs
+`actions/deploy-pages`. It holds no npm or tag credentials, so it stays apart from `publish.yml`. Run it with
+`gh workflow run docs.yml --ref main`, and point to it from `CONTRIBUTING.md`.
+
 ## Octo STS trust policies (`.github/chainguard/`)
 
 Get the IDs with `gh api repos/<owner>/<repo> --jq '"\(.owner.id) \(.id)"'`. The subject is

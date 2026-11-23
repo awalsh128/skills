@@ -27,6 +27,7 @@ generated files use.
 - `release`: restrict deployment branches to `main` and `staging`. npm trusted publishing names this
   environment.
 - `github-pages` (only with a docs site): restrict to `main`, and set Pages to deploy from GitHub Actions.
+  Both `publish.yml` and `docs.yml` deploy through it.
 
 ## npm
 

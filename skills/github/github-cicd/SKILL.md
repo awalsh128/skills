@@ -58,6 +58,7 @@ the difference in the summary.
 | `nightly.yml`                        | Starts a release candidate on `staging` when shippable files changed since release. |
 | `promote.yml`                        | Fast-forwards `main` to a CI-passed `staging` commit, then starts the release.      |
 | `publish.yml`                        | Releases with semantic-release via `awalsh128/npm-publish-strict`; deploys docs.    |
+| `docs.yml` (docs site only)          | Manual, `main` only: redeploys the docs without a release.                          |
 | `.github/actions/setup`              | Composite action: Node, cache, `npm ci`, optional `--ignore-scripts`.               |
 | `.github/actions/require-ci-success` | Composite action: fails unless the commit's latest completed CI run succeeded.      |
 | `.github/chainguard/*.sts.yaml`      | Octo STS trust policies that mint the `main` and tag tokens.                        |
