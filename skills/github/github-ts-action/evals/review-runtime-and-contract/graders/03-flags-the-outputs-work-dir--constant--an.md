@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: last_message
+focus: trace
 weight: 1
 ---
 
