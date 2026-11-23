@@ -51,15 +51,13 @@ Insert these when they apply, and suggest them in the summary when they don't ye
   Link it to the registry page.
 - **Coverage (Codecov):** applies only when a workflow runs `codecov/codecov-action`. A `.codecov.yml` alone
   (the powerpack `node` set ships one) is not enough, since nothing uploads. Verify with
-  `curl -s https://codecov.io/api/v2/github/<owner>/repos/<repo>`: if it returns the repo with
-  `"active":true`, use its `branch` value in
-  `https://codecov.io/gh/<owner>/<repo>/branch/<branch>/graph/badge.svg`, linked to
-  `https://codecov.io/gh/<owner>/<repo>`. If the repo isn't found, insert the badge anyway only when the
-  workflow uploads, and say in the summary that Codecov isn't authorized or has no upload yet (the badge shows
-  "unknown" until then). A repo with a staging/main split has one branch on Codecov; use the one the API
-  reports. If the API call itself fails (error or timeout, not a not-found), keep the existing badge or use
-  the default branch from `gh repo view --json defaultBranchRef`, and say in the summary that the Codecov
-  branch is unverified. Never skip the check silently.
+  `curl -s https://codecov.io/api/v2/github/<owner>/repos/<repo>`. Insert one Codecov badge only, for the
+  default branch (`main` or `master`, from `gh repo view --json defaultBranchRef`), never one per branch, even
+  with a staging/main split: `https://codecov.io/gh/<owner>/<repo>/branch/<default-branch>/graph/badge.svg`,
+  linked to `https://codecov.io/gh/<owner>/<repo>`. If the repo isn't found, insert the badge anyway only when
+  the workflow uploads, and say in the summary that Codecov isn't authorized or has no upload yet (the badge
+  shows "unknown" until then). If the API call itself fails (error or timeout, not a not-found), still use the
+  default branch badge and say in the summary that Codecov was unverified. Never skip the check silently.
 
 ## Optional badges
 

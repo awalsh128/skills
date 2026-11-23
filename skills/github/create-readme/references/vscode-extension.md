@@ -44,8 +44,9 @@ see "VSCE badges" below. Drop any that don't apply rather than leaving them in.
   - Labels must differ: "Version", "Marketplace downloads", "Open VSX downloads". Add Open VSX version too
     only with a distinct label such as "Open VSX".
   - Not yet published: suggest the snippets in the summary instead of inserting them.
-- **Other badges:** CI when verifiable (CI per branch, labeled, when more than one). Add the Codecov badge
-  when a workflow uploads coverage to Codecov.
+- **Other badges:** CI when verifiable (CI per branch, labeled via the shields.io form in `SKILL.md`, when
+  more than one). Add one Codecov badge, for the default branch (`main` or `master`) only, when a workflow
+  uploads coverage to Codecov.
 - **Display name:** take the title and logo alt text from the extension's `displayName` in `package.json`,
   exactly as written. The Marketplace requires a unique display name, so it may differ from the repo slug, the
   npm package name or the prose name (for example `Regex Explain Lab` for `regex-explain`). Never change it to

@@ -76,12 +76,15 @@ Ground every claim in the repo. A README that describes things the code doesn't 
 2. **Badge row** under the title. Add only badges verifiable from the repo: a workflow file exists (CI), a
    release tag exists. Never add a license badge: GitHub's License tab already shows it. Include the registry
    version badge (npm, Marketplace) when the package is published, and the Codecov badge when a workflow runs
-   `codecov/codecov-action` (see the type's reference for snippets and checks). Suggest, don't insert, a
-   registry or coverage badge that doesn't apply yet. Badges are not mandatory; with no CI, omit and say so.
-   Two badges must never show the same label: when several badges would (e.g. CI on `main` and CI on
-   `staging`, or two workflows both named "CI"), give each a distinct label naming what sets it apart (`main`,
-   `staging`, `release`), via the shields.io `label` parameter or the workflow badge's `?branch=` query plus
-   `label`, and put the differentiator in the alt text too.
+   `codecov/codecov-action` (see the type's reference for snippets and checks). Codecov gets exactly one
+   badge, for the default branch (`main` or `master`), never one per branch. Suggest, don't insert, a registry
+   or coverage badge that doesn't apply yet. Badges are not mandatory; with no CI, omit and say so. Two badges
+   must never show the same label: when several badges would (e.g. CI on `main` and CI on `staging`, or two
+   workflows both named "CI"), give each a distinct label naming what sets it apart (`main`, `staging`,
+   `release`), and put the differentiator in the alt text too. GitHub's own workflow `badge.svg` always shows
+   the workflow name and has no `label` parameter, so whenever more than one CI badge appears, build every CI
+   badge from shields.io instead:
+   `https://img.shields.io/github/actions/workflow/status/<owner>/<repo>/<file>.yml?branch=<branch>&label=<label>`.
 3. **One-paragraph description.** What it does and for whom, with links to key dependencies. No history or
    philosophy.
 4. **Emoji feature bullets.** Directly under the description: 3-5 one-line bullets, each with a distinct
