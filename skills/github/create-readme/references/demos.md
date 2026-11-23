@@ -32,9 +32,10 @@ or a broken image in the README.
   only an option or a table gets no demo.
 - **Everything else** moves to a gallery, `docs/demos.md`, with one heading and one demo per feature, linked
   once from the README in a `> [!TIP]` callout ("More demos are in the [demo gallery](url)."), right after the
-  hero. Do not stack a README full of recordings: each one competes with the text for attention and the page
-  stops being scannable. Many demos is a gallery, not a README. Start the gallery at the next feature, not
-  with the hero again.
+  hero. If the repo's Prettier config reflows prose, put `<!-- prettier-ignore -->` above the callout, or it
+  joins `[!TIP]` onto the text line and GitHub stops rendering the callout. Do not stack a README full of
+  recordings: each one competes with the text for attention and the page stops being scannable. Many demos is
+  a gallery, not a README. Start the gallery at the next feature, not with the hero again.
 
 ## How each one is written
 
