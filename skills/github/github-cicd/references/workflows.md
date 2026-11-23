@@ -528,9 +528,14 @@ with `permissions: {}` at the top. A `build` job gated on `github.ref == 'refs/h
 For an Action whose consumers run `uses: <owner>/<repo>@<tag>`. `dist/` is committed, so the tag carries the
 bundle and a release commits nothing. Differences from the npm form:
 
-- `release.config.ts` has `commit-analyzer`, `release-notes-generator` and `@semantic-release/github` with
+- `release.config.ts` has `commit-analyzer`, a `generateNotes` plugin, and `@semantic-release/github` with
   `successComment`, `failComment` and `releasedLabels` set to `false`, so the tag token needs only
   `contents: write`. No changelog or git plugin: `main` never gets commits of its own.
+- Release notes credit each PR's author. The `generateNotes` plugin calls the default generator, then appends
+  `by [@login](https://github.com/login)` to each bullet that links a PR, with the login read from
+  `GET /repos/{owner}/{repo}/pulls/{number}` using `GITHUB_TOKEN`. The commit author is only a name and email,
+  so it cannot give the login. A failed lookup logs a warning and leaves the bullet uncredited; it never fails
+  the release. See `cache-apt-pkgs-action`'s `release.config.ts` for the reference implementation.
 - `.gitignore` keeps `dist/src/` and `dist/**/*.map` out; `.gitattributes` has
   `dist/** -diff linguist-generated=true`.
 - `ci.yml` and the release job fail when `git status --porcelain -- dist` is not empty after the build.
