@@ -60,7 +60,8 @@ see "VSCE badges" below. Drop any that don't apply rather than leaving them in.
   `displayName`.
 - **Description:** add a sentence on what the extension leaves alone, if it matters.
 - **Bullets and demos:** the hero GIF goes directly under the emoji bullets; other demos follow
-  `references/demos.md`. Use vsce-demo to produce the GIFs for this type.
+  `references/demos.md`. Use vsce-demo to produce the GIFs for this type. With five or more GIFs, also load
+  the vsce-demo skill and read its README placement reference for the split and registry caveats.
 - **Sponsor badge:** centered, and preceded by `<!-- prettier-ignore -->` when the repo uses Prettier.
 
 ## Middle sections
