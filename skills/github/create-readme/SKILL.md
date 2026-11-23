@@ -34,15 +34,16 @@ Ground every claim in the repo. A README that describes things the code doesn't 
    order: the existing README title, the manifest's display name (`displayName`, `name` in `action.yml`,
    package description), then the slug with separators spaced, generic suffixes (`-action`, `vscode-`, `-cli`)
    dropped and words capitalized. Keep proper nouns and acronyms as the project writes them. Never include the
-   owner's handle in the name (`awalsh128 Agent Skills` → "Agent Skills"). For a library people install and
-   import by name, that package name (`ts-apt`) is the project name; keep it as written and use it in the alt
-   text (`ts-apt logo`). If more than one reading is plausible, pick one and say so in the summary. Use it in
-   the title, the logo alt text and prose. Keep the repo slug only where it must be literal: URLs, badge
-   links, `uses:`, install commands and code. For a VS Code extension the manifest's `displayName` is
-   authoritative, not a suggestion: the Marketplace requires it to be unique, so it can carry a suffix the
-   repo slug and prose don't (`Regex Explain Lab` for `regex-explain`). Use it as written for the title, the
-   logo alt text and Marketplace-facing prose, never "correct" it toward the slug, and don't flag the
-   difference as an inconsistency. See `references/vscode-extension.md`.
+   owner's handle in the name (`awalsh128 Agent Skills` → "Agent Skills"). This applies to libraries too: the
+   title and logo alt text are plain English even when people install the package by its slug (`ts-apt` →
+   "TypeScript APT", alt text `TypeScript APT logo`). Never use the package name or slug as the title; keep it
+   only in install commands, imports and code. If more than one reading is plausible, pick one and say so in
+   the summary. Use it in the title, the logo alt text and prose. Keep the repo slug only where it must be
+   literal: URLs, badge links, `uses:`, install commands and code. For a VS Code extension the manifest's
+   `displayName` is authoritative, not a suggestion: the Marketplace requires it to be unique, so it can carry
+   a suffix the repo slug and prose don't (`Regex Explain Lab` for `regex-explain`). Use it as written for the
+   title, the logo alt text and Marketplace-facing prose, never "correct" it toward the slug, and don't flag
+   the difference as an inconsistency. See `references/vscode-extension.md`.
 4. Find real install, build and test commands from scripts, Makefile or CI. Run the cheap ones.
 5. Classify the repo and read its template (see **Templates**). If the type or purpose isn't evident (e.g. a
    lone `main.go`), ask the user what the project is for instead of guessing.
