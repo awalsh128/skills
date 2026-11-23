@@ -20,7 +20,9 @@ Based on [spech66/hugo-best-practices](https://github.com/spech66/hugo-best-prac
 - **Assets:** put CSS, JS and images that Hugo processes in `assets/`, not `static/`. Build them with
   `resources.Get | minify | fingerprint`, and load page-specific scripts only on the pages that need them.
 - **Images:** keep the original full size and let Hugo resize it (`.Process`, WebP). Set `width` and `height`
-  on every `img`, `loading="lazy"` below the fold and `fetchpriority="high"` on the first large image.
+  on every `img`, `loading="lazy"` below the fold and `fetchpriority="high"` on the first large image. A
+  decorative image that fills a fixed-size box (`absolute inset-0 object-cover`) can't shift the layout and
+  may vary in aspect ratio, so it can skip `width` and `height`, but it still needs `alt=""`.
 - **Theme:** change as little as possible. Prefer a theme parameter, then a hook partial, then an override in
   the site's `layouts/` or `assets/`. Never edit files inside `themes/` or a theme module. Delete an override
   that is identical to the theme's.
