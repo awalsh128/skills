@@ -1,0 +1,13 @@
+name: Cache Pkgs
+description: Cache packages
+inputs:
+  packages:
+    description: Packages to cache
+    required: false
+    default: ""
+outputs:
+  hit:
+    description: Whether the cache was hit
+runs:
+  using: node24
+  main: dist/index.js

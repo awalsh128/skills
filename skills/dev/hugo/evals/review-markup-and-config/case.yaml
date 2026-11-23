@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-markup-and-config
+expected_outcome: |
+  A review reports hand-built JSON-LD, per-link external handling, missing robots and sitemap config, processed assets in static/, an edit inside themes/, and untracked build output, without editing anything.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,16 @@
+name: Cache Thing
+description: Restore a cache
+author: example
+branding:
+  icon: package
+  color: blue
+inputs:
+  key:
+    description: Cache key
+    required: true
+outputs:
+  cache-hit:
+    description: Whether the cache was restored
+runs:
+  using: node24
+  main: dist/action/index.js

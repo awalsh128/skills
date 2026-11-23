@@ -1,0 +1,30 @@
+name: Release
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+permissions: write-all
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: echo "Title is ${{ github.event.pull_request.title }}"
+      - run: npm test
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    concurrency:
+      group: release
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

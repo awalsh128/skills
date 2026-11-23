@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: repo-convention-wins-modify
+expected_outcome: |
+  The repo's AGENTS.md requiring a utils folder wins over the skill's no-utils rule, the conflict is mentioned, only the touched code changes, and wider violations are listed as suggestions.
+context:
+  scaffold_script: place-files.sh

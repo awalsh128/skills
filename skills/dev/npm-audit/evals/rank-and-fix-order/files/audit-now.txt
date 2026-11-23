@@ -1,0 +1,3 @@
+express  <4.19.2  high  direct, runtime  fix: npm audit fix (non-breaking, 4.21.2)
+serialize-javascript  <=7.0.2  high  transitive via mocha@11.7.1, dev  fix: mocha@12 (semver-major)
+markdown-toc > lodash.template  moderate  transitive, dev, runs only on the repo's own README  fix: none available

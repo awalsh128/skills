@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-manifest-and-release
+expected_outcome: |
+  The manifest and release workflow are reviewed against the registry rules: SVG icon, missing repository, hand-set version, a pre-release version string, and a separate on-release publish workflow are flagged with fixes; nothing is published.
+context:
+  scaffold_script: place-files.sh
