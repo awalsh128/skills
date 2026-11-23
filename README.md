@@ -13,6 +13,8 @@
   <a href="LICENSE"><img src="https://img.shields.io/github/license/awalsh128/skills" alt="License"></a>
 </p>
 
+> [!IMPORTANT] Changes are always welcome! If you see way to optimize or replace redundancies (even other outside skills) file a PR.
+
 Opinionated skills for developers who use [Claude Code](https://claude.com/claude-code) or another agent that
 reads `SKILL.md` files. Each one covers a recurring dev task, such as READMEs, CI workflows, TypeScript style
 and unit tests, and applies one consistent set of conventions.
