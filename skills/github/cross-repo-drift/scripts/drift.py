@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """cross-repo-drift: audit and apply. Standard library only; shells out to gh, git and multi-gitter.
 
-Detection, verification and aggregation are plain code, so a clean audit costs no tokens.
+Authentication is the gh CLI's: no token is set by hand. Detection, verification and aggregation are plain code, so a clean audit costs no tokens.
 """
 
 import argparse
@@ -20,7 +20,8 @@ import config as C  # noqa: E402
 
 USAGE = """cross-repo-drift: keep your repos in line with a standards source.
 
-  drift.py audit [--repos a,b] [--out report.json]   read-only report; changes nothing
+  drift.py repos                                      checklist of in-scope repos (current repo pre-checked)
+  drift.py audit [--repos a,b|1,3|all] [--out report.json]   read-only report; changes nothing
   drift.py apply --repos a,b | --report report.json   open PRs for fixable findings (explicit target required)
   drift.py verify DIR --rule RULE [--attempt N]       re-run check; exit 0 only when RULE has no open finding
   drift.py automerge --repo NAME --pr N --reviewed    enable auto-merge where the repo requires the check
@@ -45,9 +46,56 @@ def run(cmd, cwd=None, env=None):
 # --- discovery and classification -------------------------------------------------------------------------
 
 
+def owner():
+    """DRIFT_OWNER if set, else the account gh is logged in as."""
+    if C.OWNER:
+        return C.OWNER
+    out = run(["gh", "api", "user", "-q", ".login"])
+    if out.returncode or not out.stdout.strip():
+        die("not logged in to gh: run `gh auth login`, or set DRIFT_OWNER")
+    C.OWNER = out.stdout.strip()
+    return C.OWNER
+
+
+def current_repo():
+    """Name of the repo the working directory belongs to, if it is a GitHub repo owned by owner()."""
+    out = run(["gh", "repo", "view", "--json", "name,owner", "-q", '.owner.login + "/" + .name'])
+    if out.returncode or "/" not in out.stdout:
+        return None
+    who, name = out.stdout.strip().split("/", 1)
+    return name if who.lower() == owner().lower() else None
+
+
+def gh_token():
+    """The token gh already holds, handed to multi-gitter for this process only."""
+    out = run(["gh", "auth", "token"])
+    return out.stdout.strip() if not out.returncode and out.stdout.strip() else die(
+        "gh has no token: run `gh auth login`")
+
+
+def checklist(repos):
+    here = current_repo()
+    lines = [f"Repos for {owner()} (public, non-fork, non-archived). Pick by number, name, or 'all':"]
+    for i, r in enumerate(repos, 1):
+        mark = "x" if r["name"] == here else " "
+        desc = (r.get("description") or "").strip()[:60]
+        lines.append(f"  {i:>2}. [{mark}] {r['name']:<32} {desc}")
+    return "\n".join(lines)
+
+
+def resolve_picks(spec, repos):
+    """Turn 'all', numbers and names from the checklist into repo names."""
+    if spec.strip() == "all":
+        return [r["name"] for r in repos]
+    names = []
+    for token in (s.strip() for s in spec.split(",") if s.strip()):
+        names.append(repos[int(token) - 1]["name"] if token.isdigit() and 0 < int(token) <= len(repos) else token)
+    return names
+
+
 def discover():
     """Public, non-fork, non-archived repos of the owner, through REST (GraphQL is not always available)."""
-    out = run(["gh", "api", "--paginate", "--slurp", f"users/{C.OWNER}/repos?type=owner&per_page=100"])
+    out = run(["gh", "api", "--paginate", "--slurp", f"users/{owner()}/repos?type=owner&per_page=100"])
     if out.returncode:
         die(f"could not list repos: {out.stderr.strip()}")
     repos = [r for page in json.loads(out.stdout) for r in page]
@@ -118,7 +166,7 @@ def base_branch(root, overrides, default_branch):
 def audit_repo(name, default_branch, workdir):
     """Shallow-clone one repo into workdir, classify it and run check. Reads only; nothing is pushed."""
     dest = Path(workdir) / name
-    url = C.CLONE_URL.format(owner=C.OWNER, name=name)
+    url = C.CLONE_URL.format(owner=owner(), name=name)
     cloned = run(["git", "clone", "--depth", "1", "--quiet", url, str(dest)])
     if cloned.returncode:
         return {"repo": name, "status": "clone-failed", "error": cloned.stderr.strip()[:200]}
@@ -143,6 +191,7 @@ def audit_repo(name, default_branch, workdir):
 def audit(repo_names=None):
     repos = discover()
     if repo_names:
+        repo_names = resolve_picks(",".join(repo_names), repos)
         known = {r["name"] for r in repos}
         unknown = [n for n in repo_names if n not in known]
         if unknown:
@@ -151,7 +200,7 @@ def audit(repo_names=None):
     with tempfile.TemporaryDirectory(prefix="cross-repo-drift-") as work:
         with ThreadPoolExecutor(C.PARALLELISM) as pool:
             results = list(pool.map(lambda r: audit_repo(r["name"], r["default_branch"], work), repos))
-    return {"generated": datetime.now(timezone.utc).isoformat(), "owner": C.OWNER, "repos": results}
+    return {"generated": datetime.now(timezone.utc).isoformat(), "owner": owner(), "repos": results}
 
 
 def summarize(report):
@@ -198,13 +247,12 @@ def apply(args):
             jobs.append((repo, finding, ctype))
     for repo, rule in skipped:
         print(f"skipped {repo}: {rule} (unclassified repo, unmapped category or not fixable)")
-    if jobs and not args.dry_run and not os.environ.get("GITHUB_TOKEN"):
-        die("GITHUB_TOKEN is not set; use a token limited to the target repos")
+    token = {} if args.dry_run or not jobs else {"GITHUB_TOKEN": gh_token()}
     for repo, finding, ctype in jobs:
         category = finding["category"]
         command = [
             "multi-gitter", "run", shlex.join([sys.executable, os.path.abspath(__file__), "fix-and-verify"]),
-            "--repo", f"{C.OWNER}/{repo['repo']}",
+            "--repo", f"{owner()}/{repo['repo']}",
             "--branch", f"{C.BRANCH_PREFIX}{category}",
             "--base-branch", repo["base_branch"],
             "--pr-title", f"{ctype}: {finding['message']}"[:120],
@@ -217,7 +265,7 @@ def apply(args):
         print("+", shlex.join(command))
         if run(["which", "multi-gitter"]).returncode:
             die("multi-gitter is not installed")
-        subprocess.run(command, env={**os.environ, "DRIFT_RULE": finding["rule"]}, check=False)
+        subprocess.run(command, env={**os.environ, **token, "DRIFT_RULE": finding["rule"]}, check=False)
 
 
 def verify(root, rule, attempt):
@@ -253,15 +301,15 @@ def fix_and_verify():
 def automerge(repo, pr, reviewed):
     if not reviewed:
         die("auto-merge is enabled only after the reviewer passes; add --reviewed")
-    info = run(["gh", "api", f"repos/{C.OWNER}/{repo}/pulls/{pr}"])
+    info = run(["gh", "api", f"repos/{owner()}/{repo}/pulls/{pr}"])
     if info.returncode:
         die(info.stderr.strip())
     base = json.loads(info.stdout)["base"]["ref"]
-    rules = run(["gh", "api", f"repos/{C.OWNER}/{repo}/rules/branches/{base}"])
+    rules = run(["gh", "api", f"repos/{owner()}/{repo}/rules/branches/{base}"])
     if C.RELEASE_IMPACT_CHECK not in rules.stdout:
         print(f"skipped: {repo} does not require the '{C.RELEASE_IMPACT_CHECK}' check on {base}")
         return 0
-    done = run(["gh", "pr", "merge", str(pr), "--repo", f"{C.OWNER}/{repo}", "--auto", "--squash"])
+    done = run(["gh", "pr", "merge", str(pr), "--repo", f"{owner()}/{repo}", "--auto", "--squash"])
     print(done.stdout.strip() or done.stderr.strip())
     return done.returncode
 
@@ -300,6 +348,7 @@ def main(argv):
         return 0
     p = argparse.ArgumentParser(prog="drift.py")
     sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("repos")
     a = sub.add_parser("audit")
     a.add_argument("--repos")
     a.add_argument("--out")
@@ -326,6 +375,9 @@ def main(argv):
     k.add_argument("--output", type=int, default=0)
     args = p.parse_args(argv)
 
+    if args.cmd == "repos":
+        print(checklist(discover()))
+        return 0
     if args.cmd == "audit":
         report = audit(args.repos.split(",") if args.repos else None)
         if args.out:

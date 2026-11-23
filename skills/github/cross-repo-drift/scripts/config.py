@@ -6,8 +6,9 @@ standards source without editing code.
 
 import os
 
-# Whose repos are audited. Public, non-fork, non-archived repos only; private repos are out of scope.
-OWNER = os.environ.get("DRIFT_OWNER", "awalsh128")
+# Whose repos are audited. Empty means "the account `gh` is logged in as" (resolved in drift.owner()).
+# Public, non-fork, non-archived repos only; private repos are out of scope.
+OWNER = os.environ.get("DRIFT_OWNER", "")
 
 # Where a repo is cloned from. {owner} and {name} are filled in; tests point this at a local path.
 CLONE_URL = os.environ.get("DRIFT_CLONE_URL", "https://github.com/{owner}/{name}.git")
