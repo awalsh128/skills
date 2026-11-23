@@ -16,9 +16,9 @@ diff does to consumers?
 
 ## Scope beside other reviews
 
-If a general review (a code review skill or command) is also running on this pull request, report only
-release-type findings and leave code quality, spec and security to it. If the pull request has a release
-preview comment, take the planned version from it instead of computing one.
+If a general review (`/mattpocock-skills:code-review` or another review command) is also running on this pull
+request, report only release-type findings and leave code quality, spec and security to it. If the pull
+request has a release preview comment, take the planned version from it instead of computing one.
 
 ## Steps
 

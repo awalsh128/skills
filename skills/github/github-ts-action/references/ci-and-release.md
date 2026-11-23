@@ -11,8 +11,9 @@ Used by every job so setup lives in one place. Steps: `actions/setup-node` (Node
 
 ## ci.yml jobs
 
-Triggers: `push`, `pull_request` (opened, synchronize, reopened, ready_for_review), nightly `schedule`,
-`workflow_dispatch` with a `debug` boolean. Top-level `permissions` minimal; each job narrows further.
+Triggers and `concurrency` come from the `ci.yml` template in `github-cicd`: `push` on `main` and `staging`
+only, pull requests, nightly `schedule`, `workflow_dispatch` with a `debug` boolean. Top-level `permissions`
+minimal; each job narrows further, and each caller of `setup` has `actions: read`.
 
 1. `setup-and-cache`: checkout, setup (build), upload the bundle (`action.yml`, `dist/action/`, plus any
    runtime scripts) as `action-bundle-<sha>` with `if-no-files-found: error`, `retention-days: 1`.
@@ -45,12 +46,9 @@ workflow yet, so confirm how the user wants the bundle shipped (commit to a rele
 `dist/` in the release commit) before writing it.
 
 Variant for an action whose `main` only fast-forwards and whose `dist/` is committed (see **Bundle variant**
-in `SKILL.md`): semantic-release config without the changelog and git plugins, so a release creates a tag and
-a GitHub Release and commits nothing, `package.json` keeps a placeholder version, and notes live only in the
-Release. Keep the release job behind the off switch, and have it archive the files consumers run
-(`action.yml`, `dist/`, data and config files, the lockfile) from the tagged commit, attest the tarball with
-`actions/attest-build-provenance`, and upload it to the Release. Then `gh attestation verify` checks the
-bytes.
+in `SKILL.md`): a release creates a tag and a GitHub Release and commits nothing, `package.json` keeps a
+placeholder version, and notes live only in the Release. Use the `publish.yml (GitHub Action)` form in
+`github-cicd`, which also archives and attests the files consumers run.
 
 Release publishing is irreversible: confirm before running or enabling it.
 

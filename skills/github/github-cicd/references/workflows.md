@@ -41,6 +41,9 @@ runs:
         fi
 ```
 
+Every job that calls `setup` needs `actions: read`, because the build-artifact download reads an earlier run.
+Give that download step `timeout-minutes: 2`, so a hung download costs minutes, not the job.
+
 ## Composite action: require-ci-success (`.github/actions/require-ci-success/action.yml`)
 
 ```yaml
@@ -533,6 +536,105 @@ with `permissions: {}` at the top. A `build` job gated on `github.ref == 'refs/h
 `cancel-in-progress: false`, `pages: write`, `id-token: write`, the `github-pages` environment) runs
 `actions/deploy-pages`. It holds no npm or tag credentials, so it stays apart from `publish.yml`. Run it with
 `gh workflow run docs.yml --ref main`, and point to it from `CONTRIBUTING.md`.
+
+## publish.yml (GitHub Action)
+
+For an Action whose consumers run `uses: <owner>/<repo>@<tag>`. `dist/` is committed, so the tag carries the
+bundle and a release commits nothing. Differences from the npm form:
+
+- `release.config.ts` has `commit-analyzer`, `release-notes-generator` and `@semantic-release/github` with
+  `successComment`, `failComment` and `releasedLabels` set to `false`, so the tag token needs only
+  `contents: write`. No changelog or git plugin: `main` never gets commits of its own.
+- `.gitignore` keeps `dist/src/` and `dist/**/*.map` out; `.gitattributes` has
+  `dist/** -diff linguist-generated=true`.
+- `ci.yml` and the release job fail when `git status --porcelain -- dist` is not empty after the build.
+- The off switch is inverted (`== 'true'`), so a new copy of a template releases only once configured.
+
+```yaml
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Run the release process without creating a tag or release"
+        type: boolean
+        required: false
+        default: false
+
+permissions: {}
+
+jobs:
+  release:
+    if: ${{ vars.RELEASES_ENABLED == 'true' || inputs.dry-run }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: release
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    permissions:
+      actions: read # For checking CI results
+      contents: write # For uploading the archive to the GitHub Release
+      id-token: write # For OIDC: the Octo STS tag token and the attestation
+      attestations: write # For the build provenance attestation
+    steps:
+      - uses: actions/checkout@<sha> # vX
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: ./.github/actions/require-ci-success
+        with:
+          sha: ${{ github.sha }}
+          token: ${{ github.token }}
+
+      - uses: ./.github/actions/setup
+        with:
+          ignore-scripts: "true"
+
+      - name: Verify the committed bundle is current
+        run: |
+          set -euo pipefail
+          npm run build
+          [ -z "$(git status --porcelain -- dist)" ] || { echo "::error::dist/ is out of date."; exit 1; }
+
+      - id: octo-sts
+        uses: octo-sts/action@<sha> # vX
+        with:
+          scope: ${{ github.repository }}
+          identity: release
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
+          DRY_RUN: ${{ inputs.dry-run && '--dry-run' || '' }}
+        run: npx semantic-release $DRY_RUN
+
+      # A release commits nothing, so a new release is the tag on this commit.
+      - id: archive
+        if: ${{ !inputs.dry-run }}
+        run: |
+          set -euo pipefail
+          tag="$(git tag --points-at HEAD --list 'v[0-9]*' | sort -V | tail -n1)"
+          [ -n "$tag" ] || { echo "No release was created for this commit."; exit 0; }
+          git archive --format=tar.gz --output="action-${tag}.tar.gz" HEAD action.yml dist package.json package-lock.json
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - if: steps.archive.outputs.tag != ''
+        uses: actions/attest-build-provenance@<sha> # vX
+        with:
+          subject-path: action-${{ steps.archive.outputs.tag }}.tar.gz
+
+      - if: steps.archive.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.archive.outputs.tag }}
+        run: gh release upload "$TAG" "action-${TAG}.tar.gz"
+```
+
+Archive every file the Action runs (`action.yml`, `dist/`, data and config files, the lockfile), so
+`gh attestation verify` checks the bytes consumers get.
 
 ## Octo STS trust policies (`.github/chainguard/`)
 
