@@ -12,6 +12,10 @@ description:
 This skill applies the user's language-agnostic design conventions. They are opinions: follow them even where
 common advice differs. A language skill (for example `typescript`) adds the specifics of its language on top.
 
+Use `/mattpocock-skills:codebase-design` alongside it when the task is designing or deepening a module's
+interface or deciding where a seam goes; this skill covers conventions, not interface design. For review mode
+against a base commit or spec, use `/mattpocock-skills:code-review` and apply these rules as its standards.
+
 ## Precedence
 
 1. The repo's own documented conventions (`AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING`, lint and formatter config)

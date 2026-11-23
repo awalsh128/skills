@@ -12,6 +12,10 @@ description:
 This skill applies the user's unit-test conventions in any language. The rules are language-agnostic; the repo
 supplies the framework, file layout and commands.
 
+This skill covers what a good unit test looks like, not the workflow. When the user wants to work test-first
+(red-green-refactor), use `/mattpocock-skills:tdd` alongside it and apply these rules to each test it has you
+write. For a failing test or bug whose cause is unknown, use `/mattpocock-skills:diagnosing-bugs` first.
+
 ## Precedence
 
 1. The repo's documented conventions (`AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING`, test config) win inside that
