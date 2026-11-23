@@ -41,9 +41,9 @@ the difference in the summary.
    the lockfile. Match what exists before applying the defaults.
 2. `git remote -v` and `git branch -a` for the real owner, repo and branches. Never hardcode them.
 3. Classify the project, because it decides the publish workflow. Read `references/workflows.md` for the npm
-   package and monorepo forms. For anything else (GitHub Action, VS Code extension, Python, Go, container
-   image), build CI and the promotion flow from the templates and ask the user how it should publish, instead
-   of guessing.
+   package and monorepo forms, and the GitHub Action form (a committed `dist/` that a tag ships). For anything
+   else (VS Code extension, Python, Go, container image), build CI and the promotion flow from the templates
+   and ask the user how it should publish, instead of guessing.
 4. Resolve every action SHA and version at write time (`gh api repos/<owner>/<repo>/git/ref/tags/<tag>`,
    `npm view <pkg> version`). The numbers in the templates are placeholders, never copy them from memory.
 5. Ask before assuming: the package list and release order, the baseline commit, whether the repo is allowed

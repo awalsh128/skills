@@ -10,17 +10,28 @@ generated files use.
 - `main` ruleset: restrict updates and deletion, require linear history, and add the Octo STS app as a bypass
   actor, so only `promote.yml` can move it.
 - `staging` ruleset: require pull requests and the CI and PR checks; allow squash merge only, with the pull
-  request title as the commit subject.
+  request title as the commit subject. Apply it once `pr.yml` is on `staging`: a required check that has never
+  reported blocks every pull request, including the one that adds it.
 - Tag ruleset: restrict tag creation, with the Octo STS app as a bypass actor (`GITHUB_TOKEN` can't create
   tags under it).
 
 ## Octo STS
 
-1. Install the app: https://github.com/apps/octo-sts/installations/new on the repository.
+1. Install the app: https://github.com/apps/octo-sts/installations/new on the repository. A user token cannot
+   list installations (GitHub answers 403), so ask the user to confirm the install instead of detecting it.
 2. Commit `.github/chainguard/release.sts.yaml` and `promote.sts.yaml` to `main`; policy changes take effect
    only once promoted.
 3. Promote by hand with `gh workflow run promote.yml --ref staging`. Without `--ref staging` the run is on
    `main` and the trust policy rejects it. Put this command in the repo's `CONTRIBUTING.md`.
+
+## Repositories created from a template
+
+- Octo STS policies name the owner and repository IDs (`repo:<owner>@<id>/<repo>@<id>`) and the workflow path.
+  A copy keeps the template's, so every run is rejected: rewrite both from
+  `gh api repos/<owner>/<repo> --jq '"\(.owner.id) \(.id)"'` before the first promotion.
+- Create `staging`, the rulesets and the squash-only merge settings from the files in the repo, and keep the
+  release job held (see rule 11) until the app is installed and the policies are on `main`.
+- The first run that names the `release` environment creates it; restrict its branches afterwards.
 
 ## Environments
 
