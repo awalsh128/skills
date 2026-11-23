@@ -1,0 +1,17 @@
+{
+  "number": 12,
+  "title": "feat: add widget flag",
+  "state": "OPEN",
+  "isDraft": false,
+  "baseRefName": "main",
+  "headRefName": "feat/widget-flag",
+  "headRefOid": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+  "headRepository": {
+    "name": "demo",
+    "owner": {
+      "login": "awalsh128"
+    }
+  },
+  "mergeable": "MERGEABLE",
+  "mergeStateStatus": "CLEAN"
+}

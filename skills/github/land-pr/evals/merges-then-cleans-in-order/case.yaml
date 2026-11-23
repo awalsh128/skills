@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: merges-then-cleans-in-order
+expected_outcome: |
+  The merge is verified before cleanup, branch deletion is safe, and unrelated branches are left alone.
+context:
+  scaffold_script: place-files.sh

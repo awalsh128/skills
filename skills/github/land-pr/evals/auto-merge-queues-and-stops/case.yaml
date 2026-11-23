@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: auto-merge-queues-and-stops
+expected_outcome: |
+  Queue-to-auto-merge enables auto-merge without waiting, then leaves every branch alone.
+context:
+  scaffold_script: place-files.sh

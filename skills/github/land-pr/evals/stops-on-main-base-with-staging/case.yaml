@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: stops-on-main-base-with-staging
+expected_outcome: |
+  A pull request aimed at main in a repo with a staging branch is not merged; the user is asked.
+context:
+  scaffold_script: place-files.sh

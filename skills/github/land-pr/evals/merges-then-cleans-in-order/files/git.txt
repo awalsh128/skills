@@ -1,0 +1,15 @@
+$ git branch --show-current
+feat/widget-flag
+$ git status --short
+$ git branch -a
+* feat/widget-flag
+  main
+  old/stale-docs
+  staging
+  remotes/origin/feat/widget-flag
+  remotes/origin/main
+  remotes/origin/staging
+$ git rev-parse feat/widget-flag
+a1b2c3d4e5f60718293a4b5c6d7e8f9012345678
+$ git ls-remote --heads origin feat/widget-flag
+(no output)

@@ -1,0 +1,2 @@
+format	pass	12s	https://github.com/awalsh128/demo/actions/runs/1/job/1
+validate	pass	11s	https://github.com/awalsh128/demo/actions/runs/1/job/2
