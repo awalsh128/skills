@@ -6,7 +6,7 @@
     "prepare": "husky",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "eval": "claude plugin eval --judge-model sonnet"
+    "eval": "claude plugin eval --model sonnet --judge-model sonnet"
   },
   "devDependencies": {
     "husky": "^9.1.7",

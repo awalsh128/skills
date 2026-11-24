@@ -39,6 +39,6 @@ using the skills in other projects; each skill's `SKILL.md` carries those.
 ```bash
 python3 scripts/validate.py
 npm run format:check
-npm run eval -- skills/<group>/<skill> --scaffold   # grades with sonnet; a bare `claude plugin eval` uses haiku
+npm run eval -- skills/<group>/<skill> --scaffold   # runs and grades with sonnet; a bare `claude plugin eval` grades with haiku
 npm install   # enables the husky pre-commit hook
 ```
