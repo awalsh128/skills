@@ -317,39 +317,60 @@ def work_items(args):
     return [(r, f) for r in report["repos"] for f in r.get("findings", [])]
 
 
+def plan_jobs(items):
+    """Group (repo result, finding) pairs into one job per repo and category, so each branch gets one PR.
+
+    All of a job's rules run in the same clone, so two rules in one category never replace each other's
+    branch, and a PR that fixes many findings is titled for all of them. Returns (jobs, skipped).
+    """
+    skipped, groups = [], {}
+    for repo, finding in items:
+        ctype = C.CATEGORY_COMMIT_TYPES.get(finding.get("category"))
+        if repo["status"] == "unclassified" or not ctype or not finding.get("fixable", True):
+            skipped.append((repo["repo"], finding["rule"]))
+            continue
+        job = groups.setdefault((repo["repo"], finding["category"]), {"repo": repo, "ctype": ctype, "findings": []})
+        job["findings"].append(finding)
+    jobs = []
+    for (_, category), job in groups.items():
+        findings = job["findings"]
+        rules = sorted({f["rule"] for f in findings})
+        if len(findings) == 1:
+            title = f"{job['ctype']}: {findings[0]['message']}"
+        else:
+            title = f"{job['ctype']}: fix {len(findings)} {category} findings"
+        body = "Fixes from the standards source, opened by cross-repo-drift:\n\n" + "\n".join(
+            f"- `{f['rule']}`: {f['message']} ({f['path']})" for f in findings)
+        jobs.append({"repo": job["repo"], "category": category, "rules": rules, "title": title[:120], "body": body})
+    return jobs, skipped
+
+
 def apply(args):
     if os.environ.get("DRIFT_UNATTENDED"):
         die("apply does not run unattended; scheduled runs are audit-only")
     if not C.FIX_CMD:
         die("DRIFT_FIX_CMD is not set")
-    items = work_items(args)
-    skipped, jobs = [], []
-    for repo, finding in items:
-        ctype = C.CATEGORY_COMMIT_TYPES.get(finding.get("category"))
-        if repo["status"] == "unclassified" or not ctype or not finding.get("fixable", True):
-            skipped.append((repo["repo"], finding["rule"]))
-        else:
-            jobs.append((repo, finding, ctype))
+    jobs, skipped = plan_jobs(work_items(args))
     for repo, rule in skipped:
         print(f"skipped {repo}: {rule} (unclassified repo, unmapped category or not fixable)")
     mg = need("multi-gitter") if jobs else None
     token = {"GITHUB_TOKEN": gh_token()} if jobs else {}
-    for repo, finding, ctype in jobs:
-        category = finding["category"]
+    for job in jobs:
+        repo = job["repo"]
         command = [
             mg, "run", shlex.join([sys.executable, os.path.abspath(__file__), "fix-and-verify"]),
             "--repo", f"{owner()}/{repo['repo']}",
-            "--branch", f"{C.BRANCH_PREFIX}{category}",
+            "--branch", f"{C.BRANCH_PREFIX}{job['category']}",
             "--base-branch", repo["base_branch"],
-            "--pr-title", f"{ctype}: {finding['message']}"[:120],
-            "--pr-body", f"Rule `{finding['rule']}` from the standards source. Opened by cross-repo-drift.",
+            "--pr-title", job["title"],
+            "--pr-body", job["body"],
             "--labels", C.LABEL,
             "--conflict-strategy", "replace",
         ]
         if args.dry_run:
             command.append("--dry-run")
         print("+", shlex.join(command))
-        subprocess.run(command, env={**os.environ, **token, "DRIFT_RULE": finding["rule"]}, check=False)
+        subprocess.run(command, env={**os.environ, **token, "DRIFT_RULES": ",".join(job["rules"])}, check=False)
 
 
 def verify(root, rule, attempt):
@@ -372,14 +393,18 @@ def verify(root, rule, attempt):
 def fix_and_verify():
     """What multi-gitter runs inside each clone: apply the fix, then keep the change only if check passes.
 
-    The rule arrives in DRIFT_RULE because multi-gitter would read a --rule flag as its own.
+    The rules arrive comma-separated in DRIFT_RULES because multi-gitter would read a --rule flag as its own.
+    Each rule is fixed with DRIFT_RULE set, and the change is kept only if every rule then passes check.
     """
-    rule = os.environ.get("DRIFT_RULE") or die("DRIFT_RULE is not set")
-    result = run(shlex.split(C.FIX_CMD), cwd=".", env={"DRIFT_RULE": rule})
-    if result.returncode:
-        print(result.stderr.strip()[:300], file=sys.stderr)
-        return 1
-    return 0 if verify(".", rule, C.MAX_APPLIER_ATTEMPTS) == 0 else 1
+    rules = [r for r in (os.environ.get("DRIFT_RULES") or "").split(",") if r] or die("DRIFT_RULES is not set")
+    for rule in rules:
+        result = run(shlex.split(C.FIX_CMD), cwd=".", env={"DRIFT_RULE": rule})
+        if result.returncode:
+            print(result.stderr.strip()[:300], file=sys.stderr)
+            return 1
+        if verify(".", rule, C.MAX_APPLIER_ATTEMPTS) != 0:
+            return 1
+    return 0
 
 
 def automerge(repo, pr, reviewed):

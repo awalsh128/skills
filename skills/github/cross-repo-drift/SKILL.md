@@ -57,8 +57,10 @@ reported reason it was left unchanged.
    another value, or leave as is. Record a confirmed choice as an `exceptions` entry for the repo.
 3. **Apply.** For approved mechanical rules, `apply` runs `multi-gitter run` with
    `--conflict-strategy replace`, so a re-run force-pushes the tool's own `cross-repo-drift/<category>` branch
-   and reuses its open PR. Branch and label make re-runs find their own work; there is no state file. The PR
-   title type comes from the fixed category map in `config.py`; a category not in the map is never applied.
+   and reuses its open PR. Findings are grouped into one job per repo and category, so a repo gets one PR per
+   branch however many findings it has. Branch and label make re-runs find their own work; there is no state
+   file. The PR title type comes from the fixed category map in `config.py`; a category not in the map is
+   never applied.
 4. **Adapt, only if needed.** If a template needs real adaptation, spawn the applier (see
    `references/roles.md`) on a temp clone. After each attempt run
    `drift.py verify <dir> --rule <rule> --attempt N`. At most two attempts; the loop ends when `verify` exits

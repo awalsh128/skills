@@ -136,6 +136,68 @@ class ApplyGuards(unittest.TestCase):
             self.assertIn("approved", out.stderr)
 
 
+class PlanJobs(unittest.TestCase):
+    def repo(self, name, status="ok"):
+        return {"repo": name, "status": status, "base_branch": "main"}
+
+    def finding(self, rule, category="pin", path="a.yml", message="m", **extra):
+        return {"rule": rule, "category": category, "path": path, "message": message, **extra}
+
+    def test_many_findings_of_one_rule_make_one_job(self):
+        repo = self.repo("a")
+        items = [(repo, self.finding("unpinned-uses", message=f"pin x{i}")) for i in range(10)]
+        jobs, skipped = drift.plan_jobs(items)
+        self.assertEqual(len(jobs), 1)
+        self.assertEqual(skipped, [])
+        self.assertEqual(jobs[0]["rules"], ["unpinned-uses"])
+        self.assertEqual(jobs[0]["title"], "ci: fix 10 pin findings")
+        self.assertEqual(jobs[0]["body"].count("- `unpinned-uses`"), 10)
+
+    def test_a_single_finding_is_titled_by_its_message(self):
+        jobs, _ = drift.plan_jobs([(self.repo("a"), self.finding("r", message="pin x to a full commit SHA"))])
+        self.assertEqual(jobs[0]["title"], "ci: pin x to a full commit SHA")
+
+    def test_two_rules_in_one_category_share_one_job_and_branch(self):
+        repo = self.repo("a")
+        jobs, _ = drift.plan_jobs([(repo, self.finding("r2")), (repo, self.finding("r1"))])
+        self.assertEqual(len(jobs), 1)
+        self.assertEqual(jobs[0]["rules"], ["r1", "r2"])
+
+    def test_repos_and_categories_get_separate_jobs(self):
+        items = [(self.repo("a"), self.finding("r")), (self.repo("b"), self.finding("r")),
+                 (self.repo("a"), self.finding("s", category="reflow"))]
+        jobs, _ = drift.plan_jobs(items)
+        self.assertEqual({(j["repo"]["repo"], j["category"]) for j in jobs},
+                         {("a", "pin"), ("b", "pin"), ("a", "reflow")})
+
+    def test_skips_unclassified_unmapped_and_unfixable(self):
+        items = [(self.repo("u", "unclassified"), self.finding("r")),
+                 (self.repo("a"), self.finding("r", category="behavior")),
+                 (self.repo("a"), self.finding("r", fixable=False))]
+        jobs, skipped = drift.plan_jobs(items)
+        self.assertEqual(jobs, [])
+        self.assertEqual(len(skipped), 3)
+
+
+class FixAndVerify(unittest.TestCase):
+    def test_runs_every_rule_and_keeps_the_change_only_if_all_pass(self):
+        with tempfile.TemporaryDirectory() as d:
+            write(d, "fix.py", "import os, pathlib; pathlib.Path(os.environ['DRIFT_RULE']).touch()")
+            write(d, "check.py", "import json; print(json.dumps({'findings': []}))")
+            old = (C.FIX_CMD, C.CHECK_CMD)
+            C.FIX_CMD, C.CHECK_CMD = f"{sys.executable} {d}/fix.py", f"{sys.executable} {d}/check.py"
+            cwd, env = os.getcwd(), os.environ.get("DRIFT_RULES")
+            try:
+                os.chdir(d)
+                os.environ["DRIFT_RULES"] = "r1,r2"
+                self.assertEqual(drift.fix_and_verify(), 0)
+                self.assertTrue(Path("r1").exists() and Path("r2").exists())
+            finally:
+                os.chdir(cwd)
+                C.FIX_CMD, C.CHECK_CMD = old
+                os.environ.pop("DRIFT_RULES") if env is None else os.environ.update(DRIFT_RULES=env)
+
+
 class Automerge(unittest.TestCase):
     def test_requires_reviewer_pass(self):
         out = subprocess.run([sys.executable, str(SCRIPT), "automerge", "--repo", "a", "--pr", "1"],
