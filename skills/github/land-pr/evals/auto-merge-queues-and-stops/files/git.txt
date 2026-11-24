@@ -1,0 +1,10 @@
+$ git branch --show-current
+feat/widget-flag
+$ git status --short
+$ git branch -a
+* feat/widget-flag
+  main
+  staging
+  remotes/origin/feat/widget-flag
+  remotes/origin/main
+  remotes/origin/staging

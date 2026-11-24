@@ -31,8 +31,9 @@ commits the pull request never got.
    method from the repo's allowed methods
    (`gh repo view --json squashMergeAllowed,mergeCommitAllowed,rebaseMergeAllowed`); prefer squash. If squash
    is not allowed, ask.
-3. **Wait for checks.** `gh pr checks <n> --watch --fail-fast`. On a failure, stop and show the failing check
-   and its log tail. Never merge past a failing or missing required check, never use `--admin`, and never edit
+3. **Wait for checks.** Skip this when the user said queue or auto-merge: GitHub waits for the required checks
+   itself. Otherwise `gh pr checks <n> --watch --fail-fast`. On a failure, stop and show the failing check and
+   its log tail. Never merge past a failing or missing required check, never use `--admin`, and never edit
    branch protection. If the pull request has no checks at all, say so before merging.
 4. **Merge.** `gh pr merge <n> --squash`, leaving the title as the commit subject. If the user said queue or
    auto-merge, add `--auto`, report that it is queued, and stop: cleanup waits until the pull request is
