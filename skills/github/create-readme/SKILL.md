@@ -98,13 +98,22 @@ Ground every claim in the repo. A README that describes things the code doesn't 
 
 6. **Quick Start first.** The shortest working example precedes reference material. Real warnings (e.g. `sudo`
    required) use `> [!IMPORTANT]` / `> [!NOTE]` callouts, right after the sponsor badge.
-7. **Tables for options.** Inputs, outputs, settings in tables with name, description, required, default.
+7. **Tables for options.** Inputs, outputs, settings in tables with name, description, required, default. Each
+   table sits under its own heading (`### Inputs`, `### Outputs`), never under Quick Start or loose prose, so
+   a reader and a link can reach it by name.
 8. **Compact.** Aim for about 150 lines. Move overflow (long config reference, FAQ, API detail) to `docs/` or
    an existing doc and link it. Add a Contents list only when the README stays long for a good reason, and
    flag that.
 9. **Link out, don't duplicate.** Link Issues, Discussions, FAQ, `CONTRIBUTING`, `SECURITY`, generated API
    docs, Releases (instead of a changelog) and `docs/`, only when they exist and after verifying each link.
    Suggest missing ones in the summary; never invent them.
+   - **Link terms a reader may not know.** On first use in the README, link each named standard, tool,
+     technique or term of art that some readers will want to look up, to its official page or the most
+     authoritative doc: "Conventional Commits", "semantic-release", "trusted publishing", "provenance". This
+     covers headings too: a section like "Supply chain: attestations" links or glosses the term in its first
+     line (for example, to GitHub's artifact attestations doc), since the heading alone tells a newcomer
+     nothing. Link once per section at most, verify each URL, skip common words and terms the project itself
+     defines, and in Audit report an unlinked term as a fail with its line.
    - **Packaged README** (library, VS Code extension): the npm, Marketplace and Open VSX pages show the README
      as it was at the last release, and a `docs:` commit does not release. Keep it to stable content (what it
      is, install, Quick Start) and link volatile content (full config reference, FAQ, version-specific notes)

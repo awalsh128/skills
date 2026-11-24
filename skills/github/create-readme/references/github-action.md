@@ -15,8 +15,9 @@ Uses the standard layout in `SKILL.md`. Type-specific rules:
 
 1. Quick Start: a minimal `steps:` block using the real `uses: owner/repo@<latest tag>`
 2. Requirements: runner OS, permissions
-3. Configuration: **Inputs** and **Outputs** tables built from `action.yml` (name, description, required,
-   default)
+3. Configuration: an `### Inputs` and an `### Outputs` heading, each over its own table built from
+   `action.yml` (name, description, required, default). The inputs table never sits under Quick Start without
+   its heading; Audit reports that as a fail
 4. Usage Guide: version selection, basic and advanced example
 5. Caveats (⚠️)
 
