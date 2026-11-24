@@ -24,7 +24,10 @@ Set these before the first run (details in `scripts/config.py`):
   account, and `apply` passes `gh auth token` to `multi-gitter` for that one process. No token is set by hand.
 - `DRIFT_OWNER` (optional): audit another user or org instead of the logged-in account. Public, non-fork,
   non-archived repos only; private repos are out of scope.
-- `multi-gitter` on the path, for `apply` only.
+- `multi-gitter`, for `apply` only. `drift.py deps` reports what's missing; `drift.py deps --install` downloads
+  `multi-gitter` into `~/.local/bin` (sha256-verified) with no root, or the user can install it themselves.
+  `gh`, `git` and `jq` need a package manager, so `deps` prints the command for the user to run. Ask before
+  running `--install`.
 
 If `DRIFT_CHECK_CMD` or `DRIFT_FIX_CMD` is missing, say which one and stop. Don't guess a command.
 

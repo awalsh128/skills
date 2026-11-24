@@ -5,11 +5,15 @@ Authentication is the gh CLI's: no token is set by hand. Detection, verification
 """
 
 import argparse
+import hashlib
 import json
 import os
+import platform
 import shlex
+import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -20,6 +24,7 @@ import config as C  # noqa: E402
 
 USAGE = """cross-repo-drift: keep your repos in line with a standards source.
 
+  drift.py deps [--install]                           check dependencies; --install fetches what needs no root
   drift.py repos                                      checklist of in-scope repos (current repo pre-checked)
   drift.py audit [--repos a,b|1,3|all] [--out report.json]   read-only report; changes nothing
   drift.py apply --repos a,b | --report report.json   open PRs for fixable findings (explicit target required)
@@ -41,6 +46,86 @@ def run(cmd, cwd=None, env=None):
     return subprocess.run(
         cmd, cwd=cwd, capture_output=True, text=True, env={**os.environ, **(env or {})}, check=False
     )
+
+
+# --- dependencies ----------------------------------------------------------------------------------------
+
+# name -> (why, needed by). A missing one stops only the commands that need it.
+DEPENDENCIES = {
+    "git": ("clones the repos", "audit, apply"),
+    "gh": ("authentication, repo discovery and PRs", "audit, apply"),
+    "multi-gitter": ("runs the fix across repos and opens the PRs", "apply"),
+    "jq": ("builds and reads findings JSON", "the gh-dev-powerpack check and fix scripts"),
+}
+INSTALL_DIR = Path.home() / ".local" / "bin"
+
+
+def have(name):
+    return bool(shutil.which(name)) or (INSTALL_DIR / name).exists()
+
+
+def install_hint(name):
+    """The command a person runs to install name themselves, for this platform."""
+    mac = platform.system() == "Darwin"
+    if name == "gh":
+        return "brew install gh" if mac else "https://github.com/cli/cli/blob/trunk/docs/install_linux.md"
+    if name == "multi-gitter":
+        return "brew install lindell/multi-gitter/multi-gitter"
+    if mac:
+        return f"brew install {name}"
+    managers = {"apt-get": "sudo apt-get install", "dnf": "sudo dnf install", "pacman": "sudo pacman -S",
+                "zypper": "sudo zypper install"}
+    manager = next((m for m in managers if shutil.which(m)), None)
+    return f"{managers[manager]} {name}" if manager else f"install {name} with your package manager"
+
+
+def install_multi_gitter():
+    """Download the release for this platform with gh, verify its sha256 and put the binary in ~/.local/bin."""
+    osname = {"Linux": "Linux", "Darwin": "Darwin"}.get(platform.system())
+    arch = {"x86_64": "x86_64", "amd64": "x86_64", "arm64": "ARM64", "aarch64": "ARM64"}.get(platform.machine())
+    if not osname or not arch:
+        die(f"no prebuilt multi-gitter for {platform.system()} {platform.machine()}; install it yourself")
+    with tempfile.TemporaryDirectory(prefix="cross-repo-drift-dl-") as tmp:
+        for pattern in (f"multi-gitter_*_{osname}_{arch}.tar.gz", "checksums.txt"):
+            got = run(["gh", "release", "download", "-R", "lindell/multi-gitter", "--pattern", pattern, "--dir", tmp])
+            if got.returncode:
+                die(f"could not download {pattern}: {got.stderr.strip()}")
+        archive = next(Path(tmp).glob("*.tar.gz"))
+        sums = dict(reversed(line.split()) for line in (Path(tmp) / "checksums.txt").read_text().splitlines()
+                    if len(line.split()) == 2)
+        if sums.get(archive.name) != hashlib.sha256(archive.read_bytes()).hexdigest():
+            die(f"checksum mismatch for {archive.name}; not installing")
+        with tarfile.open(archive) as tar:
+            member = next((m for m in tar.getmembers() if m.isfile() and Path(m.name).name == "multi-gitter"), None)
+            if not member:
+                die("the archive has no multi-gitter binary")
+            INSTALL_DIR.mkdir(parents=True, exist_ok=True)
+            dest = INSTALL_DIR / "multi-gitter"
+            dest.write_bytes(tar.extractfile(member).read())
+            dest.chmod(0o755)
+    print(f"installed multi-gitter {archive.name.split('_')[1]} to {dest} (sha256 verified)")
+    if str(INSTALL_DIR) not in os.environ.get("PATH", "").split(os.pathsep):
+        print(f"note: {INSTALL_DIR} is not on PATH")
+
+
+def deps(install):
+    """Report each dependency. With install, fetch what needs no root; hand the rest back to the person."""
+    missing = [n for n in DEPENDENCIES if not have(n)]
+    for name, (why, needed_by) in DEPENDENCIES.items():
+        print(f"  {'missing' if name in missing else 'ok     '}  {name:<13} {why} ({needed_by})")
+    if install and "multi-gitter" in missing:
+        install_multi_gitter()
+        missing.remove("multi-gitter")
+    for name in missing:
+        print(f"install {name}: {install_hint(name)}")
+    return 1 if missing else 0
+
+
+def need(name):
+    """The command to run for a dependency apply needs, or stop with a pointer to `deps`."""
+    if not have(name):
+        die(f"{name} is not installed. Run `drift.py deps --install`, or install it yourself: {install_hint(name)}")
+    return name if shutil.which(name) else str(INSTALL_DIR / name)
 
 
 # --- discovery and classification -------------------------------------------------------------------------
@@ -247,11 +332,12 @@ def apply(args):
             jobs.append((repo, finding, ctype))
     for repo, rule in skipped:
         print(f"skipped {repo}: {rule} (unclassified repo, unmapped category or not fixable)")
+    mg = need("multi-gitter") if jobs else None
     token = {} if args.dry_run or not jobs else {"GITHUB_TOKEN": gh_token()}
     for repo, finding, ctype in jobs:
         category = finding["category"]
         command = [
-            "multi-gitter", "run", shlex.join([sys.executable, os.path.abspath(__file__), "fix-and-verify"]),
+            mg, "run", shlex.join([sys.executable, os.path.abspath(__file__), "fix-and-verify"]),
             "--repo", f"{owner()}/{repo['repo']}",
             "--branch", f"{C.BRANCH_PREFIX}{category}",
             "--base-branch", repo["base_branch"],
@@ -263,8 +349,6 @@ def apply(args):
         if args.dry_run:
             command.append("--dry-run")
         print("+", shlex.join(command))
-        if run(["which", "multi-gitter"]).returncode:
-            die("multi-gitter is not installed")
         subprocess.run(command, env={**os.environ, **token, "DRIFT_RULE": finding["rule"]}, check=False)
 
 
@@ -348,6 +432,8 @@ def main(argv):
         return 0
     p = argparse.ArgumentParser(prog="drift.py")
     sub = p.add_subparsers(dest="cmd", required=True)
+    dp = sub.add_parser("deps")
+    dp.add_argument("--install", action="store_true")
     sub.add_parser("repos")
     a = sub.add_parser("audit")
     a.add_argument("--repos")
@@ -375,6 +461,8 @@ def main(argv):
     k.add_argument("--output", type=int, default=0)
     args = p.parse_args(argv)
 
+    if args.cmd == "deps":
+        return deps(args.install)
     if args.cmd == "repos":
         print(checklist(discover()))
         return 0
