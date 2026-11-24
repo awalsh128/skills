@@ -333,7 +333,7 @@ def apply(args):
     for repo, rule in skipped:
         print(f"skipped {repo}: {rule} (unclassified repo, unmapped category or not fixable)")
     mg = need("multi-gitter") if jobs else None
-    token = {} if args.dry_run or not jobs else {"GITHUB_TOKEN": gh_token()}
+    token = {"GITHUB_TOKEN": gh_token()} if jobs else {}
     for repo, finding, ctype in jobs:
         category = finding["category"]
         command = [
