@@ -20,17 +20,25 @@ Set these before the first run (details in `scripts/config.py`):
 - `DRIFT_CHECK_CMD`: runs in a repo and prints
   `{"findings": [{"rule", "category", "path", "message", "fixable"}]}` as JSON.
 - `DRIFT_FIX_CMD`: changes the working tree for the rule in the `DRIFT_RULE` environment variable.
-- `DRIFT_OWNER`: whose repos to audit (public, non-fork, non-archived only; private repos are out of scope).
-- `multi-gitter` on the path and a `GITHUB_TOKEN` limited to the target repos, for `apply` only.
+- `gh` logged in (`gh auth login`). That is the only credential: the owner defaults to the logged-in account,
+  and `apply` passes `gh auth token` to `multi-gitter` for that one process. No token is set by hand.
+- `DRIFT_OWNER` (optional): audit another user or org instead of the logged-in account. Public, non-fork,
+  non-archived repos only; private repos are out of scope.
+- `multi-gitter`, for `apply` only. `drift.py deps` reports what's missing; `drift.py deps --install`
+  downloads `multi-gitter` into `~/.local/bin` (sha256-verified) with no root, or the user can install it
+  themselves. `gh`, `git` and `jq` need a package manager, so `deps` prints the command for the user to run.
+  Ask before running `--install`.
 
-If a variable is missing, say which one and stop. Don't guess a command.
+If `DRIFT_CHECK_CMD` or `DRIFT_FIX_CMD` is missing, say which one and stop. Don't guess a command.
 
 ## Calling it
 
 The skill runs only when the user calls it by name, and a bare call prints usage and does nothing else.
 
-- `audit [--repos a,b] [--out report.json]` is read-only: it clones shallowly into a temp directory, runs
-  `check`, and reports per repo its profile, open findings and excepted findings. Safe to schedule.
+- `repos` prints a checklist of in-scope repos, numbered, with the repo the working directory belongs to
+  pre-checked. Show it and let the user pick by number, name or `all`; pass the picks to `--repos`.
+- `audit [--repos a,b|1,3|all] [--out report.json]` is read-only: it clones shallowly into a temp directory,
+  runs `check`, and reports per repo its profile, open findings and excepted findings. Safe to schedule.
 - `apply --repos a,b` or `apply --report report.json` opens PRs. It needs named repos or an audit report with
   an `approved` list of `{repo, rule}` pairs that the user wrote. It refuses an `unclassified` repo and any
   run with `DRIFT_UNATTENDED` set. Use `--dry-run` first.
@@ -42,8 +50,8 @@ reported reason it was left unchanged.
 
 ## Flow
 
-1. **Audit.** Run `audit --out report.json` and show the summary. The report plus the user's approval is the
-   plan; don't change anything yet.
+1. **Audit.** Run `repos`, show the checklist and ask which to include. Then run `audit --out report.json` and
+   show the summary. The report plus the user's approval is the plan; don't change anything yet.
 2. **Resolve prompts.** A finding in category `format-collision` is never applied. Show each source with its
    file and value (and the language standard and the user's preference when known), and ask which to keep,
    another value, or leave as is. Record a confirmed choice as an `exceptions` entry for the repo.
