@@ -4,4 +4,4 @@ node_modules/
 __pycache__/
 
 # plugin eval run output
-evals/results/
+**/evals/results/
