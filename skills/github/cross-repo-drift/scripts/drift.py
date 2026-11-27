@@ -55,7 +55,7 @@ DEPENDENCIES = {
     "git": ("clones the repos", "audit, apply"),
     "gh": ("authentication, repo discovery and PRs", "audit, apply"),
     "multi-gitter": ("runs the fix across repos and opens the PRs", "apply"),
-    "jq": ("builds and reads findings JSON", "the gh-dev-powerpack check and fix scripts"),
+    "jq": ("builds and reads findings JSON", "the powerpack check and fix scripts"),
 }
 INSTALL_DIR = Path.home() / ".local" / "bin"
 
