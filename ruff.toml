@@ -1,0 +1,21 @@
+line-length = 110
+# The oldest Python the code's syntax needs; CI runs a newer one.
+target-version = "py310"
+# Eval inputs are test data, and some break rules on purpose.
+extend-exclude = ["**/evals/**"]
+
+[lint]
+# Preview rules run only when selected by their full code, as PLR1702 is.
+preview = true
+explicit-preview-rules = true
+select = ["B", "E", "F", "I", "PLR1702", "RET", "UP", "W"]
+
+[lint.pylint]
+max-nested-blocks = 2
+
+[lint.per-file-ignores]
+# Scripts that predate Ruff. Drop a rule here once its file is cleaned up.
+"skills/dev/vsce-demo/scripts/check-coverage.py" = ["E501", "PLR1702"]
+"skills/dev/vsce-demo/scripts/inventory.py" = ["E501", "PLR1702"]
+"skills/github/cross-repo-drift/scripts/config.py" = ["E501"]
+"skills/github/cross-repo-drift/scripts/drift.py" = ["E501", "PLR1702"]

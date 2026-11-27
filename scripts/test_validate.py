@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 import unittest
+from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -38,10 +39,36 @@ def skill_text(frontmatter="name: demo\ndescription: Use when testing.", body="B
     return f"---\n{frontmatter}\n---\n{body}"
 
 
+@dataclass(frozen=True)
+class DamagedManifest:
+    case: str
+    path: str
+    content: str | bytes
+    expected_error: str
+
+
+@dataclass(frozen=True)
+class BadFrontmatter:
+    case: str
+    frontmatter: str
+    expected_error: str
+
+
+@dataclass(frozen=True)
+class MissingReference:
+    case: str
+    mention: str
+    path: str
+
+
 class RepoTestCase(unittest.TestCase):
     """Each test gets its own repo that passes every check, then breaks the part it is about."""
 
     def setUp(self):
+        self.create_repo()
+
+    def create_repo(self):
+        """Point self.root at a new repo. Table tests call this to start each case clean."""
         temp_dir = tempfile.TemporaryDirectory()
         self.addCleanup(temp_dir.cleanup)
         self.root = Path(temp_dir.name)
@@ -84,17 +111,17 @@ class ValidRepo(RepoTestCase):
 
 class ManifestInput(RepoTestCase):
     def test_main_unusable_manifest_reports_only_that_problem(self):
-        cases = {
-            "bad JSON": (PLUGIN_JSON, "{", f"{PLUGIN_JSON}: Expecting"),
-            "not an object": (PLUGIN_JSON, "[]", f"{PLUGIN_JSON}: must be a JSON object"),
-            "not UTF-8": (MARKETPLACE_JSON, b"\xff", f"{MARKETPLACE_JSON}: 'utf-8'"),
-        }
-        for case, (path, content, expected_error) in cases.items():
-            with self.subTest(case):
-                self.setUp()
-                self.write(path, content)
+        cases = [
+            DamagedManifest("bad JSON", PLUGIN_JSON, "{", f"{PLUGIN_JSON}: Expecting"),
+            DamagedManifest("not an object", PLUGIN_JSON, "[]", f"{PLUGIN_JSON}: must be a JSON object"),
+            DamagedManifest("not UTF-8", MARKETPLACE_JSON, b"\xff", f"{MARKETPLACE_JSON}: 'utf-8'"),
+        ]
+        for damaged in cases:
+            with self.subTest(damaged.case):
+                self.create_repo()
+                self.write(damaged.path, damaged.content)
 
-                self.assert_single_error(expected_error)
+                self.assert_single_error(damaged.expected_error)
 
     def test_main_missing_manifest_reports_it(self):
         (self.root / MARKETPLACE_JSON).unlink()
@@ -143,20 +170,24 @@ class ManifestConsistency(RepoTestCase):
 
         self.assert_single_error("marketplace.json: plugins has no entry for the plugin")
 
-    def test_main_key_missing_from_both_manifests_reports_it(self):
-        for key in ("version", "description"):
-            with self.subTest(key):
-                self.setUp()
-                plugin = plugin_manifest()
-                entry = marketplace_entry()
-                marketplace = marketplace_manifest(plugins=[entry])
-                del plugin[key], entry[key]
-                if key == "description":
-                    del marketplace[key]
-                self.write_json(PLUGIN_JSON, plugin)
-                self.write_json(MARKETPLACE_JSON, marketplace)
+    def test_main_version_missing_from_both_manifests_reports_it(self):
+        plugin = plugin_manifest()
+        entry = marketplace_entry()
+        del plugin["version"], entry["version"]
+        self.write_json(PLUGIN_JSON, plugin)
+        self.write_json(MARKETPLACE_JSON, marketplace_manifest(plugins=[entry]))
 
-                self.assert_single_error(f"plugin.json: missing {key}")
+        self.assert_single_error("plugin.json: missing version")
+
+    def test_main_description_missing_everywhere_reports_it(self):
+        plugin = plugin_manifest()
+        entry = marketplace_entry()
+        marketplace = marketplace_manifest(plugins=[entry])
+        del plugin["description"], entry["description"], marketplace["description"]
+        self.write_json(PLUGIN_JSON, plugin)
+        self.write_json(MARKETPLACE_JSON, marketplace)
+
+        self.assert_single_error("plugin.json: missing description")
 
     def test_main_marketplace_key_missing_reports_it(self):
         for key in ("name", "owner"):
@@ -207,21 +238,22 @@ class Frontmatter(RepoTestCase):
 
     def test_main_bad_frontmatter_reports_it(self):
         no_description = "description must be a non-empty string"
-        cases = {
-            "unquoted colon": ("name: demo\ndescription: Use when: testing.", "invalid YAML frontmatter"),
-            "impossible date": ("name: demo\ndescription: x\ndate: 2026-13-45", "invalid YAML frontmatter"),
-            "list": ("- demo", "frontmatter is not a mapping"),
-            "wrong name": ("name: other\ndescription: x", "name 'other' != folder 'demo'"),
-            "no description": ("name: demo", no_description),
-            "empty description": ("name: demo\ndescription:\nlicense: MIT", no_description),
-            "blank string": ('name: demo\ndescription: " "', no_description),
-            "empty block": ("name: demo\ndescription: >", no_description),
-        }
-        for case, (frontmatter, expected_error) in cases.items():
-            with self.subTest(case):
-                self.write(SKILL_MD, skill_text(frontmatter))
+        invalid_yaml = "invalid YAML frontmatter"
+        cases = [
+            BadFrontmatter("unquoted colon", "name: demo\ndescription: Use when: testing.", invalid_yaml),
+            BadFrontmatter("impossible date", "name: demo\ndescription: x\ndate: 2026-13-45", invalid_yaml),
+            BadFrontmatter("list", "- demo", "frontmatter is not a mapping"),
+            BadFrontmatter("wrong name", "name: other\ndescription: x", "name 'other' != folder 'demo'"),
+            BadFrontmatter("no description", "name: demo", no_description),
+            BadFrontmatter("empty description", "name: demo\ndescription:\nlicense: MIT", no_description),
+            BadFrontmatter("blank string", 'name: demo\ndescription: " "', no_description),
+            BadFrontmatter("empty block", "name: demo\ndescription: >", no_description),
+        ]
+        for bad in cases:
+            with self.subTest(bad.case):
+                self.write(SKILL_MD, skill_text(bad.frontmatter))
 
-                self.assert_single_error(f"{SKILL_MD}: {expected_error}")
+                self.assert_single_error(f"{SKILL_MD}: {bad.expected_error}")
 
     def test_main_invalid_yaml_reports_the_line_in_the_file(self):
         self.write(SKILL_MD, skill_text("name: demo\ndescription: Use when: testing."))
@@ -249,16 +281,16 @@ class Frontmatter(RepoTestCase):
 
 class ReferencedFiles(RepoTestCase):
     def test_main_missing_referenced_file_reports_it(self):
-        cases = {
-            "reference": ("`references/gone.md`", "references/gone.md"),
-            "script": ("`scripts/gone.py`", "scripts/gone.py"),
-            "template": ("<skill dir>/templates/gone.txt", "templates/gone.txt"),
-        }
-        for case, (mention, path) in cases.items():
-            with self.subTest(case):
-                self.write(SKILL_MD, skill_text(body=f"Read {mention}\n"))
+        cases = [
+            MissingReference("reference", "`references/gone.md`", "references/gone.md"),
+            MissingReference("script", "`scripts/gone.py`", "scripts/gone.py"),
+            MissingReference("template", "<skill dir>/templates/gone.txt", "templates/gone.txt"),
+        ]
+        for missing in cases:
+            with self.subTest(missing.case):
+                self.write(SKILL_MD, skill_text(body=f"Read {missing.mention}\n"))
 
-                self.assert_single_error(f"{SKILL_MD}: referenced {path} does not exist")
+                self.assert_single_error(f"{SKILL_MD}: referenced {missing.path} does not exist")
 
     def test_main_present_referenced_files_pass(self):
         self.write(f"{SKILL_DIR}/references/notes.md", "Notes.\n")
@@ -272,7 +304,7 @@ class PowerpackNames(RepoTestCase):
     def test_main_powerpack_name_in_skill_file_reports_the_line(self):
         for file_name in ("references/notes.md", "scripts/run.py", "templates/ci.yml"):
             with self.subTest(file_name):
-                self.setUp()
+                self.create_repo()
                 self.write(f"{SKILL_DIR}/{file_name}", "first\nuses gh-dev-powerpack\n")
 
                 self.assert_single_error(f"{SKILL_DIR}/{file_name}:2: names gh-dev-powerpack")
