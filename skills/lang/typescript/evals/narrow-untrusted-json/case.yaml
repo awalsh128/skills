@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: narrow-untrusted-json
+expected_outcome: |
+  fetchUser takes the response body as unknown and narrows it with a guard or a schema parser, never an as cast, has an annotated return type, and adds no dependency unless it is a schema library the project already uses.
+context:
+  scaffold_script: place-files.sh

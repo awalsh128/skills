@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: mock-owned-collaborators
+expected_outcome: |
+  Tests use the real in-memory repository and pricing function and replace only the payment client.
+context:
+  scaffold_script: place-files.sh

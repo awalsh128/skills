@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: tautological-expected
+expected_outcome: |
+  Expected values are worked-out results that do not repeat the implementation.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: eager-test
+expected_outcome: |
+  Each test exercises one behavior on its own cart.
+context:
+  scaffold_script: place-files.sh
