@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: flat-and-typed
+expected_outcome: |
+  The new check stays at most two blocks deep, leaves skipped cases early, returns its results as a named type and parses each service file once into a named type.
+context:
+  scaffold_script: place-files.sh

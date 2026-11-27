@@ -1,0 +1,6 @@
+{
+  "name": "billing",
+  "owner": "payments",
+  "port": 8001,
+  "endpoints": [{ "path": "/invoices", "method": "GET" }]
+}

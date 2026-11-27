@@ -33,7 +33,9 @@ against a base commit or spec, use `/mattpocock-skills:code-review` and apply th
 
 ## Before writing
 
-Read the neighbouring files, the manifest (what is already a dependency) and the lint config. The environment
+Start by searching the repo for `AGENTS.md`, `CLAUDE.md` and `CONTRIBUTING*`, and read each one at the root or
+above a file you will touch. They override the rules below, and a search for source files misses them. Then
+read the neighbouring files, the manifest (what is already a dependency) and the lint config. The environment
 answers "what is available"; these rules answer "what to prefer".
 
 ## Rules
@@ -45,8 +47,20 @@ Write the version a newcomer understands on first read, even when it is longer.
 - Parse structured strings with the format's own parser: a URL type, a path library, a date or number
   formatting library. A regex is the right tool only for a genuinely pattern-shaped string, kept short and
   named.
-- Name intermediate values instead of chaining long one-liners. Prefer early returns and `if` blocks to nested
-  ternaries. Prefer plain loops or a single map or filter to a clever fold.
+- Name intermediate values instead of chaining long one-liners. Prefer `if` blocks to nested ternaries. Prefer
+  plain loops or a single map or filter to a clever fold.
+- **Flat control flow.** Open with guard clauses: handle the skipped or failing case first and leave (`return`
+  or `raise` in a function, `continue` in a loop), then write the main path after it, outside any `else`. A
+  function nests at most two blocks (`if`, loop, `try`); past that, move the loop body into a function named
+  for what it does to one item.
+- **Named shapes.** Data with fixed fields gets a named type (data class, record, interface, struct): several
+  values returned together, table rows of three or more fields, and keyed data passed between functions. Keep
+  dictionaries and maps for lookup, where the keys are data. The language's own idiom stays, such as Go's
+  `(value, error)`.
+- **Parse, don't validate.** Turn each external record (from a file, request or environment) into a named type
+  where it is read, collecting problems as you build it, and run every later check on that type. This includes
+  code whose job is validation. That type is the one statement of the input's shape, so declaring it is not
+  duplication.
 - Comment the non-obvious why, not the what.
 
 ### Reuse before writing
@@ -105,7 +119,7 @@ Use a **data file** (JSON, YAML, TOML) for data that should change without touch
 
 - Per-environment configuration (endpoints, feature flags), one file per environment, selected at runtime.
 - Static data: fixtures and mock data, localisation strings, lookup tables.
-- Load it through a typed or validated path; validate at the boundary when the file is user-editable.
+- Load it by the parse, don't validate rule above.
 
 Use **code** when the values need logic, functions, computed values or comments. For configuration that needs
 documentation, use a typed code config or a format that allows comments.
