@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-type-safety
+expected_outcome: |
+  A review that flags the non-exhaustive switch over Status (cancelled unhandled), the any parameter with an as cast, the floating notify promise, the non-null assertion and the missing return types on exported functions, with file:line references and no files edited.
+context:
+  scaffold_script: place-files.sh

@@ -33,7 +33,6 @@ The platform already parses and formats most things; reach for these before a re
   `node:path` for paths; `Intl` for number and date formatting.
 - Built-ins and Node or browser APIs such as `structuredClone`, `Array.prototype.toSorted`, `AbortController`,
   `node:util` `parseArgs` and `fetch`.
-- Keep a regex short and named (`const SEMVER_TAG = /^v\d+\.\d+\.\d+$/`).
 - Check a candidate library with `npm view <pkg> dependencies dist.unpackedSize`. Prefer ESM and
   tree-shakeable packages, most of all for bundled output (browser, GitHub Actions, VS Code extensions).
 
@@ -51,7 +50,30 @@ The platform already parses and formats most things; reach for these before a re
 - For configuration that needs comments, use a typed `.ts` config (`export default { ... } satisfies Config`)
   or JSONC.
 
+### Type safety and async
+
+Do not restate these rules here; the tools own them and keep them current.
+
+- Enable the typescript-eslint `strictTypeChecked` preset (https://typescript-eslint.io/users/configs) in new
+  projects, and fix what it reports instead of silencing it. It covers `any`, unsafe assertions, floating
+  promises, thrown non-errors and non-exhaustive `switch`. In an existing repo, keep its lint config and do
+  not loosen it to clear an error.
+- Keep `strict` on in `tsconfig.json`. For new projects also prefer `noUncheckedIndexedAccess`; check the
+  current options in the TSConfig reference (https://www.typescriptlang.org/tsconfig) rather than from memory.
+- Annotate the return types of exported functions: they are the public API, and inference there leaks internal
+  types and hides breaking changes. Infer everything else.
+- At a trust boundary (JSON, `fetch`, `process.env`) take `unknown` and narrow it with a guard or a schema
+  parser the project already depends on, never an `as` cast.
+
+## Related skills
+
+Use these alongside when the task fits; they own their topics, so this skill does not copy them.
+
+- `unit-tests` for the tests a change needs.
+- `/mattpocock-skills:codebase-design` when the task is designing a module's interface or seam.
+- `/mattpocock-skills:code-review` for a review against a base commit; apply these rules as its standards.
+
 ## Finishing
 
 Done when `code-design`'s checks are met and `tsc --noEmit`, lint and tests have run (or the summary says
-which could not).
+which could not). In a review, report findings with `file:line` and edit nothing until asked.

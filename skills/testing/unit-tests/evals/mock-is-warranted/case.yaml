@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: mock-is-warranted
+expected_outcome: |
+  Tests fake the email gateway and assert the send call, because that call is the behavior.
+context:
+  scaffold_script: place-files.sh

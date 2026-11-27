@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: extend-clean-suite
+expected_outcome: |
+  New burst tests are deterministic, use the public API and share no state.
+context:
+  scaffold_script: place-files.sh
