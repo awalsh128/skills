@@ -33,7 +33,9 @@ against a base commit or spec, use `/mattpocock-skills:code-review` and apply th
 
 ## Before writing
 
-Read the neighbouring files, the manifest (what is already a dependency) and the lint config. The environment
+Start by searching the repo for `AGENTS.md`, `CLAUDE.md` and `CONTRIBUTING*`, and read each one at the root or
+above a file you will touch. They override the rules below, and a search for source files misses them. Then
+read the neighbouring files, the manifest (what is already a dependency) and the lint config. The environment
 answers "what is available"; these rules answer "what to prefer".
 
 ## Rules
