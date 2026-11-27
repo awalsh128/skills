@@ -1,0 +1,10 @@
+{
+  "name": "search",
+  "owner": "discovery",
+  "port": 8001,
+  "endpoints": [
+    { "path": "/query", "method": "FETCH" },
+    { "path": "/query", "method": "GET" },
+    { "path": "/query", "method": "GET" }
+  ]
+}
