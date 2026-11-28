@@ -37,8 +37,9 @@ using the skills in other projects; each skill's `SKILL.md` carries those.
 ## Quick Commands
 
 ```bash
-python3 -m pip install -r requirements.txt   # what validate.py needs; use a venv if system pip refuses
+python3 -m pip install -r requirements.txt   # for validate.py and Ruff; use a venv if system pip refuses
 python3 scripts/validate.py
+python3 -m ruff check .   # Python lint, configured in ruff.toml
 python3 -m unittest discover -s scripts   # tests for validate.py
 npm run format:check
 npm run eval -- skills/<group>/<skill> --scaffold   # runs and grades with sonnet; a bare `claude plugin eval` grades with haiku
